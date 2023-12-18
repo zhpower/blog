@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.2">Jekyll</generator><link href="https://sighingnow.github.io/blog/feed.xml" rel="self" type="application/atom+xml" /><link href="https://sighingnow.github.io/blog/" rel="alternate" type="text/html" /><updated>2023-12-18T14:26:18+08:00</updated><id>https://sighingnow.github.io/blog/feed.xml</id><title type="html">学习笔记</title><subtitle>Build Jekyll site with the GitBook style.
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.2">Jekyll</generator><link href="https://sighingnow.github.io/blog/feed.xml" rel="self" type="application/atom+xml" /><link href="https://sighingnow.github.io/blog/" rel="alternate" type="text/html" /><updated>2023-12-18T17:13:56+08:00</updated><id>https://sighingnow.github.io/blog/feed.xml</id><title type="html">学习笔记</title><subtitle>Build Jekyll site with the GitBook style.
 </subtitle><author><name>kevin_zh</name></author><entry><title type="html">位运算</title><link href="https://sighingnow.github.io/blog/jekyll/2023-04-27-bit.html" rel="alternate" type="text/html" title="位运算" /><published>2023-04-27T00:00:00+08:00</published><updated>2023-04-27T00:00:00+08:00</updated><id>https://sighingnow.github.io/blog/jekyll/bit</id><content type="html" xml:base="https://sighingnow.github.io/blog/jekyll/2023-04-27-bit.html"><![CDATA[<h3 id="1位运算概述">1.位运算概述</h3>
 
 <p>从现代计算机中所有的数据二进制的形式存储在设备中。即 0、1 两种状态，计算机对二进制数据进行的运算(+、-、*、/)都是叫位运算，即将符号位共同参与运算的运算。</p>
@@ -324,41 +324,41 @@ ffmpeg.exe -i agf-dog-1280x960.jpg  -vf scale=1920:1080 agf-dog-1920x1080.jpg
 
 <div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">wet_main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">argv</span><span class="p">[],</span> <span class="k">const</span> <span class="k">struct</span> <span class="n">weston_testsuite_data</span> <span class="o">*</span><span class="n">test_data</span><span class="p">){</span>
 
-	<span class="c1">// 初始化 layoutput_list</span>
-	<span class="n">wl_list_init</span><span class="p">(</span><span class="o">&amp;</span><span class="n">wet</span><span class="p">.</span><span class="n">layoutput_list</span><span class="p">);</span>
-	<span class="p">...</span>
-	<span class="c1">//  parse command line</span>
-	<span class="p">...</span>
-	<span class="c1">//  init log system</span>
-	<span class="p">...</span>
-	
-	<span class="c1">// 调用wayland提供的函数wl_display_create()</span>
-	<span class="c1">// 创建 wl_display 对象</span>
-	<span class="n">display</span> <span class="o">=</span> <span class="n">wl_display_create</span><span class="p">();</span>
+    <span class="c1">// 初始化 layoutput_list</span>
+    <span class="n">wl_list_init</span><span class="p">(</span><span class="o">&amp;</span><span class="n">wet</span><span class="p">.</span><span class="n">layoutput_list</span><span class="p">);</span>
+    <span class="p">...</span>
+    <span class="c1">//  parse command line</span>
+    <span class="p">...</span>
+    <span class="c1">//  init log system</span>
+    <span class="p">...</span>
+    
+    <span class="c1">// 调用wayland提供的函数wl_display_create()</span>
+    <span class="c1">// 创建 wl_display 对象</span>
+    <span class="n">display</span> <span class="o">=</span> <span class="n">wl_display_create</span><span class="p">();</span>
     <span class="p">...</span>
     
     <span class="c1">// 创建 weston_compositor 对象  </span>
     <span class="c1">// --&gt; 创建 global resource compositor and shm 以及其他resource</span>
-    <span class="n">weston_compositor_create</span><span class="p">(</span> <span class="p">);</span>	
-	<span class="c1">// 读取config for compositor</span>
-	<span class="p">...</span>
-	
+    <span class="n">weston_compositor_create</span><span class="p">(</span> <span class="p">);</span>    
+    <span class="c1">// 读取config for compositor</span>
+    <span class="p">...</span>
+    
     <span class="c1">// load backend，通用的为load_drm_backend( )</span>
     <span class="c1">// 最终调用 对应backend实现的weston_backend_init( )</span>
     <span class="c1">// 在backend 初始化的过程中会装载 gl_renderer</span>
     <span class="n">load_backend</span><span class="p">(</span><span class="n">compositor</span><span class="p">,</span> <span class="n">backend</span><span class="p">)</span>
-	<span class="p">...</span>
-	
-	<span class="c1">// 创建socket， 侦听client的连接请求</span>
-	<span class="n">weston_create_listening_socket</span><span class="p">(</span><span class="n">display</span><span class="p">,</span> <span class="n">socket_name</span><span class="p">)</span>
-	<span class="p">...</span>
-	<span class="c1">// load shell, 默认为 desktop-shell.so</span>
-	<span class="n">wet_load_shell</span><span class="p">(</span><span class="n">compositor</span><span class="p">,</span> <span class="n">shell</span><span class="p">,</span> <span class="p">...)</span>
-	<span class="p">...</span>
-	<span class="c1">// loop, 循环等待event的发生</span>
-	<span class="n">wl_display_run</span><span class="p">(</span><span class="n">display</span><span class="p">)</span>
-	<span class="p">...</span>
-	<span class="c1">// 退出流程，资源的释放</span>
+    <span class="p">...</span>
+    
+    <span class="c1">// 创建socket， 侦听client的连接请求</span>
+    <span class="n">weston_create_listening_socket</span><span class="p">(</span><span class="n">display</span><span class="p">,</span> <span class="n">socket_name</span><span class="p">)</span>
+    <span class="p">...</span>
+    <span class="c1">// load shell, 默认为 desktop-shell.so</span>
+    <span class="n">wet_load_shell</span><span class="p">(</span><span class="n">compositor</span><span class="p">,</span> <span class="n">shell</span><span class="p">,</span> <span class="p">...)</span>
+    <span class="p">...</span>
+    <span class="c1">// loop, 循环等待event的发生</span>
+    <span class="n">wl_display_run</span><span class="p">(</span><span class="n">display</span><span class="p">)</span>
+    <span class="p">...</span>
+    <span class="c1">// 退出流程，资源的释放</span>
 <span class="p">}</span>
 </code></pre></div></div>
 
@@ -370,13 +370,13 @@ ffmpeg.exe -i agf-dog-1280x960.jpg  -vf scale=1920:1080 agf-dog-1920x1080.jpg
 
 <p>backend</p>
 <div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span>
-<span class="err">  </span> <span class="n">destroy</span><span class="p">()</span>
-<span class="err">  </span> <span class="n">repaint_begin</span><span class="p">()</span><span class="err">    </span> <span class="c1">//composite之前调用</span>
-<span class="err">  </span> <span class="n">repaint_cancel</span><span class="p">()</span><span class="err">  </span>  <span class="c1">// 中途取消</span>
-<span class="err">  </span> <span class="n">repaint_flush</span><span class="p">()</span><span class="err">    </span> <span class="c1">// composite 完成后调用， 可用于实现提交到display</span>
-<span class="err">  </span> <span class="n">create_output</span><span class="p">()</span><span class="err">   </span>  <span class="c1">// 创建weston_output</span>
-<span class="err">  </span> <span class="n">device_changed</span><span class="p">()</span>
-<span class="err">  </span> <span class="n">can_scanout_dmabuf</span><span class="p">()</span>
+ <span class="n">destroy</span><span class="p">()</span>
+ <span class="n">repaint_begin</span><span class="p">()</span>   <span class="c1">//composite之前调用</span>
+ <span class="n">repaint_cancel</span><span class="p">()</span>  <span class="c1">// 中途取消</span>
+ <span class="n">repaint_flush</span><span class="p">()</span>   <span class="c1">// composite 完成后调用， 可用于实现提交到display</span>
+ <span class="n">create_output</span><span class="p">()</span>   <span class="c1">// 创建weston_output</span>
+ <span class="n">device_changed</span><span class="p">()</span>
+ <span class="n">can_scanout_dmabuf</span><span class="p">()</span>
 <span class="p">}</span><span class="n">Weston_backend</span><span class="p">,</span> <span class="n">Compositor</span><span class="o">-&gt;</span><span class="n">backend</span>
 
 </code></pre></div></div>
@@ -406,49 +406,49 @@ renderer接口供backend内部使用，外部通过调用backend接口触发</p>
 </ol>
 
 <h6 id="伪代码">伪代码</h6>
-<pre><code class="language-C">static void global_resource_found(void* data, struct wl_registry* registry, uint32_t name, const char* interface, uint32_t version) {
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">static</span> <span class="kt">void</span> <span class="nf">global_resource_found</span><span class="p">(</span><span class="kt">void</span><span class="o">*</span> <span class="n">data</span><span class="p">,</span> <span class="k">struct</span> <span class="n">wl_registry</span><span class="o">*</span> <span class="n">registry</span><span class="p">,</span> <span class="kt">uint32_t</span> <span class="n">name</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">interface</span><span class="p">,</span> <span class="kt">uint32_t</span> <span class="n">version</span><span class="p">)</span> <span class="p">{</span>
 
-	// 通过字符串interface 判断是什么resource，
-	// 通过wl_registry_bind() 创建对应的 resource proxy
-	
-    if (strcmp(interface, "wl_compositor") == 0) {
-	    // 构建了 compositor 的 proxy    
-        compositor = wl_registry_bind(registry, name, &amp;wl_compositor_interface, 4));
+    <span class="c1">// 通过字符串interface 判断是什么resource，</span>
+    <span class="c1">// 通过wl_registry_bind() 创建对应的 resource proxy</span>
+    
+    <span class="k">if</span> <span class="p">(</span><span class="n">strcmp</span><span class="p">(</span><span class="n">interface</span><span class="p">,</span> <span class="s">"wl_compositor"</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// 构建了 compositor 的 proxy    </span>
+        <span class="n">compositor</span> <span class="o">=</span> <span class="n">wl_registry_bind</span><span class="p">(</span><span class="n">registry</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">wl_compositor_interface</span><span class="p">,</span> <span class="mi">4</span><span class="p">));</span>
         
-    }else if (strcmp(interface, "wl_shm") == 0) {
-	    // 构建了 shm 的proxy
-	    shm = wl_registry_bind(registry, name, &amp;wl_shm_interface, 1);
-    }
-    ...
+    <span class="p">}</span><span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">strcmp</span><span class="p">(</span><span class="n">interface</span><span class="p">,</span> <span class="s">"wl_shm"</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// 构建了 shm 的proxy</span>
+        <span class="n">shm</span> <span class="o">=</span> <span class="n">wl_registry_bind</span><span class="p">(</span><span class="n">registry</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">wl_shm_interface</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="p">...</span>
 
-}
+<span class="p">}</span>
 
-// 当weston的global resoure发生变化时，通过如下回调函数通知到client
-wl_registry_listener registry_listener = {
-    // 发现新global resource的回调函数
-	global_resource_found,
-	// global resource remove的回调函数
-	global_resource_remove
-}
+<span class="c1">// 当weston的global resoure发生变化时，通过如下回调函数通知到client</span>
+<span class="n">wl_registry_listener</span> <span class="n">registry_listener</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="c1">// 发现新global resource的回调函数</span>
+    <span class="n">global_resource_found</span><span class="p">,</span>
+    <span class="c1">// global resource remove的回调函数</span>
+    <span class="n">global_resource_remove</span>
+<span class="p">}</span>
 
-int main(int argc, char** argv) {
-	// 1. 调用wayland提供的 wl_display_connect( ), 连接到weston( wayland server)
-	//    对应到weston启动中的weston_create_listening_socket()
-	display = wl_display_connect(NULL);
-	...
-	
-	// 2. 获取 wl_registry, 并侦听它的callback
-	registry= wl_display_get_registry(display);
-	wl_registry_add_listener(registry, &amp;registry_listener, display);
-	...
-	
-	// 3. 循环等待，
-	//    调用wl_display_dispatch( )，由wayland处理weston发来的event
-	while(ret != -1){
-		ret = wl_display_dispatch( );
-	}
-}
-</code></pre>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span><span class="o">**</span> <span class="n">argv</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// 1. 调用wayland提供的 wl_display_connect( ), 连接到weston( wayland server)</span>
+    <span class="c1">//    对应到weston启动中的weston_create_listening_socket()</span>
+    <span class="n">display</span> <span class="o">=</span> <span class="n">wl_display_connect</span><span class="p">(</span><span class="nb">NULL</span><span class="p">);</span>
+    <span class="p">...</span>
+    
+    <span class="c1">// 2. 获取 wl_registry, 并侦听它的callback</span>
+    <span class="n">registry</span><span class="o">=</span> <span class="n">wl_display_get_registry</span><span class="p">(</span><span class="n">display</span><span class="p">);</span>
+    <span class="n">wl_registry_add_listener</span><span class="p">(</span><span class="n">registry</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">registry_listener</span><span class="p">,</span> <span class="n">display</span><span class="p">);</span>
+    <span class="p">...</span>
+    
+    <span class="c1">// 3. 循环等待，</span>
+    <span class="c1">//    调用wl_display_dispatch( )，由wayland处理weston发来的event</span>
+    <span class="k">while</span><span class="p">(</span><span class="n">ret</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">){</span>
+        <span class="n">ret</span> <span class="o">=</span> <span class="n">wl_display_dispatch</span><span class="p">(</span> <span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
 
 <h4 id="22-内部weston---client-通讯机制">2.2 内部weston - client 通讯机制</h4>
 
@@ -486,39 +486,39 @@ int main(int argc, char** argv) {
 
 <h5 id="主要资源proxy">主要资源proxy</h5>
 
-<pre><code class="language-C">// wl_surface
-wl_surface = wl_compositor_create_surface(compositor)
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// wl_surface</span>
+<span class="n">wl_surface</span> <span class="o">=</span> <span class="n">wl_compositor_create_surface</span><span class="p">(</span><span class="n">compositor</span><span class="p">)</span>
 
-// wl_buffer
-wl_shm_pool = wl_shm_create_pool( )
-wl_buffer = wl_shm_pool_create_buffer( )
+<span class="c1">// wl_buffer</span>
+<span class="n">wl_shm_pool</span> <span class="o">=</span> <span class="n">wl_shm_create_pool</span><span class="p">(</span> <span class="p">)</span>
+<span class="n">wl_buffer</span> <span class="o">=</span> <span class="n">wl_shm_pool_create_buffer</span><span class="p">(</span> <span class="p">)</span>
 
-// attach buffer to surface
-wl_surface_attach(wl_surface, wl_buffer)
+<span class="c1">// attach buffer to surface</span>
+<span class="n">wl_surface_attach</span><span class="p">(</span><span class="n">wl_surface</span><span class="p">,</span> <span class="n">wl_buffer</span><span class="p">)</span>
 
-/* 以下与窗口的管理\显示相关 */
+<span class="cm">/* 以下与窗口的管理\显示相关 */</span>
 
-// xdg_surface
-// xdg_wm_base 它也是一个global resouce，对应到 desktop-shell
-xdg_surface = xdg_wm_base_get_xdg_surface(xdg_wm_base, wl_surface)
+<span class="c1">// xdg_surface</span>
+<span class="c1">// xdg_wm_base 它也是一个global resouce，对应到 desktop-shell</span>
+<span class="n">xdg_surface</span> <span class="o">=</span> <span class="n">xdg_wm_base_get_xdg_surface</span><span class="p">(</span><span class="n">xdg_wm_base</span><span class="p">,</span> <span class="n">wl_surface</span><span class="p">)</span>
 
-// xdg_toplevel
-xdg_toplevel = xdg_surface_get_toplevel(xdg_toplevel)
+<span class="c1">// xdg_toplevel</span>
+<span class="n">xdg_toplevel</span> <span class="o">=</span> <span class="n">xdg_surface_get_toplevel</span><span class="p">(</span><span class="n">xdg_toplevel</span><span class="p">)</span>
 
-// wl_keyboard
-// wl_seat 是一个global resource
-// 通过wl_keyboard 创建一个listener就可接收按键
-wl_keyboard = wl_seat_get_keyboard(wl_seat)
-wl_keyboard_add_listener(wl_keyboard, keyboard_listener)
+<span class="c1">// wl_keyboard</span>
+<span class="c1">// wl_seat 是一个global resource</span>
+<span class="c1">// 通过wl_keyboard 创建一个listener就可接收按键</span>
+<span class="n">wl_keyboard</span> <span class="o">=</span> <span class="n">wl_seat_get_keyboard</span><span class="p">(</span><span class="n">wl_seat</span><span class="p">)</span>
+<span class="n">wl_keyboard_add_listener</span><span class="p">(</span><span class="n">wl_keyboard</span><span class="p">,</span> <span class="n">keyboard_listener</span><span class="p">)</span>
 
-// wl_pointer 鼠标指针
-// 通过wl_pointer 创建一个listener可以接收鼠标的移动信息
-wl_pointre = wl_seat_get_pointer(wl_weat)
-wl_pointer_add_listener（wl_pointer, pointer_listener)
+<span class="c1">// wl_pointer 鼠标指针</span>
+<span class="c1">// 通过wl_pointer 创建一个listener可以接收鼠标的移动信息</span>
+<span class="n">wl_pointre</span> <span class="o">=</span> <span class="n">wl_seat_get_pointer</span><span class="p">(</span><span class="n">wl_weat</span><span class="p">)</span>
+<span class="n">wl_pointer_add_listener</span><span class="err">（</span><span class="n">wl_pointer</span><span class="p">,</span> <span class="n">pointer_listener</span><span class="p">)</span>
 
-... ...
+<span class="p">...</span> <span class="p">...</span>
 
-</code></pre>
+</code></pre></div></div>
 
 <h4 id="24-client-渲染">2.4 Client 渲染</h4>
 
@@ -593,24 +593,40 @@ wl_pointer_add_listener（wl_pointer, pointer_listener)
   <li>全部完成后，提交呈现</li>
 </ol>
 
+<pre><code class="language-MERMAID">graph TD;
+    A--&gt;B;
+    A--&gt;C;
+    B--&gt;D;
+    C--&gt;D;
+</code></pre>
+
 <pre><code class="language-mermaid">sequenceDiagram
 participant C as Compositor
 participant O as Weston_output
 participant B as Backend
 
 loop 遍历weston_output_list
-	C -&gt;&gt; O: 要开始repaint_loop &lt;br /&gt;call backend_output start_repaint_loop( )	
-	C -&gt;&gt; B: repaint_begin( )
-	Note right of B: 创建 pending_state
-	C -&gt;&gt; O: 通知output repaint
-	O -&gt;&gt; C: 构建view_list, build_view_list( )
-	Note left of C:构建paint_node_z_order_list
+    C -&gt;&gt; O: 要开始repaint_loop &lt;br /&gt;call backend_output start_repaint_loop( )    
+    C -&gt;&gt; B: repaint_begin( )
+    Note right of B: 创建 pending_state
+    C -&gt;&gt; O: 通知output repaint
+    O -&gt;&gt; C: 构建view_list, build_view_list( )
+    Note left of C:构建paint_node_z_order_list
 
     C -&gt;&gt; B: assign_planes( ),设置输出plane
     C -&gt;&gt; B: drm_output_repaint( )
     Note right of B: 调用OpenGL API &lt;br/&gt;结合paint_node_z_order_list&lt;br/&gt;进行渲染
 end
-</code></pre>]]></content><author><name>Tao He</name></author><category term="Jekyll" /><summary type="html"><![CDATA[一. 启动Weston]]></summary></entry><entry><title type="html">only test</title><link href="https://sighingnow.github.io/blog/jekyll/2018-04-27-test.html" rel="alternate" type="text/html" title="only test" /><published>2018-04-27T00:00:00+08:00</published><updated>2018-04-27T00:00:00+08:00</updated><id>https://sighingnow.github.io/blog/jekyll/test</id><content type="html" xml:base="https://sighingnow.github.io/blog/jekyll/2018-04-27-test.html"><![CDATA[<p>only for test new txt</p>]]></content><author><name>Tao He</name></author><category term="Jekyll" /><summary type="html"><![CDATA[only for test new txt]]></summary></entry><entry><title type="html">硬中断</title><link href="https://sighingnow.github.io/blog/jekyll/2018-02-27-interrupte.html" rel="alternate" type="text/html" title="硬中断" /><published>2018-02-27T00:00:00+08:00</published><updated>2018-02-27T00:00:00+08:00</updated><id>https://sighingnow.github.io/blog/jekyll/interrupte</id><content type="html" xml:base="https://sighingnow.github.io/blog/jekyll/2018-02-27-interrupte.html"><![CDATA[<p>本来想写内核如何接收一个网络包这个过程，但发现把整个过程捋顺了，还是很难的。</p>
+</code></pre>]]></content><author><name>Tao He</name></author><category term="Jekyll" /><summary type="html"><![CDATA[一. 启动Weston]]></summary></entry><entry><title type="html">only test</title><link href="https://sighingnow.github.io/blog/jekyll/2018-04-27-test.html" rel="alternate" type="text/html" title="only test" /><published>2018-04-27T00:00:00+08:00</published><updated>2018-04-27T00:00:00+08:00</updated><id>https://sighingnow.github.io/blog/jekyll/test</id><content type="html" xml:base="https://sighingnow.github.io/blog/jekyll/2018-04-27-test.html"><![CDATA[<p>only for test new txt
+123
+dsf</p>
+
+<pre><code class="language-mermaid">graph TD;
+    A--&gt;B;
+    A--&gt;C;
+    B--&gt;D;
+    C--&gt;D;
+</code></pre>]]></content><author><name>Tao He</name></author><category term="Jekyll" /><summary type="html"><![CDATA[only for test new txt 123 dsf]]></summary></entry><entry><title type="html">硬中断</title><link href="https://sighingnow.github.io/blog/jekyll/2018-02-27-interrupte.html" rel="alternate" type="text/html" title="硬中断" /><published>2018-02-27T00:00:00+08:00</published><updated>2018-02-27T00:00:00+08:00</updated><id>https://sighingnow.github.io/blog/jekyll/interrupte</id><content type="html" xml:base="https://sighingnow.github.io/blog/jekyll/2018-02-27-interrupte.html"><![CDATA[<p>本来想写内核如何接收一个网络包这个过程，但发现把整个过程捋顺了，还是很难的。</p>
 
 <p>推导整个过程的起点是<strong>中断</strong>，包括<strong>硬中断</strong>和<strong>软中断</strong>。</p>
 

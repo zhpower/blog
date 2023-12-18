@@ -8,7 +8,7 @@
 <link rel="stylesheet" href="/blog/assets/gitbook/gitbook-plugin-search-pro/search.css">
 <link rel="stylesheet" href="/blog/assets/gitbook/gitbook-plugin-back-to-top-button/plugin.css">
 
-<link rel="stylesheet" href="/blog/assets/gitbook/rouge/colorful.css">
+<link rel="stylesheet" href="/blog/assets/gitbook/rouge/magritte.css">
 
 <link rel="stylesheet" href="/blog/assets/gitbook/custom.css">
 <link rel="stylesheet" href="/blog/assets/gitbook/custom-local.css">
@@ -208,7 +208,16 @@
                         <h1 id="/jekyll/test">only test</h1>
                     
 
-                    <p>only for test new txt</p>
+                    <p>only for test new txt
+123
+dsf</p>
+
+<pre><code class="language-mermaid">graph TD;
+    A--&gt;B;
+    A--&gt;C;
+    B--&gt;D;
+    C--&gt;D;
+</code></pre>
 </section>
             </div><div class="search-results">
     <div class="has-results">
@@ -240,6 +249,38 @@ window.MathJax = {
 
 
 <!-- introduce per-page mermaid support -->
+
+    <script>
+    function render_mermaid() {
+        mermaid.initialize({
+            startOnLoad: false,
+            theme: "default",
+        });
+        window.mermaid.init(undefined, document.querySelectorAll('.language-mermaid'));
+    }
+
+    function initialize_mermaid() {
+        if (document.readyState === "loading") {
+            // Loading hasn't finished yet
+            document.addEventListener("DOMContentLoaded", render_mermaid);
+        } else {
+            // `DOMContentLoaded` has already fired
+            render_mermaid();
+        }
+    }
+
+    if (window.mermaid_script && window.mermaid) {
+        initialize_mermaid();
+    } else {
+        window.mermaid_script = document.createElement("script");
+        mermaid_script.onload = initialize_mermaid;
+        document.head.appendChild(mermaid_script);
+        mermaid_script.defer = true;
+        mermaid_script.id = 'mermaid-script';
+        mermaid_script.src = 'https://unpkg.com/mermaid@10.4.0/dist/mermaid.min.js';
+    }
+</script>
+
 
 
 <!-- introduce mathjax support -->
@@ -387,7 +428,7 @@ window.MathJax = {
     },
     "gitbook": {
         "version": "3.2.3",
-        "time": "2023-12-18 14:26:18 +0800"
+        "time": "2023-12-18 17:13:56 +0800"
     },
     "basePath": "/blog",
     "book": {
