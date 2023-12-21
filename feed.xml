@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.2">Jekyll</generator><link href="https://sighingnow.github.io/blog/feed.xml" rel="self" type="application/atom+xml" /><link href="https://sighingnow.github.io/blog/" rel="alternate" type="text/html" /><updated>2023-12-18T17:13:56+08:00</updated><id>https://sighingnow.github.io/blog/feed.xml</id><title type="html">学习笔记</title><subtitle>Build Jekyll site with the GitBook style.
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.2">Jekyll</generator><link href="https://sighingnow.github.io/blog/feed.xml" rel="self" type="application/atom+xml" /><link href="https://sighingnow.github.io/blog/" rel="alternate" type="text/html" /><updated>2023-12-21T20:08:12+08:00</updated><id>https://sighingnow.github.io/blog/feed.xml</id><title type="html">学习笔记</title><subtitle>Build Jekyll site with the GitBook style.
 </subtitle><author><name>kevin_zh</name></author><entry><title type="html">位运算</title><link href="https://sighingnow.github.io/blog/jekyll/2023-04-27-bit.html" rel="alternate" type="text/html" title="位运算" /><published>2023-04-27T00:00:00+08:00</published><updated>2023-04-27T00:00:00+08:00</updated><id>https://sighingnow.github.io/blog/jekyll/bit</id><content type="html" xml:base="https://sighingnow.github.io/blog/jekyll/2023-04-27-bit.html"><![CDATA[<h3 id="1位运算概述">1.位运算概述</h3>
 
 <p>从现代计算机中所有的数据二进制的形式存储在设备中。即 0、1 两种状态，计算机对二进制数据进行的运算(+、-、*、/)都是叫位运算，即将符号位共同参与运算的运算。</p>
@@ -306,9 +306,9 @@ ffmpeg.exe -i agf-dog-1280x960.jpg  -vf scale=1920:1080 agf-dog-1920x1080.jpg
 <p>四倍慢速：</p>
 
 <pre><code class="language-cobol">ffmpeg -i test1.mp4 -vf  "setpts=4*PTS" test2.mp4
-</code></pre>]]></content><author><name>Tao He</name></author><category term="Jekyll" /><summary type="html"><![CDATA[01. 视频分割 ffmpeg -ss 00:00:00 -i input.mp4 -c copy -t 60 output.mp4 -ss 表示视频分割的起始时间，-t 表示分割时长，同时也可以用 00:01:00表示]]></summary></entry><entry><title type="html">weston</title><link href="https://sighingnow.github.io/blog/jekyll/2021-04-27-Weston.html" rel="alternate" type="text/html" title="weston" /><published>2021-04-27T00:00:00+08:00</published><updated>2021-04-27T00:00:00+08:00</updated><id>https://sighingnow.github.io/blog/jekyll/Weston</id><content type="html" xml:base="https://sighingnow.github.io/blog/jekyll/2021-04-27-Weston.html"><![CDATA[<h3 id="一-启动weston">一. 启动Weston</h3>
+</code></pre>]]></content><author><name>Tao He</name></author><category term="Jekyll" /><summary type="html"><![CDATA[01. 视频分割 ffmpeg -ss 00:00:00 -i input.mp4 -c copy -t 60 output.mp4 -ss 表示视频分割的起始时间，-t 表示分割时长，同时也可以用 00:01:00表示]]></summary></entry><entry><title type="html">weston</title><link href="https://sighingnow.github.io/blog/jekyll/2021-04-27-Weston.html" rel="alternate" type="text/html" title="weston" /><published>2021-04-27T00:00:00+08:00</published><updated>2021-04-27T00:00:00+08:00</updated><id>https://sighingnow.github.io/blog/jekyll/Weston</id><content type="html" xml:base="https://sighingnow.github.io/blog/jekyll/2021-04-27-Weston.html"><![CDATA[<h1 id="一-启动weston">一. 启动Weston</h1>
 
-<h4 id="11-实现内容">1.1 实现内容</h4>
+<h2 id="11-实现内容">1.1 实现内容</h2>
 
 <ol>
   <li>解析cmdline</li>
@@ -320,7 +320,7 @@ ffmpeg.exe -i agf-dog-1280x960.jpg  -vf scale=1920:1080 agf-dog-1920x1080.jpg
   <li>调用wl_display_run( ) <strong>循环等待event的发生</strong></li>
 </ol>
 
-<h4 id="12-伪代码">1.2 伪代码</h4>
+<h2 id="12-伪代码">1.2 伪代码</h2>
 
 <div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">wet_main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">argv</span><span class="p">[],</span> <span class="k">const</span> <span class="k">struct</span> <span class="n">weston_testsuite_data</span> <span class="o">*</span><span class="n">test_data</span><span class="p">){</span>
 
@@ -362,11 +362,11 @@ ffmpeg.exe -i agf-dog-1280x960.jpg  -vf scale=1920:1080 agf-dog-1920x1080.jpg
 <span class="p">}</span>
 </code></pre></div></div>
 
-<h4 id="13-backend-renderer-shell的作用">1.3 backend, renderer, shell的作用</h4>
+<h2 id="13-backend-renderer-shell的作用">1.3 backend, renderer, shell的作用</h2>
 
 <p>结构图</p>
 
-<p>![[image-20230209140244854.png]]</p>
+<p><img src="/blog/assets/wayland/image-20230209140244854.png" alt="image" /></p>
 
 <p>backend</p>
 <div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span>
@@ -393,11 +393,11 @@ renderer接口供backend内部使用，外部通过调用backend接口触发</p>
 } gl_renderer_interface
 </code></pre>
 
-<h3 id="二-client-动作">二. Client 动作</h3>
+<h1 id="二-client-动作">二. Client 动作</h1>
 
-<h4 id="21-client的接入和global资源代理的创建">2.1 Client的接入和global资源代理的创建</h4>
+<h2 id="21-client的接入和global资源代理的创建">2.1 Client的接入和global资源代理的创建</h2>
 
-<h6 id="流程">流程</h6>
+<h3 id="流程">流程</h3>
 <ol>
   <li>连接display</li>
   <li>获得registry，注册listener，用于处理weston资源变化时的callback</li>
@@ -405,7 +405,7 @@ renderer接口供backend内部使用，外部通过调用backend接口触发</p>
   <li>进入loop，不断调用wl_display_dispatch( )，使得wayland内部循环处理各类event</li>
 </ol>
 
-<h6 id="伪代码">伪代码</h6>
+<h3 id="伪代码">伪代码</h3>
 <div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">static</span> <span class="kt">void</span> <span class="nf">global_resource_found</span><span class="p">(</span><span class="kt">void</span><span class="o">*</span> <span class="n">data</span><span class="p">,</span> <span class="k">struct</span> <span class="n">wl_registry</span><span class="o">*</span> <span class="n">registry</span><span class="p">,</span> <span class="kt">uint32_t</span> <span class="n">name</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">interface</span><span class="p">,</span> <span class="kt">uint32_t</span> <span class="n">version</span><span class="p">)</span> <span class="p">{</span>
 
     <span class="c1">// 通过字符串interface 判断是什么resource，</span>
@@ -450,10 +450,11 @@ renderer接口供backend内部使用，外部通过调用backend接口触发</p>
 <span class="p">}</span>
 </code></pre></div></div>
 
-<h4 id="22-内部weston---client-通讯机制">2.2 内部weston - client 通讯机制</h4>
+<h2 id="22-内部weston---client-通讯机制">2.2 内部weston - client 通讯机制</h2>
 
-<p>==request==:  Client –&gt; Server
-==event==   :  Server –&gt; Client</p>
+<p><mark>request</mark>:  Client –&gt; Server</p>
+
+<p><mark>event</mark>  :  Server –&gt; Client</p>
 
 <p>术语上，Wayland 中把 Client 发给 Server 的跨进程函数调用称为 request，反方向的跨进程函数调用称为 event。 本质上，它们处理的方式是类似的。</p>
 
@@ -465,10 +466,10 @@ renderer接口供backend内部使用，外部通过调用backend接口触发</p>
 
 <p>等到了目标进程后， 会从数据流通过 wl_connection_demarshal()转回 wl_closure。</p>
 
-<h6 id="rpc-图示">RPC 图示</h6>
-<p>![[image-20230210145327279.png]]</p>
+<h4 id="rpc-图示">RPC 图示</h4>
+<p><img src="/blog/assets/wayland/image-20230210145327279.png" alt="image-20230210145327279.png" /></p>
 
-<h6 id="object-rpc-机制">object RPC 机制</h6>
+<h4 id="object-rpc-机制">object RPC 机制</h4>
 
 <p>这个过程类似于 Android 中的 Parcel 机制。那么 问题来了，参数中的整形，字符串什么的都好搞，拷贝就行。但如果参数中包含对象，我们不能把整个对象 拷贝过去，也不能传引用过去。那么需要一种机制来作<strong>同一对象在 Server 和 Client 端的映射</strong>，这是通过 wl_map 实现的。</p>
 
@@ -480,11 +481,11 @@ renderer接口供backend内部使用，外部通过调用backend接口触发</p>
 
 <p>这个映射过程如下图所示(以 wl_registry 为例)</p>
 
-<p><img src="https://img-blog.csdn.net/20141019204223671?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvamluemh1b2p1bg==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="image" /></p>
+<p><img src="/blog/assets/wayland/20141019204223671.png" alt="image" /></p>
 
-<h4 id="23-client-创建各类资源proxy">2.3 Client 创建各类资源proxy</h4>
+<h2 id="23-client-创建各类资源proxy">2.3 Client 创建各类资源proxy</h2>
 
-<h5 id="主要资源proxy">主要资源proxy</h5>
+<h3 id="主要资源proxy">主要资源proxy</h3>
 
 <div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// wl_surface</span>
 <span class="n">wl_surface</span> <span class="o">=</span> <span class="n">wl_compositor_create_surface</span><span class="p">(</span><span class="n">compositor</span><span class="p">)</span>
@@ -592,13 +593,6 @@ renderer接口供backend内部使用，外部通过调用backend接口触发</p>
   <li>依据paint_node_z_order_list, OpenGL依次建立shader，texture等进行渲染</li>
   <li>全部完成后，提交呈现</li>
 </ol>
-
-<pre><code class="language-MERMAID">graph TD;
-    A--&gt;B;
-    A--&gt;C;
-    B--&gt;D;
-    C--&gt;D;
-</code></pre>
 
 <pre><code class="language-mermaid">sequenceDiagram
 participant C as Compositor
@@ -997,4 +991,25 @@ dsf</p>
 <p><img src="https://mp.weixin.qq.com/mp/qrcode?scene=10000004&amp;size=102&amp;__biz=MzAxODI5ODMwOA==&amp;mid=2666559053&amp;idx=2&amp;sn=cdd9e3e14102740664c93bfe99bb0044&amp;send_time=" alt="" /></p>
 
 <p>微信扫一扫<br />
-关注该公众号</p>]]></content><author><name>Tao He</name></author><category term="Jekyll" /><summary type="html"><![CDATA[本来想写内核如何接收一个网络包这个过程，但发现把整个过程捋顺了，还是很难的。]]></summary></entry></feed>
+关注该公众号</p>]]></content><author><name>Tao He</name></author><category term="Jekyll" /><summary type="html"><![CDATA[本来想写内核如何接收一个网络包这个过程，但发现把整个过程捋顺了，还是很难的。]]></summary></entry><entry><title type="html">Direct Rendering Manager driver</title><link href="https://sighingnow.github.io/blog/drm/2018-02-01-DRM.html" rel="alternate" type="text/html" title="Direct Rendering Manager driver" /><published>2018-02-01T00:00:00+08:00</published><updated>2018-02-01T00:00:00+08:00</updated><id>https://sighingnow.github.io/blog/drm/DRM</id><content type="html" xml:base="https://sighingnow.github.io/blog/drm/2018-02-01-DRM.html"><![CDATA[<h1 id="一drm总述">一、DRM总述</h1>
+<h2 id="11在整个系统中的位置">1.1在整个系统中的位置</h2>
+<p><img src="/blog/assets/DRM/640px-DRM_architecture.png" alt="drm" /></p>
+<h1 id="二图形buffer相关">二、图形buffer相关</h1>
+<h2 id="21-几个概念-dumb-prime">2.1 几个概念: dumb, prime</h2>
+<h2 id="21超简单实现">2.1超简单实现</h2>
+<h3 id="21-简单应用程序">2.1 简单应用程序</h3>
+<h3 id="22-实现简单的驱动">2.2 实现简单的驱动</h3>
+<h3 id="23-它们是如何衔接起来的">2.3 它们是如何衔接起来的</h3>
+<h4 id="231">2.3.1</h4>
+<h4 id="232">2.3.2</h4>
+<h4 id="233">2.3.3</h4>
+<h4 id="234">2.3.4</h4>
+
+<h2 id="22-基于gem的实现">2.2 基于GEM的实现</h2>
+<h3 id="221-系统现有的两种实现">2.2.1 系统现有的两种实现</h3>
+<h4 id="2211-share-memory">2.2.1.1 share memory</h4>
+<h4 id="2212-cma">2.2.1.2 CMA</h4>
+
+<h1 id="三kms的相关">三、KMS的相关</h1>
+<h2 id="31-传统实现">3.1 传统实现</h2>
+<h2 id="32-atomic实现">3.2 atomic实现</h2>]]></content><author><name>kevin</name></author><category term="DRM" /><summary type="html"><![CDATA[一、DRM总述 1.1在整个系统中的位置 二、图形buffer相关 2.1 几个概念: dumb, prime 2.1超简单实现 2.1 简单应用程序 2.2 实现简单的驱动 2.3 它们是如何衔接起来的 2.3.1 2.3.2 2.3.3 2.3.4]]></summary></entry></feed>
