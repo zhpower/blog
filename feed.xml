@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.2">Jekyll</generator><link href="http://localhost:4000/blog/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/blog/" rel="alternate" type="text/html" /><updated>2024-02-19T18:24:56+08:00</updated><id>http://localhost:4000/blog/feed.xml</id><title type="html">学习笔记</title><subtitle>Build Jekyll site with the GitBook style.
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.2">Jekyll</generator><link href="http://localhost:4000/blog/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/blog/" rel="alternate" type="text/html" /><updated>2024-02-21T15:57:44+08:00</updated><id>http://localhost:4000/blog/feed.xml</id><title type="html">学习笔记</title><subtitle>Build Jekyll site with the GitBook style.
 </subtitle><author><name>kevin_zh</name></author><entry><title type="html">位运算</title><link href="http://localhost:4000/blog/jekyll/2023-04-27-bit.html" rel="alternate" type="text/html" title="位运算" /><published>2023-04-27T00:00:00+08:00</published><updated>2023-04-27T00:00:00+08:00</updated><id>http://localhost:4000/blog/jekyll/bit</id><content type="html" xml:base="http://localhost:4000/blog/jekyll/2023-04-27-bit.html"><![CDATA[<h3 id="1位运算概述">1.位运算概述</h3>
 
 <p>从现代计算机中所有的数据二进制的形式存储在设备中。即 0、1 两种状态，计算机对二进制数据进行的运算(+、-、*、/)都是叫位运算，即将符号位共同参与运算的运算。</p>
@@ -1140,9 +1140,340 @@ dsf</p>
 <h1 id="二图形buffer相关">二、图形buffer相关</h1>
 
 <h2 id="21-几个概念-dumb-prime">2.1 几个概念: dumb, prime</h2>
-<h2 id="21超简单实现">2.1超简单实现</h2>
+
+<h3 id="dumb">dumb</h3>
+
+<p>旧时的显卡由一块很小的显存（通常为640x480）加一块数模转换电路（DAC）组成，说白了就是一块 Framebuffer + Display Controller。显卡的功能极其简单，只负责将显存中的图像数据转换成RGB信号发送出去即可，而所有的绘图操作则都交给 CPU 来完成。行业里将这种显卡称为 VGA(Video Graphics Array) Card，它的显存则被称为“Dumb Frame Buffer”。而到了后期，随着显卡技术的不断发展，许多原来由 CPU 干的活，渐渐的都被显卡取代了。从最初支持某些特定绘图指令（如画点、画线）的显卡，到后来支持视频解码的 Video Card，再到现代支持复杂3D渲染指令（如OpenGL）的 GPU 显卡，CPU 绘图的繁重任务彻底得到了解放。与 VGA Card 相比较，行业里将后来显卡的显存称为“Smart Frame Buffer”。</p>
+
+<p>首先从这两种称谓上我们就可以看出，dumb 是 smart 的反义词，因此 dumb 在这里的解释应该是“傻的”或“傻瓜式的”，而不是“哑的”。
+dumb buffer 和 smart buffer 的区别就在于，你写到显存里的数据，是可以直接上屏显示的图像内容，还是一堆需要GPU解析的命令和资源数据。</p>
+
+<p>与 dumb buffer 命名类似的还有：</p>
+
+<ul>
+  <li>dumb-terminal：不支持特殊字符的终端，如“清屏”、“粗体”、“彩色字符”等等</li>
+  <li>dumb-panel：不带 GRAM 的 panel</li>
+  <li>dumb-TV：与 Smart-TV 相反，指以前老式的黑白电视</li>
+</ul>
+
+<p>如今的 IT 领域，dumb一词更多的代表 “功能简单的”、“老式的”、“传统的” 含义</p>
+
+<h3 id="prime">prime</h3>
+
+<p>RIME 在 DRM 驱动中其实是一种buffer共享机制，它是基于 dma-buf 来实现的.</p>
+
+<p>2010年2月9日，NVIDIA 官方发布了一项新的双显卡技术 —— <code class="language-plaintext highlighter-rouge">Optimus Technology</code>。该技术主要运用于带双显卡的笔记本（集成显卡+独立显卡），可以根据当前集成显卡的工作负载，自动的将一部分图形任务交给独立显卡去处理，以此来达到功耗和性能的最佳平衡。举例来说，一个带 Intel 集成显卡和 NVIDIA 独立显卡的笔记本，通常将集成显卡做为默认显卡，且充当了 Display Controller 的角色。当用户使用办公软件时，由于需要渲染的任务量不多，此时直接由 Intel 集成显卡来完成。而当用户玩3D游戏时，由于图形渲染的负载较重，此时系统会将部分或全部的任务交给 NVIDIA 独立显卡去处理，等处理完后再将结果送回给集成显卡做最后的合成显示。而这整个过程都是由软硬件自动完成的，中间无需人为干预，用户体验十分流畅。只可惜，该技术只能用在 Windows 系统上，Linux 系统不支持。</p>
+
+<p>当时的 Linux 开源社区，Dave Airlie （RedHat Graphics 工程师，DRM 社区 maintainer）在业余时间里研究起 Optimus 技术，并琢磨着怎样在 Linux 平台上实现类似的功能。结果不到2周时间，他就做出了该方案的原型设计，并在自己的笔记本上（Intel集成显卡+ATI独立显卡）实现了该功能的验证。</p>
+
+<p>他将这项技术命名为“PRIME”。 命名为<code class="language-plaintext highlighter-rouge">PRIME</code> 主要是映射<code class="language-plaintext highlighter-rouge">Optimus</code>
+Optimus Prime 就是变形金刚 擎天柱的名字！ NVIDIA 当初给他们 Optimus 技术命名的精妙之处：擎天柱本身所具有的变形能力，形象的表达了 Optimus 这项技术可以在功耗和性能之间来回自由变换。 Dave 将他这项 Linux 下的技术命名为 “PRIME”，其实是很巧妙的玩了一把文字游戏，隐晦的告诉大家：DRM Prime 技术就是用来对标 NVIDIA Optimus 技术的。</p>
+
+<h3 id="framebuffer">framebuffer</h3>
+
+<h2 id="21超简单dumb实现">2.1超简单DUMB实现</h2>
+<p><img src="/blog/assets/DRM/dumb.png" alt="drm" /></p>
+
+<p>与dumb buffer相关的userspace接口有四个, 下表列出了它们的名字, 作用和对应要实现的函数</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>interface</th>
+      <th>Description</th>
+      <th>drm driver</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>ioctl(fd, DRM_IOCTL_MODE_CREATE_DUMB, …)</td>
+      <td>向驱动申请一个dumb buffer，返回一个handle，指向新分配的buffer</td>
+      <td>.dumb_create()</td>
+    </tr>
+    <tr>
+      <td>ioctl(fd, DRM_IOCTL_MODE_MAP_DUMB, …)</td>
+      <td>为buffer map做准备，传入handle，得到一个offset</td>
+      <td>.dumb_map_offset()</td>
+    </tr>
+    <tr>
+      <td>ioctl(fd, DRM_IOCTL_MODE_DESTROY_DUMB, …)</td>
+      <td>销毁该dumb buffer</td>
+      <td>.dumb_destroy()</td>
+    </tr>
+    <tr>
+      <td>mmap(fd, …)</td>
+      <td>传入 buffer对应的offset，映射到进程空间，返回一个用户空间可使用的地址。</td>
+      <td>.fops.mmap()</td>
+    </tr>
+  </tbody>
+</table>
+
 <h3 id="21-简单应用程序">2.1 简单应用程序</h3>
+
+<p>下面是一个简单的应用程序，演示了dumb buffer的申请，mmap，使用和销毁。</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;fcntl.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;sys/mman.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;unistd.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;xf86drm.h&gt;</span><span class="cp">
+</span>
+<span class="cp">#define log(fmt, args...) printf("%s():%d " fmt "\n", __func__, __LINE__, ##args)
+#define err(fmt, args...) printf("\033[35m%s():%d " fmt "\033[0m\n", __func__, __LINE__, ##args)
+</span>
+<span class="k">static</span> <span class="kt">int</span> <span class="nf">create_dumb_buffer</span><span class="p">(</span><span class="kt">int</span> <span class="n">fd</span><span class="p">,</span> <span class="kt">int</span> <span class="n">width</span><span class="p">,</span> <span class="kt">int</span> <span class="n">height</span><span class="p">){</span>
+    <span class="kt">int</span> <span class="n">ret</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">struct</span> <span class="n">drm_mode_create_dumb</span> <span class="n">create</span> <span class="o">=</span> <span class="p">{};</span>
+    <span class="n">create</span><span class="p">.</span><span class="n">width</span>  <span class="o">=</span> <span class="n">width</span><span class="p">;</span>
+    <span class="n">create</span><span class="p">.</span><span class="n">height</span> <span class="o">=</span><span class="n">height</span><span class="p">;</span>
+    <span class="n">create</span><span class="p">.</span><span class="n">bpp</span>    <span class="o">=</span> <span class="mi">4</span><span class="o">*</span><span class="mi">8</span><span class="p">;</span> <span class="c1">// byte per pixel</span>
+    <span class="n">ret</span> <span class="o">=</span> <span class="n">drmIoctl</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">DRM_IOCTL_MODE_CREATE_DUMB</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">create</span><span class="p">);</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">ret</span><span class="p">){</span>
+        <span class="n">err</span><span class="p">(</span><span class="s">"ret:%d"</span><span class="p">,</span> <span class="n">ret</span><span class="p">);</span>
+        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>    
+    <span class="k">return</span> <span class="n">create</span><span class="p">.</span><span class="n">handle</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">static</span> <span class="kt">int</span> <span class="nf">get_dumb_buffer_offset</span><span class="p">(</span><span class="kt">int</span> <span class="n">fd</span><span class="p">,</span> <span class="kt">int</span> <span class="n">handle</span><span class="p">){</span>
+    <span class="k">struct</span> <span class="n">drm_mode_map_dumb</span> <span class="n">map</span> <span class="o">=</span> <span class="p">{};</span>  
+    <span class="n">map</span><span class="p">.</span><span class="n">handle</span> <span class="o">=</span> <span class="n">handle</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">ret</span> <span class="o">=</span> <span class="n">drmIoctl</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">DRM_IOCTL_MODE_MAP_DUMB</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">map</span><span class="p">);</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">ret</span><span class="p">){</span>
+        <span class="n">err</span><span class="p">(</span><span class="s">"ret:%d"</span><span class="p">,</span> <span class="n">ret</span><span class="p">);</span>
+        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">map</span><span class="p">.</span><span class="n">offset</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">static</span> <span class="kt">void</span><span class="o">*</span> <span class="nf">mmap_dumb_buffer</span><span class="p">(</span><span class="kt">int</span> <span class="n">fd</span><span class="p">,</span> <span class="kt">int</span> <span class="n">size</span><span class="p">,</span> <span class="kt">int</span> <span class="n">offset</span><span class="p">){</span>
+    <span class="kt">void</span> <span class="o">*</span><span class="n">addr</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+    <span class="n">addr</span> <span class="o">=</span> <span class="n">mmap</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">PROT_READ</span> <span class="o">|</span> <span class="n">PROT_WRITE</span><span class="p">,</span> <span class="n">MAP_SHARED</span><span class="p">,</span> <span class="n">fd</span><span class="p">,</span> <span class="n">offset</span><span class="p">);</span>
+    <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">addr</span><span class="p">){</span>
+        <span class="n">err</span><span class="p">(</span><span class="s">"mmap dumb buffer offset:0x%x failed"</span><span class="p">,</span> <span class="n">offset</span><span class="p">);</span>
+        <span class="k">return</span> <span class="nb">NULL</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">addr</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">static</span> <span class="kt">void</span> <span class="nf">destroy_dumb_buffer</span><span class="p">(</span><span class="kt">int</span> <span class="n">fd</span><span class="p">,</span> <span class="kt">int</span> <span class="n">handle</span><span class="p">){</span>
+    <span class="k">struct</span> <span class="n">drm_mode_destroy_dumb</span> <span class="n">destroy</span> <span class="o">=</span> <span class="p">{};</span>
+    <span class="n">destroy</span><span class="p">.</span><span class="n">handle</span> <span class="o">=</span> <span class="n">handle</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">ret</span> <span class="o">=</span> <span class="n">drmIoctl</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">DRM_IOCTL_MODE_DESTROY_DUMB</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">destroy</span><span class="p">);</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">ret</span><span class="p">){</span>
+        <span class="n">err</span><span class="p">(</span><span class="s">"DRM_IOCTL_MODE_DESTROY_DUMB failed. ret:%d"</span><span class="p">,</span> <span class="n">ret</span><span class="p">);</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">**</span><span class="n">argv</span><span class="p">){</span>
+    <span class="kt">int</span> <span class="n">fd</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">width</span> <span class="o">=</span> <span class="mi">1024</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">height</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">size</span> <span class="o">=</span> <span class="n">width</span><span class="o">*</span><span class="n">height</span><span class="p">;</span>
+    <span class="n">fd</span> <span class="o">=</span> <span class="n">open</span><span class="p">(</span><span class="s">"/dev/dri/card0"</span><span class="p">,</span> <span class="n">O_RDWR</span> <span class="o">|</span> <span class="n">O_CLOEXEC</span><span class="p">);</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">fd</span><span class="o">&lt;=</span><span class="mi">0</span><span class="p">){</span>
+        <span class="n">err</span><span class="p">(</span><span class="s">"open dev failed."</span><span class="p">);</span>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="kt">int</span> <span class="n">handle</span> <span class="o">=</span> <span class="n">create_dumb_buffer</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">);</span>
+    <span class="n">log</span><span class="p">(</span><span class="s">"create dumb buffer, get handle:%d"</span><span class="p">,</span> <span class="n">handle</span><span class="p">);</span>
+
+    <span class="kt">int</span> <span class="n">offset</span> <span class="o">=</span> <span class="n">get_dumb_buffer_offset</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">handle</span><span class="p">);</span>
+    <span class="n">log</span><span class="p">(</span><span class="s">"get dumb buffer offset:0x%x"</span><span class="p">,</span> <span class="n">offset</span><span class="p">);</span>
+
+    <span class="kt">void</span> <span class="o">*</span><span class="n">addr</span> <span class="o">=</span> <span class="n">mmap_dumb_buffer</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">offset</span><span class="p">);</span>
+    <span class="n">log</span><span class="p">(</span><span class="s">"get dumb buffer addr:%p"</span><span class="p">,</span><span class="n">addr</span><span class="p">);</span>
+
+    <span class="c1">//在addr所指向的buffer上进行渲染</span>
+
+    <span class="n">munmap</span><span class="p">(</span><span class="n">addr</span><span class="p">,</span> <span class="n">size</span><span class="p">);</span> 
+
+    <span class="n">destroy_dumb_buffer</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">handle</span><span class="p">);</span>
+    <span class="n">log</span><span class="p">(</span><span class="s">"destroy dumb buffer"</span><span class="p">);</span>
+
+    <span class="n">getchar</span><span class="p">();</span>
+    <span class="n">close</span><span class="p">(</span><span class="n">fd</span><span class="p">);</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
 <h3 id="22-实现简单的驱动">2.2 实现简单的驱动</h3>
+
+<p>主要是.dumb_create(), .dumb_map_offset(), .dumb_destroy, fops.mmap()的实现</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;linux/module.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;linux/platform_device.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;drm/drm_drv.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;drm/drm_file.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;drm/drm_ioctl.h&gt;</span><span class="cp">
+</span>
+<span class="cp">#define DRIVER_NAME "drm dumb driver"
+#define DRIVER_DESC "Virtual drm dumb driver"
+#define DRIVER_DATE "20191114"
+#define DRIVER_MAJOR 1
+#define DRIVER_MINOR 0
+</span>
+<span class="cp">#define MAX_NUM 10
+#define log(fmt, args...) printk("%s():%d " fmt "\n", __func__, __LINE__, ##args)
+#define err(fmt, args...) printk("\033[35m%s():%d " fmt "\033[0m\n", __func__, __LINE__, ##args)
+</span>
+<span class="k">struct</span> <span class="n">dumb_device</span> <span class="p">{</span>
+    <span class="k">struct</span> <span class="n">drm_device</span> <span class="n">drm</span><span class="p">;</span>
+    <span class="k">struct</span> <span class="n">platform_device</span> <span class="o">*</span><span class="n">platform_dev</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="k">static</span> <span class="k">struct</span> <span class="n">dumb_device</span><span class="o">*</span> <span class="n">dumb_device</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+<span class="k">static</span> <span class="k">struct</span> <span class="n">page</span>  <span class="o">*</span><span class="n">pages</span><span class="p">[</span><span class="n">MAX_NUM</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">};</span>
+<span class="k">static</span> <span class="kt">int</span> <span class="n">page_idx</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+<span class="k">static</span> <span class="kt">int</span> <span class="nf">dumb_mmap_impl</span><span class="p">(</span><span class="k">struct</span> <span class="n">file</span><span class="o">*</span> <span class="n">filp</span><span class="p">,</span> <span class="k">struct</span> <span class="n">vm_area_struct</span><span class="o">*</span> <span class="n">vma</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">pfn_start</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>    
+    <span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">size</span> <span class="o">=</span> <span class="n">vma</span><span class="o">-&gt;</span><span class="n">vm_end</span> <span class="o">-</span> <span class="n">vma</span><span class="o">-&gt;</span><span class="n">vm_start</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">ret</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">idx</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="cm">/*********************************************************************
+     * vm_pgoff: 也是vm_are_struct的一个字段
+     * 表示偏移量，它是以page size计数的。 pg表示page计数，off表示偏移
+     *********************************************************************/</span>
+    <span class="n">idx</span> <span class="o">=</span> <span class="n">vma</span><span class="o">-&gt;</span><span class="n">vm_pgoff</span><span class="p">;</span>
+    <span class="n">pfn_start</span> <span class="o">=</span> <span class="n">page_to_pfn</span><span class="p">(</span><span class="n">pages</span><span class="p">[</span><span class="n">idx</span><span class="p">]);</span>
+
+    <span class="n">log</span><span class="p">(</span><span class="s">"idx:%d phy: 0x%lx, vm_pgoff: 0x%lx, vma-&gt;vm_start:0x%lx, size: 0x%lx"</span><span class="p">,</span>
+            <span class="n">idx</span><span class="p">,</span> <span class="n">pfn_start</span> <span class="o">&lt;&lt;</span> <span class="n">PAGE_SHIFT</span><span class="p">,</span> <span class="n">vma</span><span class="o">-&gt;</span><span class="n">vm_pgoff</span><span class="p">,</span> <span class="n">vma</span><span class="o">-&gt;</span><span class="n">vm_start</span><span class="p">,</span> <span class="n">size</span><span class="p">);</span>
+
+    <span class="n">ret</span> <span class="o">=</span> <span class="n">remap_pfn_range</span><span class="p">(</span><span class="n">vma</span><span class="p">,</span> <span class="n">vma</span><span class="o">-&gt;</span><span class="n">vm_start</span><span class="p">,</span> <span class="n">pfn_start</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">vma</span><span class="o">-&gt;</span><span class="n">vm_page_prot</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">ret</span><span class="p">)</span>
+        <span class="n">err</span><span class="p">(</span><span class="s">"remap_pfn_range failed at [0x%lx  0x%lx]"</span><span class="p">,</span> <span class="n">vma</span><span class="o">-&gt;</span><span class="n">vm_start</span><span class="p">,</span> <span class="n">vma</span><span class="o">-&gt;</span><span class="n">vm_end</span><span class="p">);</span>
+    <span class="k">else</span><span class="p">{</span>
+        <span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">virt_start</span> <span class="o">=</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">long</span><span class="p">)</span><span class="n">page_address</span><span class="p">(</span><span class="n">pages</span><span class="p">[</span><span class="n">idx</span><span class="p">]);</span>        
+        <span class="n">log</span><span class="p">(</span><span class="s">"map 0x%lx to 0x%lx, size: 0x%lx"</span><span class="p">,</span>  <span class="n">virt_start</span><span class="p">,</span> <span class="n">vma</span><span class="o">-&gt;</span><span class="n">vm_start</span><span class="p">,</span> <span class="n">size</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">static</span> <span class="k">const</span> <span class="k">struct</span> <span class="n">file_operations</span> <span class="n">dumb_driver_fops</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="p">.</span><span class="n">owner</span>      <span class="o">=</span> <span class="n">THIS_MODULE</span><span class="p">,</span>
+    <span class="p">.</span><span class="n">open</span>       <span class="o">=</span> <span class="n">drm_open</span><span class="p">,</span>
+    <span class="p">.</span><span class="n">release</span>    <span class="o">=</span> <span class="n">drm_release</span><span class="p">,</span>
+    <span class="p">.</span><span class="n">unlocked_ioctl</span> <span class="o">=</span> <span class="n">drm_ioctl</span><span class="p">,</span>
+    <span class="p">.</span><span class="n">compat_ioctl</span> <span class="o">=</span> <span class="n">drm_compat_ioctl</span><span class="p">,</span>    
+    <span class="p">.</span><span class="n">mmap</span>   <span class="o">=</span> <span class="n">dumb_mmap_impl</span><span class="p">,</span>
+<span class="p">};</span>
+
+<span class="k">static</span> <span class="kt">void</span> <span class="nf">dumb_release</span><span class="p">(</span><span class="k">struct</span> <span class="n">drm_device</span><span class="o">*</span> <span class="n">dev</span><span class="p">)</span> <span class="p">{</span> <span class="n">log</span><span class="p">();</span> <span class="p">}</span>
+
+<span class="k">static</span> <span class="kt">int</span> <span class="nf">dumb_create_impl</span><span class="p">(</span><span class="k">struct</span> <span class="n">drm_file</span>     <span class="o">*</span><span class="n">file_priv</span><span class="p">,</span> 
+                            <span class="k">struct</span> <span class="n">drm_device</span>   <span class="o">*</span><span class="n">dev</span><span class="p">,</span> 
+                            <span class="k">struct</span> <span class="n">drm_mode_create_dumb</span><span class="o">*</span> <span class="n">args</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">u32</span> <span class="n">size</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">log</span><span class="p">();</span>
+
+    <span class="k">if</span><span class="p">(</span><span class="n">page_idx</span><span class="o">&gt;=</span><span class="n">MAX_NUM</span><span class="p">){</span>
+        <span class="n">err</span><span class="p">(</span><span class="s">"only support alloc %d buffers"</span><span class="p">,</span> <span class="n">MAX_NUM</span><span class="p">);</span>
+        <span class="k">return</span> <span class="o">-</span><span class="n">ENOMEM</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">size</span> <span class="o">=</span> <span class="n">roundup</span><span class="p">((</span><span class="n">args</span><span class="o">-&gt;</span><span class="n">width</span> <span class="o">*</span> <span class="n">args</span><span class="o">-&gt;</span><span class="n">height</span> <span class="o">*</span> <span class="n">args</span><span class="o">-&gt;</span><span class="n">bpp</span><span class="o">/</span><span class="mi">8</span><span class="p">),</span> <span class="n">PAGE_SIZE</span><span class="p">);</span>
+
+    <span class="c1">// 分配页面</span>
+    <span class="n">pages</span><span class="p">[</span><span class="n">page_idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">alloc_pages</span><span class="p">(</span><span class="n">GFP_KERNEL</span><span class="p">,</span> <span class="n">get_order</span><span class="p">(</span><span class="n">size</span><span class="p">));</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">pages</span><span class="p">[</span><span class="n">page_idx</span><span class="p">])</span> <span class="p">{</span>
+        <span class="n">err</span><span class="p">(</span><span class="s">"alloc_pages() failed"</span><span class="p">);</span>
+        <span class="k">return</span> <span class="o">-</span><span class="n">ENOMEM</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="c1">// 赋值返回参数</span>
+    <span class="n">args</span><span class="o">-&gt;</span><span class="n">size</span>    <span class="o">=</span> <span class="n">size</span><span class="p">;</span>
+    <span class="n">args</span><span class="o">-&gt;</span><span class="n">pitch</span>   <span class="o">=</span> <span class="n">args</span><span class="o">-&gt;</span><span class="n">width</span> <span class="o">*</span> <span class="n">args</span><span class="o">-&gt;</span><span class="n">bpp</span><span class="o">/</span><span class="mi">8</span><span class="p">;</span>
+    <span class="n">args</span><span class="o">-&gt;</span><span class="n">handle</span>  <span class="o">=</span> <span class="n">page_idx</span><span class="o">++</span><span class="p">;</span>
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">static</span> <span class="kt">int</span> <span class="nf">dumb_map_offset_impl</span><span class="p">(</span><span class="k">struct</span> <span class="n">drm_file</span>     <span class="o">*</span><span class="n">file_priv</span><span class="p">,</span> 
+                                <span class="k">struct</span> <span class="n">drm_device</span>   <span class="o">*</span><span class="n">dev</span><span class="p">,</span> 
+                                <span class="kt">uint32_t</span> <span class="n">handle</span><span class="p">,</span> <span class="kt">uint64_t</span><span class="o">*</span> <span class="n">offset</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">log</span><span class="p">(</span><span class="s">"%d"</span><span class="p">,</span> <span class="n">handle</span><span class="p">);</span>
+    <span class="c1">//根据handle得到一个offset，为了简单，这里直接使用handle</span>
+    <span class="o">*</span><span class="n">offset</span> <span class="o">=</span> <span class="mh">0x1000</span><span class="o">*</span><span class="p">(</span><span class="n">u64</span><span class="p">)</span><span class="n">handle</span><span class="p">;</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="k">static</span>  <span class="kt">int</span> <span class="nf">dumb_destroy_impl</span><span class="p">(</span><span class="k">struct</span> <span class="n">drm_file</span> <span class="o">*</span><span class="n">file_priv</span><span class="p">,</span> <span class="k">struct</span> <span class="n">drm_device</span> <span class="o">*</span><span class="n">dev</span><span class="p">,</span> <span class="kt">uint32_t</span> <span class="n">handle</span><span class="p">){</span>
+    <span class="n">log</span><span class="p">(</span><span class="s">"handle:%d"</span><span class="p">,</span> <span class="n">handle</span><span class="p">);</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="k">static</span> <span class="k">struct</span> <span class="n">drm_driver</span> <span class="n">dumb_driver</span> <span class="o">=</span> <span class="p">{</span>    
+    <span class="p">.</span><span class="n">release</span> <span class="o">=</span> <span class="n">dumb_release</span><span class="p">,</span>
+    <span class="p">.</span><span class="n">fops</span>    <span class="o">=</span> <span class="o">&amp;</span><span class="n">dumb_driver_fops</span><span class="p">,</span>
+    
+    <span class="p">.</span><span class="n">dumb_create</span>     <span class="o">=</span> <span class="n">dumb_create_impl</span><span class="p">,</span>
+    <span class="p">.</span><span class="n">dumb_map_offset</span> <span class="o">=</span> <span class="n">dumb_map_offset_impl</span><span class="p">,</span>
+    <span class="p">.</span><span class="n">dumb_destroy</span>    <span class="o">=</span> <span class="n">dumb_destroy_impl</span><span class="p">,</span>
+
+    <span class="p">.</span><span class="n">name</span>  <span class="o">=</span> <span class="n">DRIVER_NAME</span><span class="p">,</span>
+    <span class="p">.</span><span class="n">desc</span>  <span class="o">=</span> <span class="n">DRIVER_DESC</span><span class="p">,</span>
+    <span class="p">.</span><span class="n">date</span>  <span class="o">=</span> <span class="n">DRIVER_DATE</span><span class="p">,</span>
+    <span class="p">.</span><span class="n">major</span> <span class="o">=</span> <span class="n">DRIVER_MAJOR</span><span class="p">,</span>
+    <span class="p">.</span><span class="n">minor</span> <span class="o">=</span> <span class="n">DRIVER_MINOR</span><span class="p">,</span>
+<span class="p">};</span>
+
+<span class="k">static</span> <span class="kt">int</span> <span class="n">__init</span> <span class="nf">dumb_drv_init</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">ret</span><span class="p">;</span>
+    <span class="k">struct</span> <span class="n">platform_device</span><span class="o">*</span> <span class="n">pdev</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+
+    <span class="n">log</span><span class="p">(</span><span class="s">"build time: %s %s"</span><span class="p">,</span> <span class="n">__DATE__</span><span class="p">,</span> <span class="n">__TIME__</span><span class="p">);</span>
+
+    <span class="n">pdev</span> <span class="o">=</span> <span class="n">platform_device_register_simple</span><span class="p">(</span><span class="n">DRIVER_NAME</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">IS_ERR</span><span class="p">(</span><span class="n">pdev</span><span class="p">))</span> <span class="k">return</span> <span class="n">PTR_ERR</span><span class="p">(</span><span class="n">pdev</span><span class="p">);</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">devres_open_group</span><span class="p">(</span><span class="o">&amp;</span><span class="n">pdev</span><span class="o">-&gt;</span><span class="n">dev</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="n">GFP_KERNEL</span><span class="p">))</span> <span class="p">{</span>
+        <span class="n">ret</span> <span class="o">=</span> <span class="o">-</span><span class="n">ENOMEM</span><span class="p">;</span>
+        <span class="k">goto</span> <span class="n">out_unregister</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="c1">// 分配</span>
+    <span class="n">dumb_device</span> <span class="o">=</span> <span class="n">devm_drm_dev_alloc</span><span class="p">(</span><span class="o">&amp;</span><span class="n">pdev</span><span class="o">-&gt;</span><span class="n">dev</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">dumb_driver</span><span class="p">,</span> <span class="k">struct</span> <span class="n">dumb_device</span><span class="p">,</span> <span class="n">drm</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">IS_ERR</span><span class="p">(</span><span class="n">dumb_device</span><span class="p">))</span> <span class="p">{</span>
+        <span class="n">ret</span> <span class="o">=</span> <span class="n">PTR_ERR</span><span class="p">(</span><span class="n">dumb_device</span><span class="p">);</span>
+        <span class="k">goto</span> <span class="n">out_devres</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="c1">// 注册</span>
+    <span class="n">ret</span> <span class="o">=</span> <span class="n">drm_dev_register</span><span class="p">(</span><span class="o">&amp;</span><span class="n">dumb_device</span><span class="o">-&gt;</span><span class="n">drm</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">ret</span><span class="p">)</span> <span class="k">goto</span> <span class="n">out_devres</span><span class="p">;</span>
+
+    <span class="n">dumb_device</span><span class="o">-&gt;</span><span class="n">platform_dev</span> <span class="o">=</span> <span class="n">pdev</span><span class="p">;</span>
+
+    <span class="n">log</span><span class="p">(</span><span class="s">"Finish"</span><span class="p">);</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+
+<span class="nl">out_devres:</span>
+    <span class="n">devres_release_group</span><span class="p">(</span><span class="o">&amp;</span><span class="n">pdev</span><span class="o">-&gt;</span><span class="n">dev</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+
+<span class="nl">out_unregister:</span>
+    <span class="n">platform_device_unregister</span><span class="p">(</span><span class="n">pdev</span><span class="p">);</span>
+
+    <span class="k">return</span> <span class="n">ret</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">static</span> <span class="kt">void</span> <span class="n">__exit</span> <span class="nf">dumb_drv_exit</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>    
+    <span class="k">struct</span> <span class="n">platform_device</span> <span class="o">*</span><span class="n">pdev</span> <span class="o">=</span> <span class="n">dumb_device</span><span class="o">-&gt;</span><span class="n">platform_dev</span><span class="p">;</span>
+    <span class="n">log</span><span class="p">();</span>
+
+    <span class="n">drm_dev_unregister</span><span class="p">(</span><span class="o">&amp;</span><span class="n">dumb_device</span><span class="o">-&gt;</span><span class="n">drm</span><span class="p">);</span>
+    <span class="n">devres_release_group</span><span class="p">(</span><span class="o">&amp;</span><span class="n">pdev</span><span class="o">-&gt;</span><span class="n">dev</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+    <span class="n">platform_device_unregister</span><span class="p">(</span><span class="n">pdev</span><span class="p">);</span>
+    
+<span class="p">}</span>
+
+<span class="n">module_init</span><span class="p">(</span><span class="n">dumb_drv_init</span><span class="p">);</span>
+<span class="n">module_exit</span><span class="p">(</span><span class="n">dumb_drv_exit</span><span class="p">);</span>
+
+<span class="n">MODULE_AUTHOR</span><span class="p">(</span><span class="s">"kevin"</span><span class="p">);</span>
+<span class="n">MODULE_DESCRIPTION</span><span class="p">(</span><span class="n">DRIVER_DESC</span><span class="p">);</span>
+<span class="n">MODULE_LICENSE</span><span class="p">(</span><span class="s">"GPL"</span><span class="p">);</span>
+</code></pre></div></div>
 <h3 id="23-它们是如何衔接起来的">2.3 它们是如何衔接起来的</h3>
 <h4 id="231">2.3.1</h4>
 <h4 id="232">2.3.2</h4>

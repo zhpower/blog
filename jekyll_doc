@@ -1,0 +1,18 @@
+1. issue: in `import': File to import not found or unreadable: minima. (Sass::SyntaxError)
+
+method:
+	cp -R `echo "$(bundle show minima)/_*/"` .
+	cp -R `echo "$(bundle show minima)/assets/"` .
+
+2. 设置local hostname
+method： jekyll serve --host 10.86.79.100
+         或者 添加"host: 10.86.79.100" 到_config.yml
+
+3. issue: 
+        /c/Users/lqzhang/AppData/Local/Microsoft/WindowsApps/jekyll: line 6: /c/Users/lqzhang/AppData/Local/Microsoft/WindowsApps/ruby: No such file or directory
+
+method: vi /c/Users/lqzhang/AppData/Local/Microsoft/WindowsApps/jekyll +6
+        change the path of "ruby"
+
+4. run jekyll server in jekyll_data folder, the page data will be built in ../blog (configure in _config.yml)
+   need to push jekyll_data and blog to github.
