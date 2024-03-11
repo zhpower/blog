@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.2">Jekyll</generator><link href="http://localhost:4000/blog/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/blog/" rel="alternate" type="text/html" /><updated>2024-03-08T18:11:49+08:00</updated><id>http://localhost:4000/blog/feed.xml</id><title type="html">学习笔记</title><subtitle>Build Jekyll site with the GitBook style.
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.2">Jekyll</generator><link href="http://localhost:4000/blog/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/blog/" rel="alternate" type="text/html" /><updated>2024-03-11T13:37:17+08:00</updated><id>http://localhost:4000/blog/feed.xml</id><title type="html">学习笔记</title><subtitle>Build Jekyll site with the GitBook style.
 </subtitle><author><name>kevin_zh</name></author><entry><title type="html">位运算</title><link href="http://localhost:4000/blog/jekyll/2023-04-27-bit.html" rel="alternate" type="text/html" title="位运算" /><published>2023-04-27T00:00:00+08:00</published><updated>2023-04-27T00:00:00+08:00</updated><id>http://localhost:4000/blog/jekyll/bit</id><content type="html" xml:base="http://localhost:4000/blog/jekyll/2023-04-27-bit.html"><![CDATA[<h3 id="1位运算概述">1.位运算概述</h3>
 
 <p>从现代计算机中所有的数据二进制的形式存储在设备中。即 0、1 两种状态，计算机对二进制数据进行的运算(+、-、*、/)都是叫位运算，即将符号位共同参与运算的运算。</p>
@@ -1123,7 +1123,7 @@ dsf</p>
 <p><img src="https://mp.weixin.qq.com/mp/qrcode?scene=10000004&amp;size=102&amp;__biz=MzAxODI5ODMwOA==&amp;mid=2666559053&amp;idx=2&amp;sn=cdd9e3e14102740664c93bfe99bb0044&amp;send_time=" alt="" /></p>
 
 <p>微信扫一扫<br />
-关注该公众号</p>]]></content><author><name>Tao He</name></author><category term="Jekyll" /><summary type="html"><![CDATA[本来想写内核如何接收一个网络包这个过程，但发现把整个过程捋顺了，还是很难的。]]></summary></entry><entry><title type="html">Direct Rendering Manager driver</title><link href="http://localhost:4000/blog/drm/2018-02-01-DRM.html" rel="alternate" type="text/html" title="Direct Rendering Manager driver" /><published>2018-02-01T00:00:00+08:00</published><updated>2018-02-01T00:00:00+08:00</updated><id>http://localhost:4000/blog/drm/DRM</id><content type="html" xml:base="http://localhost:4000/blog/drm/2018-02-01-DRM.html"><![CDATA[<h1 id="一drm总述">一、DRM总述</h1>
+关注该公众号</p>]]></content><author><name>Tao He</name></author><category term="Jekyll" /><summary type="html"><![CDATA[本来想写内核如何接收一个网络包这个过程，但发现把整个过程捋顺了，还是很难的。]]></summary></entry><entry><title type="html">DRM子系统</title><link href="http://localhost:4000/blog/drm/2018-02-01-DRM.html" rel="alternate" type="text/html" title="DRM子系统" /><published>2018-02-01T00:00:00+08:00</published><updated>2018-02-01T00:00:00+08:00</updated><id>http://localhost:4000/blog/drm/DRM</id><content type="html" xml:base="http://localhost:4000/blog/drm/2018-02-01-DRM.html"><![CDATA[<h1 id="一drm总述">一、DRM总述</h1>
 
 <h2 id="11在整个系统中的位置">1.1在整个系统中的位置</h2>
 
@@ -1468,13 +1468,13 @@ dumb buffer 和 smart buffer 的区别就在于，你写到显存里的数据，
 <span class="n">MODULE_LICENSE</span><span class="p">(</span><span class="s">"GPL"</span><span class="p">);</span>
 </code></pre></div></div>
 <h4 id="2113-它们是如何衔接起来的">2.1.1.3 它们是如何衔接起来的</h4>
-<p><img src="/blog/assets/DRM/DRM_DUMB_simple.png" alt="drm_dumb_simple" /></p>
+<p><img src="/blog/assets/DRM/DRM_DUMB_simple.svg" alt="drm_dumb_simple" /></p>
 
 <h3 id="212-基于gem的实现">2.1.2 基于GEM的实现</h3>
 
 <p>GEM是系统提供的一套实现框架或者帮助工具。在各自实现私有的drm driver时，总有一些内容是相同或相似的，GEM就对这些相同部分进行了总结，抽象，然后实现了它们，供开发者使用。具体实现在drm_gem.c</p>
 
-<h4 id="2121-实现">2.1.2.1 实现</h4>
+<h4 id="2121-实现代码">2.1.2.1 实现代码</h4>
 <p>下面是基于GEM对上面driver实现的改造。 它利用了GEM 提供的如下函数：</p>
 
 <table>
@@ -1738,6 +1738,9 @@ dumb buffer 和 smart buffer 的区别就在于，你写到显存里的数据，
 <span class="n">MODULE_DESCRIPTION</span><span class="p">(</span><span class="n">DRIVER_DESC</span><span class="p">);</span>
 <span class="n">MODULE_LICENSE</span><span class="p">(</span><span class="s">"GPL"</span><span class="p">);</span>
 </code></pre></div></div>
+
+<h4 id="2122-流程图">2.1.2.2 流程图</h4>
+<p><img src="/blog/assets/DRM/DRM_DUMB_gem.svg" alt="drm_dumb_gem" /></p>
 <h2 id="22-prime">2.2 PRIME</h2>
 
 <p>PRIME 在 DRM 驱动中其实是一种buffer共享机制，它是基于 dma-buf 来实现的.</p>
@@ -2195,7 +2198,7 @@ Optimus Prime 就是变形金刚 擎天柱的名字！ NVIDIA 当初给他们 Op
 <span class="n">MODULE_LICENSE</span><span class="p">(</span><span class="s">"GPL v2"</span><span class="p">);</span>
 </code></pre></div></div>
 <h4 id="2211-进程间分享fd">2.2.1.1 进程间分享fd</h4>
-<p>如果要不同设备中共享buffer，就需要导入dmabuf到不同的设备中，这就涉及到一个fd共享的问题。我们知道fd是和进程相关的，每个进程都有它自己的文件描述符表，不同进程的fd表是不同的。所以不同把一个进程的fd直接在另一个进程中使用，需要通过一定的方法来共享fd，也就是fd的跨进程传递。 这个方法就是UNIX域的socket接口。
+<p>如果要不同设备中共享buffer，就需要导入dmabuf到不同的设备中，这就涉及到一个fd共享的问题。我们知道fd是和进程相关的，每个进程都有它自己的文件描述符表，不同进程的fd表是不同的。所以不能把一个进程的fd直接传递给另一个进程中使用，需要通过一定的方法来共享fd，也就是fd的跨进程传递。 这个方法就是UNIX域的socket接口。
 代码如下：</p>
 
 <p>发送方代码：</p>
