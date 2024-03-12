@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html lang="en" >
     <head><meta charset="UTF-8">
-<meta content="text/html; charset=utf-8" http-equiv="Content-Type"><title>ffmpeg命令 · 学习笔记</title><meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type"><title>YUV 资料 · 学习笔记</title><meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta name="description" content="Build Jekyll site with the GitBook style.
 "><meta name="generator" content="Jekyll (using style of GitBook 3.2.3)"><meta name="author" content="kevin_zh"><link rel="stylesheet" href="/blog/assets/gitbook/style.css">
 <link rel="stylesheet" href="/blog/assets/gitbook/gitbook-plugin-back-to-top-button/plugin.css">
@@ -25,11 +25,11 @@
 
 
 
-            <link rel="prev" href="/blog/jekyll/2021-04-27-Weston.html" />
+            <link rel="prev" href="/blog/jekyll/2018-02-27-interrupte.html" />
         
 
         
-            <link rel="next" href="/blog/jekyll/2023-04-27-bit.html" />
+            <link rel="next" href="/blog/jekyll/2018-04-27-test.html" />
         
     </head>
     <body>
@@ -122,12 +122,15 @@
                         </li>
                     
                         
-                        <li class="chapter" data-level="1.1" data-path="/blog/jekyll/2018-03-21-YUV.html">
+                        <li class="chapter active" data-level="1.2" data-path="/blog/jekyll/2018-03-21-YUV.html">
                         
                             <a href="/blog/jekyll/2018-03-21-YUV.html" onclick="pageScrollToTop(this)">
                                 YUV 资料
                             </a>
                             
+                                
+                                    <ul><li><a href="#1简介" onclick="mobilePageScrollToAnchor(this)" >1.简介</a></li><li><a href="#2采样方式444-422-420的区别" onclick="mobilePageScrollToAnchor(this)" >2.采样方式(444, 422, 420的区别)</a><ul><li><a href="#21-采样方式" onclick="mobilePageScrollToAnchor(this)" >2.1 采样方式</a></li><li><a href="#22-占用字节数" onclick="mobilePageScrollToAnchor(this)" >2.2 占用字节数</a></li></ul></li><li><a href="#3-存储方式" onclick="mobilePageScrollToAnchor(this)" >3 存储方式</a><ul><li><a href="#31-分类" onclick="mobilePageScrollToAnchor(this)" >3.1 分类</a></li><li><a href="#32-444" onclick="mobilePageScrollToAnchor(this)" >3.2 444</a></li><li><a href="#33-422" onclick="mobilePageScrollToAnchor(this)" >3.3 422</a></li><li><a href="#34-420" onclick="mobilePageScrollToAnchor(this)" >3.4 420</a></li></ul></li></ul>
+
                                 
                             
                         </li>
@@ -166,15 +169,12 @@
                         </li>
                     
                         
-                        <li class="chapter active" data-level="1.2" data-path="/blog/jekyll/2022-04-27-ffmpeg.html">
+                        <li class="chapter" data-level="1.1" data-path="/blog/jekyll/2022-04-27-ffmpeg.html">
                         
                             <a href="/blog/jekyll/2022-04-27-ffmpeg.html" onclick="pageScrollToTop(this)">
                                 ffmpeg命令
                             </a>
                             
-                                
-                                    <ul><li><a href="#01-视频分割" onclick="mobilePageScrollToAnchor(this)" >01. 视频分割</a></li><li><a href="#02-视频区域裁剪" onclick="mobilePageScrollToAnchor(this)" >02. 视频区域裁剪：</a></li><li><a href="#03-视频预览" onclick="mobilePageScrollToAnchor(this)" >03. 视频预览</a></li><li><a href="#04-视频放大缩小" onclick="mobilePageScrollToAnchor(this)" >04. 视频放大,缩小</a></li><li><a href="#05-列出所有format" onclick="mobilePageScrollToAnchor(this)" >05. 列出所有format</a></li><li><a href="#06-图片转换" onclick="mobilePageScrollToAnchor(this)" >06. 图片转换</a></li><li><a href="#07-视频format转换" onclick="mobilePageScrollToAnchor(this)" >07. 视频format转换</a></li><li><a href="#08-视频叠加" onclick="mobilePageScrollToAnchor(this)" >08. 视频叠加</a></li><li><a href="#09-视频旋转" onclick="mobilePageScrollToAnchor(this)" >09. 视频旋转</a></li><li><a href="#10-视频镜像" onclick="mobilePageScrollToAnchor(this)" >10. 视频镜像</a></li><li><a href="#10-图片旋转" onclick="mobilePageScrollToAnchor(this)" >10. 图片旋转</a></li><li><a href="#11--图片镜像" onclick="mobilePageScrollToAnchor(this)" >11.  图片镜像</a></li><li><a href="#12-音频音量调节大小" onclick="mobilePageScrollToAnchor(this)" >12. 音频音量调节大小</a></li><li><a href="#13-调节播放速度" onclick="mobilePageScrollToAnchor(this)" >13. 调节播放速度</a></li></ul>
-
                                 
                             
                         </li>
@@ -205,7 +205,7 @@
                     <h1>
                         <i class="fa fa-circle-o-notch fa-spin"></i>
                         
-                            <a href="." >ffmpeg命令</a>
+                            <a href="." >YUV 资料</a>
                         
                     </h1>
                 </div>
@@ -218,108 +218,132 @@
             <div class="search-noresults">
                 <section class="normal markdown-section">
                     
-                        <h1 id="/jekyll/ffmpeg">ffmpeg命令</h1>
+                        <h1 id="/jekyll/YUV">YUV 资料</h1>
                     
 
-                    <h3 id="01-视频分割">01. 视频分割</h3>
-<pre><code class="language-cobol">ffmpeg -ss 00:00:00 -i input.mp4 -c copy -t 60 output.mp4
-</code></pre>
-<p>-ss 表示视频分割的起始时间，-t 表示分割时长，同时也可以用 00:01:00表示</p>
+                    <h1 id="1简介">1.简介</h1>
 
-<p>==<em>注意</em>== ：-ss 要放在 -i 之前</p>
+<p>YUV数据由Y、U、V三个分量组成，现在通常说的YUV指的是YCbCr。</p>
 
-<h3 id="02-视频区域裁剪">02. 视频区域裁剪：</h3>
-<pre><code class="language-cobol">ffmpeg -i 3.mkv -filter_complex crop=1024:50:0:550 -y 4.mkv  
-</code></pre>
-<h3 id="03-视频预览">03. 视频预览</h3>
-<p>ffplay 3.mkv -vf crop=1024:50:0:550</p>
+<p>Y：表示亮度（Luminance、Luma），占8bit（1字节）</p>
 
-<h3 id="04-视频放大缩小">04. 视频放大,缩小</h3>
-<pre><code class="language-cobol">ffmpeg  -i 2.mp4 -vf "scale=1280:64" 4.mp4
-</code></pre>
-<p>==scale== =w:h 表示放大后的大小</p>
+<p>Cb、Cr：表示色度（Chrominance、Chroma）</p>
 
-<h3 id="05-列出所有format">05. 列出所有format</h3>
-<p>// list all pix format</p>
-<pre><code class="language-cobol">ffmpeg -pix_fmts 
-</code></pre>
-<h3 id="06-图片转换">06. 图片转换</h3>
-<pre><code class="language-cobol">ffmpeg -i temp.jpg -s 1024x680 -pix_fmt yuvj420p 9.yuv
-ffmpeg.exe -i agf-dog-1280x960.jpg  -vf scale=1920:1080 agf-dog-1920x1080.jpg
-</code></pre>
-<h3 id="07-视频format转换">07. 视频format转换</h3>
+<p>Cb（U）：蓝色色度分量，占8bit（1字节）</p>
 
-<p>YUV -&gt; RGB</p>
+<p>Cr（V）：红色色度分量，占8bit（1字节）</p>
 
-<pre><code class="language-cobol">ffmpeg -s 360x270 -pix_fmt yuv420p -i  2_test_360x270_50.yuv -pix_fmt rgb24  aaaa.rgb  
-</code></pre>
-<pre><code class="language-cobol">ffmpeg -s 640x480 -pix_fmt nv12 -i 640x480_1.jpg -vf scale=640:480,setsar=1:1 640x480_1_nv12.yuv -hide_banner  
-</code></pre>
-<h3 id="08-视频叠加">08. 视频叠加</h3>
-<pre><code class="language-cobol"> ffmpeg -i input1 -i input2 -filter_complex overlay=x:y output
-</code></pre>
-<h3 id="09-视频旋转">09. 视频旋转</h3>
+<h1 id="2采样方式444-422-420的区别">2.采样方式(444, 422, 420的区别)</h1>
 
-<p>//mp4向左旋转90度
- ffmpeg -i input.mp4 -metadata:s:v rotate=”90” -codec copy outut.mp4</p>
+<h2 id="21-采样方式">2.1 采样方式</h2>
+<p>采样方式通常用A:B:C的形式来表示，比如4:4:4、4:2:2、4:2:0等</p>
+<ul>
+  <li>
+    <p>A：假定在一块A*2个像素的概念区域，一般都是4.</p>
+  </li>
+  <li>
+    <p>B：第1行的色度(UV)采样数目。</p>
+  </li>
+  <li>
+    <p>C：第2行的色度(UV)采样数目</p>
+  </li>
+</ul>
 
-<p>//mp4向右旋转90度
- ffmpeg -i input.mp4 -metadata:s:v rotate=”-90” -codec copy outut.mp4</p>
+<p>所以这里的B,C指的分别是在第一行，第二行UV采样的数目。 C的值一般要么等于B，要么等于0</p>
 
-<h3 id="10-视频镜像">10. 视频镜像</h3>
-<p>//mp4左右镜像翻转</p>
-<pre><code class="language-cobol"> ffmpeg -i input.mp4 -vf "hflip" outut.mp4
-</code></pre>
-<p>//mp4上下镜像翻转</p>
-<pre><code class="language-cobol"> ffmpeg -i input.mp4 -vf "vflip" outut.mp4
-</code></pre>
+<p>示意图1：
+<img src="/blog/assets/YUV/sampling.png" alt="sampling" /></p>
 
-<h3 id="10-图片旋转">10. 图片旋转</h3>
-<p>//图片向右旋转90度</p>
-<pre><code class="language-cobol"> ffmpeg -i input.png -vf rotate='90*PI/180' -y rotate60.png
-</code></pre>
-<p>//图片向右旋转90度</p>
-<pre><code class="language-cobol"> ffmpeg -i input.png -vf rotate='-90*PI/180' -y rotate_90.png
-</code></pre>
-<p>//图片像左旋转90度</p>
-<pre><code class="language-cobol"> ffmpeg -i input.png -vf transpose=2 -y transpose2.png
-</code></pre>
-<p>//图片像右旋转90度</p>
-<pre><code class="language-cobol"> ffmpeg -i input.png -vf transpose=1 -y transpose2.png
-</code></pre>
-<p>//逆时针(向左)旋转90°，然后垂直（上下）翻转</p>
-<pre><code class="language-cobol"> ffmpeg -i input.png -vf transpose=0 -y transpose0.png
-</code></pre>
-<h3 id="11--图片镜像">11.  图片镜像</h3>
-<p>//图片左右镜像翻转</p>
-<pre><code class="language-cobol"> ffmpeg -i input.png -vf hflip -y hflip.png
-</code></pre>
-<p>//图片上下镜像翻转</p>
-<pre><code class="language-cobol"> ffmpeg -i input.png -vf vflip -y vflip.png
-</code></pre>
-<p>//yuv数据左右镜像翻转</p>
-<pre><code class="language-cobol"> ffmpeg -s 1920x1080 -pix_fmt nv12 -i nv12_1.yuv -vf hflip -y hflip_nv12.yuv
-</code></pre>
-<p>//播放左右翻转后的yuv数据</p>
-<pre><code class="language-cobol"> ffplay -video_size 1920x1080 -pixel_format nv12 hflip_nv12.yuv
-</code></pre>
+<p>示意图2</p>
 
-<h3 id="12-音频音量调节大小">12. 音频音量调节大小</h3>
-<p>//音量翻倍，写在滤镜里</p>
-<pre><code class="language-cobol"> ffmpeg -i input.wav -af volume=2 -y output.wav
-</code></pre>
-<p>//音量翻倍，不写在滤镜中</p>
-<pre><code class="language-cobol">ffmpeg -i input.wav -vol 2000 -y output.wav
-</code></pre>
-<h3 id="13-调节播放速度">13. 调节播放速度</h3>
+<p><img src="/blog/assets/YUV/sampling_2.jpg" alt="sampling_2" /></p>
 
-<pre><code class="language-cobol">ffmpeg -i test1.mp4 -vf  "setpts=0.25*PTS" test2.mp4
-</code></pre>
+<p>上图中，不管是哪种采样格式，Y分量都是全水平、全垂直分辨率采样的，每一个像素都有自己独立的Y分量</p>
 
-<p>四倍慢速：</p>
+<h2 id="22-占用字节数">2.2 占用字节数</h2>
 
-<pre><code class="language-cobol">ffmpeg -i test1.mp4 -vf  "setpts=4*PTS" test2.mp4
-</code></pre>
+<p>由上可以推算出不同采样方式下每个像素需要的平均字节数。</p>
+
+<p>4:4:4 
+一个像素YUV各占一个字节，总共3个字节 24bit</p>
+
+<p>4:2:2
+8个像素 ： 8个Y + 2个U +2个V +2个U +2个V = 16字节 
+每个像素：16字节/8 = 2个字节 16bit</p>
+
+<p>4:2:0
+8个像素 ： 8个Y + 2个U +2个V  = 12字节 
+每个像素：12字节/8 = 1.5个字节 12bit</p>
+
+<h1 id="3-存储方式">3 存储方式</h1>
+
+<p>存储格式，表示的是Y、U、V数据是如何排列和存储的。</p>
+
+<h2 id="31-分类">3.1 分类</h2>
+<p>YUV的存储格式可以分为3大类：</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>名称</th>
+      <th>特点</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Planar(平面)</td>
+      <td>Y、U、V分量分开单独存储,名称通常以字母p结尾,  3个planar</td>
+    </tr>
+    <tr>
+      <td>Semi-Planar（半平面）</td>
+      <td>Y分量单独存储，U、V分量交错存储, 名称通常以字母sp结尾, 1个planar</td>
+    </tr>
+    <tr>
+      <td>Packed（紧凑）</td>
+      <td>或者叫Interleaved(交错), Y、U、V分量交错存储,  1个planar</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="32-444">3.2 444</h2>
+
+<p><img src="/blog/assets/YUV/444.png" alt="" width="540px" height="150px" /></p>
+
+<p>I444 和YV24 主要是UV次序的不同</p>
+
+<p><img src="/blog/assets/YUV/I444.png" alt="" width="540px" height="200px" /></p>
+
+<p>semi-planar NV24 和NV42 主要是UV交替次序的不同</p>
+
+<p><img src="/blog/assets/YUV/NV24.png" alt="" width="540px" height="200px" /></p>
+
+<h2 id="33-422">3.3 422</h2>
+
+<p><img src="/blog/assets/YUV/422.png" alt="" width="540px" height="150px" /></p>
+
+<p>Planar I422 YV16 区别：VU 次序</p>
+
+<p><img src="/blog/assets/YUV/YV16.png" alt="" width="540px" height="200px" /></p>
+
+<p>Semi-Planar NV16 NV61 区别：VU 次序</p>
+
+<p><img src="/blog/assets/YUV/NV16.png" alt="" width="540px" height="200px" /></p>
+
+<p>Packed UYVY YUYV YVYU 区别：VU 次序</p>
+
+<p><img src="/blog/assets/YUV/YUYV.png" alt="" width="540px" height="200px" /></p>
+
+<h2 id="34-420">3.4 420</h2>
+
+<p><img src="/blog/assets/YUV/420.png" alt="" width="540px" height="150px" /></p>
+
+<p>Planar I420</p>
+
+<p><img src="/blog/assets/YUV/I420.png" alt="" width="300px" height="200px" /></p>
+
+<p>像素示意图</p>
+
+<p><img src="/blog/assets/YUV/I420_pixel.png" alt="" width="540px" height="200px" /></p>
 </section>
             </div><div class="search-results">
     <div class="has-results">
@@ -352,6 +376,38 @@ window.MathJax = {
 
 <!-- introduce per-page mermaid support -->
 
+    <script>
+    function render_mermaid() {
+        mermaid.initialize({
+            startOnLoad: false,
+            theme: "default",
+        });
+        window.mermaid.init(undefined, document.querySelectorAll('.language-mermaid'));
+    }
+
+    function initialize_mermaid() {
+        if (document.readyState === "loading") {
+            // Loading hasn't finished yet
+            document.addEventListener("DOMContentLoaded", render_mermaid);
+        } else {
+            // `DOMContentLoaded` has already fired
+            render_mermaid();
+        }
+    }
+
+    if (window.mermaid_script && window.mermaid) {
+        initialize_mermaid();
+    } else {
+        window.mermaid_script = document.createElement("script");
+        mermaid_script.onload = initialize_mermaid;
+        document.head.appendChild(mermaid_script);
+        mermaid_script.defer = true;
+        mermaid_script.id = 'mermaid-script';
+        mermaid_script.src = '/blog/assets/gitbook/mermaid.min.js';
+    }
+</script>
+
+
 
 <!-- introduce mathjax support -->
 <script>
@@ -376,13 +432,13 @@ window.MathJax = {
 </script>
 
 
-                        <a href="/blog/jekyll/2021-04-27-Weston.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page: weston">
+                        <a href="/blog/jekyll/2018-02-27-interrupte.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page: 硬中断">
                             <i class="fa fa-angle-left"></i>
                         </a>
                     
 
                     
-                        <a href="/blog/jekyll/2023-04-27-bit.html" class="navigation navigation-next navigation-unique" aria-label="Next page: 位运算">
+                        <a href="/blog/jekyll/2018-04-27-test.html" class="navigation navigation-next navigation-unique" aria-label="Next page: only test">
                             <i class="fa fa-angle-right"></i>
                         </a>
                     
@@ -399,11 +455,11 @@ window.MathJax = {
         "depth": 1,
         
         "next": {
-            "title": "位运算",
+            "title": "only test",
             "level": "1.2",
             "depth": 1,
-            "path": "_posts/2023-04-01-bit.md",
-            "ref": "_posts/2023-04-01-bit.md",
+            "path": "_posts/2018-04-27-test.md",
+            "ref": "_posts/2018-04-27-test.md",
             "articles": []
         },
         
@@ -495,8 +551,8 @@ window.MathJax = {
         "gitbook": "*"
     },
     "file": {
-        "path": "_posts/2022-05-06-ffmpeg.md",
-        "mtime": "2022-04-27 00:00:00 +0800",
+        "path": "_posts/2018-03-21-YUV.md",
+        "mtime": "2018-03-21 00:00:00 +0800",
         "type": "markdown"
     },
     "gitbook": {
