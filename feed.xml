@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.2">Jekyll</generator><link href="http://localhost:4000/blog/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/blog/" rel="alternate" type="text/html" /><updated>2024-03-12T20:15:11+08:00</updated><id>http://localhost:4000/blog/feed.xml</id><title type="html">学习笔记</title><subtitle>Build Jekyll site with the GitBook style.
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.2">Jekyll</generator><link href="http://localhost:4000/blog/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/blog/" rel="alternate" type="text/html" /><updated>2024-03-13T10:40:48+08:00</updated><id>http://localhost:4000/blog/feed.xml</id><title type="html">学习笔记</title><subtitle>Build Jekyll site with the GitBook style.
 </subtitle><author><name>kevin_zh</name></author><entry><title type="html">位运算</title><link href="http://localhost:4000/blog/jekyll/2023-04-27-bit.html" rel="alternate" type="text/html" title="位运算" /><published>2023-04-27T00:00:00+08:00</published><updated>2023-04-27T00:00:00+08:00</updated><id>http://localhost:4000/blog/jekyll/bit</id><content type="html" xml:base="http://localhost:4000/blog/jekyll/2023-04-27-bit.html"><![CDATA[<h3 id="1位运算概述">1.位运算概述</h3>
 
 <p>从现代计算机中所有的数据二进制的形式存储在设备中。即 0、1 两种状态，计算机对二进制数据进行的运算(+、-、*、/)都是叫位运算，即将符号位共同参与运算的运算。</p>
@@ -483,9 +483,9 @@ renderer接口供backend内部使用，外部通过调用backend接口触发</p>
 
 <p><img src="/blog/assets/wayland/20141019204223671.png" alt="image" /></p>
 
-<h2 id="23-client-创建各类资源proxy">2.3 Client 创建各类资源proxy</h2>
+<h3 id="23-client-创建各类资源proxy">2.3 Client 创建各类资源proxy</h3>
 
-<h3 id="主要资源proxy">主要资源proxy</h3>
+<h4 id="主要资源proxy">主要资源proxy</h4>
 
 <div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// wl_surface</span>
 <span class="n">wl_surface</span> <span class="o">=</span> <span class="n">wl_compositor_create_surface</span><span class="p">(</span><span class="n">compositor</span><span class="p">)</span>
@@ -521,9 +521,9 @@ renderer接口供backend内部使用，外部通过调用backend接口触发</p>
 
 </code></pre></div></div>
 
-<h4 id="24-client-渲染">2.4 Client 渲染</h4>
+<h3 id="24-client-渲染">2.4 Client 渲染</h3>
 
-<h5 id="伪代码-1">伪代码</h5>
+<h4 id="伪代码-1">伪代码</h4>
 <p>simple-egl.c</p>
 <div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/*-------------------- egl 初始化工作 ------------------------*/</span>
 
@@ -573,14 +573,14 @@ renderer接口供backend内部使用，外部通过调用backend接口触发</p>
 <span class="p">...</span>
 </code></pre></div></div>
 
-<h4 id="25-client-提交渲染好的surface">2.5. Client 提交渲染好的surface</h4>
+<h3 id="25-client-提交渲染好的surface">2.5. Client 提交渲染好的surface</h3>
 
-<h6 id="提交函数">提交函数</h6>
+<h4 id="提交函数">提交函数</h4>
 <p>wl_surface_commit( )</p>
 
-<h3 id="三-weston-合成各个app的surface并呈现">三. Weston 合成各个App的surface并呈现</h3>
+<h1 id="三-weston-合成各个app的surface并呈现">三. Weston 合成各个App的surface并呈现</h1>
 
-<h5 id="流程-1">流程</h5>
+<h2 id="流程-1">流程</h2>
 <ol>
   <li>compositor遍历每个weston_output 发起repaint。weston_output_schedule_repaint( )</li>
   <li>通知weston_output具体实现–backend_output, 开始repaint的前期准备工作, 对应函数start_repaint_loop( )， drm实现暂无内容</li>
@@ -756,15 +756,16 @@ dsf</p>
 
 <p>YUV数据由Y、U、V三个分量组成，现在通常说的YUV指的是YCbCr。</p>
 
-<p>Y：表示亮度（Luminance、Luma），占8bit（1字节）</p>
+<p>Y：表示<strong>亮度</strong>（Luminance、Luma），占8bit（1字节）</p>
 
-<p>Cb、Cr：表示色度（Chrominance、Chroma）</p>
+<p>Cb、Cr：表示<strong>色度</strong>（Chrominance、Chroma）</p>
 
 <p>Cb（U）：蓝色色度分量，占8bit（1字节）</p>
 
 <p>Cr（V）：红色色度分量，占8bit（1字节）</p>
 
 <h1 id="2采样方式444-422-420的区别">2.采样方式(444, 422, 420的区别)</h1>
+<p>把Y、U、V数据转变为R、G、B时用到</p>
 
 <h2 id="21-采样方式">2.1 采样方式</h2>
 <p>采样方式通常用A:B:C的形式来表示，比如4:4:4、4:2:2、4:2:0等</p>
@@ -806,9 +807,9 @@ dsf</p>
 8个像素 ： 8个Y + 2个U +2个V  = 12字节 
 每个像素：12字节/8 = 1.5个字节 12bit</p>
 
-<h1 id="3-存储方式">3 存储方式</h1>
+<h1 id="3-存储方式planar-semi-planar和packed的区别">3. 存储方式(Planar, Semi-Planar和Packed的区别)</h1>
 
-<p>存储格式，表示的是Y、U、V数据是如何排列和存储的。</p>
+<p>存储格式，表示的是Y、U、V数据是如何排列和存储的。 读取或写入Y、U、V数据时用到.</p>
 
 <h2 id="31-分类">3.1 分类</h2>
 <p>YUV的存储格式可以分为3大类：</p>
@@ -852,15 +853,15 @@ dsf</p>
 
 <p><img src="/blog/assets/YUV/422.png" alt="" width="540px" height="150px" /></p>
 
-<p>Planar I422 YV16 区别：VU 次序</p>
+<p><strong>Planar I422 YV16 区别：VU 次序</strong></p>
 
 <p><img src="/blog/assets/YUV/YV16.png" alt="" width="540px" height="200px" /></p>
 
-<p>Semi-Planar NV16 NV61 区别：VU 次序</p>
+<p><strong>Semi-Planar NV16 NV61 区别：VU 次序</strong></p>
 
 <p><img src="/blog/assets/YUV/NV16.png" alt="" width="540px" height="200px" /></p>
 
-<p>Packed UYVY YUYV YVYU 区别：VU 次序</p>
+<p><strong>Packed UYVY YUYV YVYU 区别：VU 次序</strong></p>
 
 <p><img src="/blog/assets/YUV/YUYV.png" alt="" width="540px" height="200px" /></p>
 
@@ -868,13 +869,58 @@ dsf</p>
 
 <p><img src="/blog/assets/YUV/420.png" alt="" width="540px" height="150px" /></p>
 
-<p>Planar I420</p>
+<p><strong>Planar I420 YV12</strong></p>
 
-<p><img src="/blog/assets/YUV/I420.png" alt="" width="300px" height="200px" /></p>
+<p><img src="/blog/assets/YUV/I420.png" alt="" width="540px" height="200px" /></p>
 
-<p>像素示意图</p>
+<p><strong>采样方式420 I420，像素示意图</strong></p>
 
-<p><img src="/blog/assets/YUV/I420_pixel.png" alt="" width="540px" height="200px" /></p>]]></content><author><name>Kevin</name></author><category term="Jekyll" /><summary type="html"><![CDATA[1.简介]]></summary></entry><entry><title type="html">硬中断</title><link href="http://localhost:4000/blog/jekyll/2018-02-27-interrupte.html" rel="alternate" type="text/html" title="硬中断" /><published>2018-02-27T00:00:00+08:00</published><updated>2018-02-27T00:00:00+08:00</updated><id>http://localhost:4000/blog/jekyll/interrupte</id><content type="html" xml:base="http://localhost:4000/blog/jekyll/2018-02-27-interrupte.html"><![CDATA[<p>【转帖】</p>
+<p><img src="/blog/assets/YUV/I420_pixel.png" alt="" width="540px" height="200px" /></p>
+
+<p><strong>Semi-Planar NV12 NV21</strong></p>
+
+<p><img src="/blog/assets/YUV/NV12.png" alt="" width="540px" height="200px" /></p>
+
+<p><strong>采样方式420，各种存储方式， 像素示意图</strong></p>
+
+<p><img src="/blog/assets/YUV/420_pixel.png" alt="" width="540px" height="350px" /></p>
+
+<h1 id="4-借助ffmpeg格式转换">4. 借助ffmpeg格式转换</h1>
+
+<ol>
+  <li>PNG -&gt; YUV
+    <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code> ffmpeg <span class="nt">-i</span> <span class="k">in</span>.png <span class="nt">-s</span> 512x512 <span class="nt">-pix_fmt</span> yuv420p out.yuv
+</code></pre></div>    </div>
+  </li>
+  <li>YUV -&gt; PNG
+    <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code> ffmpeg <span class="nt">-s</span> 512x512 <span class="nt">-pix_fmt</span> yuv420p <span class="nt">-i</span> <span class="k">in</span>.yuv out.jpg
+</code></pre></div>    </div>
+  </li>
+</ol>
+
+<p><strong>YUV 文件只是存储数据的文件，没有大小信息，所以转换时一定要给出它的尺寸</strong></p>
+
+<p><strong>PNG 文件含有尺寸信息，所以转YUV时可以不指定大小，默认原大小</strong></p>
+
+<h1 id="5-借助ffplay显示yuv">5. 借助ffplay显示YUV</h1>
+
+<p>可以通过ffplay显示YUV数据。</p>
+
+<ul>
+  <li>
+    <p>YUV中直接存储的是所有像素的颜色信息（可以理解为是图像的一种原始数据）</p>
+  </li>
+  <li>
+    <p>必须得设置YUV的尺寸（-s）、像素格式（-pix_fmt）才能正常显示</p>
+  </li>
+</ul>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ffplay <span class="nt">-s</span> 512x512 <span class="nt">-pix_fmt</span> yuv420p <span class="k">in</span>.yuv
+<span class="c"># 在ffplay中</span>
+<span class="c"># -s已经过期，建议改为：-video_size</span>
+<span class="c"># -pix_fmt已经过期，建议改为：-pixel_format</span>
+ffplay <span class="nt">-video_size</span> 512x512 <span class="nt">-pixel_format</span> yuv420p <span class="k">in</span>.yuv
+</code></pre></div></div>]]></content><author><name>Kevin</name></author><category term="Jekyll" /><summary type="html"><![CDATA[1.简介]]></summary></entry><entry><title type="html">硬中断</title><link href="http://localhost:4000/blog/jekyll/2018-02-27-interrupte.html" rel="alternate" type="text/html" title="硬中断" /><published>2018-02-27T00:00:00+08:00</published><updated>2018-02-27T00:00:00+08:00</updated><id>http://localhost:4000/blog/jekyll/interrupte</id><content type="html" xml:base="http://localhost:4000/blog/jekyll/2018-02-27-interrupte.html"><![CDATA[<p>【转帖】</p>
 
 <p>本来想写内核如何接收一个网络包这个过程，但发现把整个过程捋顺了，还是很难的。</p>
 

@@ -129,7 +129,7 @@
                             </a>
                             
                                 
-                                    <ul><li><a href="#1简介" onclick="mobilePageScrollToAnchor(this)" >1.简介</a></li><li><a href="#2采样方式444-422-420的区别" onclick="mobilePageScrollToAnchor(this)" >2.采样方式(444, 422, 420的区别)</a><ul><li><a href="#21-采样方式" onclick="mobilePageScrollToAnchor(this)" >2.1 采样方式</a></li><li><a href="#22-占用字节数" onclick="mobilePageScrollToAnchor(this)" >2.2 占用字节数</a></li></ul></li><li><a href="#3-存储方式" onclick="mobilePageScrollToAnchor(this)" >3 存储方式</a><ul><li><a href="#31-分类" onclick="mobilePageScrollToAnchor(this)" >3.1 分类</a></li><li><a href="#32-444" onclick="mobilePageScrollToAnchor(this)" >3.2 444</a></li><li><a href="#33-422" onclick="mobilePageScrollToAnchor(this)" >3.3 422</a></li><li><a href="#34-420" onclick="mobilePageScrollToAnchor(this)" >3.4 420</a></li></ul></li></ul>
+                                    <ul><li><a href="#1简介" onclick="mobilePageScrollToAnchor(this)" >1.简介</a></li><li><a href="#2采样方式444-422-420的区别" onclick="mobilePageScrollToAnchor(this)" >2.采样方式(444, 422, 420的区别)</a><ul><li><a href="#21-采样方式" onclick="mobilePageScrollToAnchor(this)" >2.1 采样方式</a></li><li><a href="#22-占用字节数" onclick="mobilePageScrollToAnchor(this)" >2.2 占用字节数</a></li></ul></li><li><a href="#3-存储方式planar-semi-planar和packed的区别" onclick="mobilePageScrollToAnchor(this)" >3. 存储方式(Planar, Semi-Planar和Packed的区别)</a><ul><li><a href="#31-分类" onclick="mobilePageScrollToAnchor(this)" >3.1 分类</a></li><li><a href="#32-444" onclick="mobilePageScrollToAnchor(this)" >3.2 444</a></li><li><a href="#33-422" onclick="mobilePageScrollToAnchor(this)" >3.3 422</a></li><li><a href="#34-420" onclick="mobilePageScrollToAnchor(this)" >3.4 420</a></li></ul></li><li><a href="#4-借助ffmpeg格式转换" onclick="mobilePageScrollToAnchor(this)" >4. 借助ffmpeg格式转换</a></li><li><a href="#5-借助ffplay显示yuv" onclick="mobilePageScrollToAnchor(this)" >5. 借助ffplay显示YUV</a></li></ul>
 
                                 
                             
@@ -225,15 +225,16 @@
 
 <p>YUV数据由Y、U、V三个分量组成，现在通常说的YUV指的是YCbCr。</p>
 
-<p>Y：表示亮度（Luminance、Luma），占8bit（1字节）</p>
+<p>Y：表示<strong>亮度</strong>（Luminance、Luma），占8bit（1字节）</p>
 
-<p>Cb、Cr：表示色度（Chrominance、Chroma）</p>
+<p>Cb、Cr：表示<strong>色度</strong>（Chrominance、Chroma）</p>
 
 <p>Cb（U）：蓝色色度分量，占8bit（1字节）</p>
 
 <p>Cr（V）：红色色度分量，占8bit（1字节）</p>
 
 <h1 id="2采样方式444-422-420的区别">2.采样方式(444, 422, 420的区别)</h1>
+<p>把Y、U、V数据转变为R、G、B时用到</p>
 
 <h2 id="21-采样方式">2.1 采样方式</h2>
 <p>采样方式通常用A:B:C的形式来表示，比如4:4:4、4:2:2、4:2:0等</p>
@@ -275,9 +276,9 @@
 8个像素 ： 8个Y + 2个U +2个V  = 12字节 
 每个像素：12字节/8 = 1.5个字节 12bit</p>
 
-<h1 id="3-存储方式">3 存储方式</h1>
+<h1 id="3-存储方式planar-semi-planar和packed的区别">3. 存储方式(Planar, Semi-Planar和Packed的区别)</h1>
 
-<p>存储格式，表示的是Y、U、V数据是如何排列和存储的。</p>
+<p>存储格式，表示的是Y、U、V数据是如何排列和存储的。 读取或写入Y、U、V数据时用到.</p>
 
 <h2 id="31-分类">3.1 分类</h2>
 <p>YUV的存储格式可以分为3大类：</p>
@@ -321,15 +322,15 @@
 
 <p><img src="/blog/assets/YUV/422.png" alt="" width="540px" height="150px" /></p>
 
-<p>Planar I422 YV16 区别：VU 次序</p>
+<p><strong>Planar I422 YV16 区别：VU 次序</strong></p>
 
 <p><img src="/blog/assets/YUV/YV16.png" alt="" width="540px" height="200px" /></p>
 
-<p>Semi-Planar NV16 NV61 区别：VU 次序</p>
+<p><strong>Semi-Planar NV16 NV61 区别：VU 次序</strong></p>
 
 <p><img src="/blog/assets/YUV/NV16.png" alt="" width="540px" height="200px" /></p>
 
-<p>Packed UYVY YUYV YVYU 区别：VU 次序</p>
+<p><strong>Packed UYVY YUYV YVYU 区别：VU 次序</strong></p>
 
 <p><img src="/blog/assets/YUV/YUYV.png" alt="" width="540px" height="200px" /></p>
 
@@ -337,13 +338,58 @@
 
 <p><img src="/blog/assets/YUV/420.png" alt="" width="540px" height="150px" /></p>
 
-<p>Planar I420</p>
+<p><strong>Planar I420 YV12</strong></p>
 
-<p><img src="/blog/assets/YUV/I420.png" alt="" width="300px" height="200px" /></p>
+<p><img src="/blog/assets/YUV/I420.png" alt="" width="540px" height="200px" /></p>
 
-<p>像素示意图</p>
+<p><strong>采样方式420 I420，像素示意图</strong></p>
 
 <p><img src="/blog/assets/YUV/I420_pixel.png" alt="" width="540px" height="200px" /></p>
+
+<p><strong>Semi-Planar NV12 NV21</strong></p>
+
+<p><img src="/blog/assets/YUV/NV12.png" alt="" width="540px" height="200px" /></p>
+
+<p><strong>采样方式420，各种存储方式， 像素示意图</strong></p>
+
+<p><img src="/blog/assets/YUV/420_pixel.png" alt="" width="540px" height="350px" /></p>
+
+<h1 id="4-借助ffmpeg格式转换">4. 借助ffmpeg格式转换</h1>
+
+<ol>
+  <li>PNG -&gt; YUV
+    <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code> ffmpeg <span class="nt">-i</span> <span class="k">in</span>.png <span class="nt">-s</span> 512x512 <span class="nt">-pix_fmt</span> yuv420p out.yuv
+</code></pre></div>    </div>
+  </li>
+  <li>YUV -&gt; PNG
+    <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code> ffmpeg <span class="nt">-s</span> 512x512 <span class="nt">-pix_fmt</span> yuv420p <span class="nt">-i</span> <span class="k">in</span>.yuv out.jpg
+</code></pre></div>    </div>
+  </li>
+</ol>
+
+<p><strong>YUV 文件只是存储数据的文件，没有大小信息，所以转换时一定要给出它的尺寸</strong></p>
+
+<p><strong>PNG 文件含有尺寸信息，所以转YUV时可以不指定大小，默认原大小</strong></p>
+
+<h1 id="5-借助ffplay显示yuv">5. 借助ffplay显示YUV</h1>
+
+<p>可以通过ffplay显示YUV数据。</p>
+
+<ul>
+  <li>
+    <p>YUV中直接存储的是所有像素的颜色信息（可以理解为是图像的一种原始数据）</p>
+  </li>
+  <li>
+    <p>必须得设置YUV的尺寸（-s）、像素格式（-pix_fmt）才能正常显示</p>
+  </li>
+</ul>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ffplay <span class="nt">-s</span> 512x512 <span class="nt">-pix_fmt</span> yuv420p <span class="k">in</span>.yuv
+<span class="c"># 在ffplay中</span>
+<span class="c"># -s已经过期，建议改为：-video_size</span>
+<span class="c"># -pix_fmt已经过期，建议改为：-pixel_format</span>
+ffplay <span class="nt">-video_size</span> 512x512 <span class="nt">-pixel_format</span> yuv420p <span class="k">in</span>.yuv
+</code></pre></div></div>
 </section>
             </div><div class="search-results">
     <div class="has-results">

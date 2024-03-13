@@ -162,7 +162,7 @@
                             </a>
                             
                                 
-                                    <ul><li><a href="#一-启动weston" onclick="mobilePageScrollToAnchor(this)" >一. 启动Weston</a><ul><li><a href="#11-实现内容" onclick="mobilePageScrollToAnchor(this)" >1.1 实现内容</a></li><li><a href="#12-伪代码" onclick="mobilePageScrollToAnchor(this)" >1.2 伪代码</a></li><li><a href="#13-backend-renderer-shell的作用" onclick="mobilePageScrollToAnchor(this)" >1.3 backend, renderer, shell的作用</a></li></ul></li><li><a href="#二-client-动作" onclick="mobilePageScrollToAnchor(this)" >二. Client 动作</a><ul><li><a href="#21-client的接入和global资源代理的创建" onclick="mobilePageScrollToAnchor(this)" >2.1 Client的接入和global资源代理的创建</a><ul><li><a href="#流程" onclick="mobilePageScrollToAnchor(this)" >流程</a></li><li><a href="#伪代码" onclick="mobilePageScrollToAnchor(this)" >伪代码</a></li></ul></li><li><a href="#22-内部weston---client-通讯机制" onclick="mobilePageScrollToAnchor(this)" >2.2 内部weston - client 通讯机制</a><ul><li><a href="#rpc-图示" onclick="mobilePageScrollToAnchor(this)" >RPC 图示</a></li><li><a href="#object-rpc-机制" onclick="mobilePageScrollToAnchor(this)" >object RPC 机制</a></li></ul></li></ul></li><li><a href="#23-client-创建各类资源proxy" onclick="mobilePageScrollToAnchor(this)" >2.3 Client 创建各类资源proxy</a><ul><li><a href="#主要资源proxy" onclick="mobilePageScrollToAnchor(this)" >主要资源proxy</a><ul><li><a href="#24-client-渲染" onclick="mobilePageScrollToAnchor(this)" >2.4 Client 渲染</a><ul><li><a href="#伪代码-1" onclick="mobilePageScrollToAnchor(this)" >伪代码</a></li></ul></li><li><a href="#25-client-提交渲染好的surface" onclick="mobilePageScrollToAnchor(this)" >2.5. Client 提交渲染好的surface</a></li></ul></li><li><a href="#三-weston-合成各个app的surface并呈现" onclick="mobilePageScrollToAnchor(this)" >三. Weston 合成各个App的surface并呈现</a><ul><li><a href="#流程-1" onclick="mobilePageScrollToAnchor(this)" >流程</a></li></ul></li></ul></li></ul></li></ul></li></ul>
+                                    <ul><li><a href="#一-启动weston" onclick="mobilePageScrollToAnchor(this)" >一. 启动Weston</a><ul><li><a href="#11-实现内容" onclick="mobilePageScrollToAnchor(this)" >1.1 实现内容</a></li><li><a href="#12-伪代码" onclick="mobilePageScrollToAnchor(this)" >1.2 伪代码</a></li><li><a href="#13-backend-renderer-shell的作用" onclick="mobilePageScrollToAnchor(this)" >1.3 backend, renderer, shell的作用</a></li></ul></li><li><a href="#二-client-动作" onclick="mobilePageScrollToAnchor(this)" >二. Client 动作</a><ul><li><a href="#21-client的接入和global资源代理的创建" onclick="mobilePageScrollToAnchor(this)" >2.1 Client的接入和global资源代理的创建</a><ul><li><a href="#流程" onclick="mobilePageScrollToAnchor(this)" >流程</a></li><li><a href="#伪代码" onclick="mobilePageScrollToAnchor(this)" >伪代码</a></li></ul></li><li><a href="#22-内部weston---client-通讯机制" onclick="mobilePageScrollToAnchor(this)" >2.2 内部weston - client 通讯机制</a><ul><li><a href="#rpc-图示" onclick="mobilePageScrollToAnchor(this)" >RPC 图示</a></li><li><a href="#object-rpc-机制" onclick="mobilePageScrollToAnchor(this)" >object RPC 机制</a></li></ul></li><li><a href="#23-client-创建各类资源proxy" onclick="mobilePageScrollToAnchor(this)" >2.3 Client 创建各类资源proxy</a><ul><li><a href="#主要资源proxy" onclick="mobilePageScrollToAnchor(this)" >主要资源proxy</a></li></ul></li><li><a href="#24-client-渲染" onclick="mobilePageScrollToAnchor(this)" >2.4 Client 渲染</a><ul><li><a href="#伪代码-1" onclick="mobilePageScrollToAnchor(this)" >伪代码</a></li></ul></li><li><a href="#25-client-提交渲染好的surface" onclick="mobilePageScrollToAnchor(this)" >2.5. Client 提交渲染好的surface</a><ul><li><a href="#提交函数" onclick="mobilePageScrollToAnchor(this)" >提交函数</a></li></ul></li></ul></li></ul></li><li><a href="#三-weston-合成各个app的surface并呈现" onclick="mobilePageScrollToAnchor(this)" >三. Weston 合成各个App的surface并呈现</a><ul><li><a href="#流程-1" onclick="mobilePageScrollToAnchor(this)" >流程</a></li></ul></li></ul>
 
                                 
                             
@@ -398,9 +398,9 @@ renderer接口供backend内部使用，外部通过调用backend接口触发</p>
 
 <p><img src="/blog/assets/wayland/20141019204223671.png" alt="image" /></p>
 
-<h2 id="23-client-创建各类资源proxy">2.3 Client 创建各类资源proxy</h2>
+<h3 id="23-client-创建各类资源proxy">2.3 Client 创建各类资源proxy</h3>
 
-<h3 id="主要资源proxy">主要资源proxy</h3>
+<h4 id="主要资源proxy">主要资源proxy</h4>
 
 <div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// wl_surface</span>
 <span class="n">wl_surface</span> <span class="o">=</span> <span class="n">wl_compositor_create_surface</span><span class="p">(</span><span class="n">compositor</span><span class="p">)</span>
@@ -436,9 +436,9 @@ renderer接口供backend内部使用，外部通过调用backend接口触发</p>
 
 </code></pre></div></div>
 
-<h4 id="24-client-渲染">2.4 Client 渲染</h4>
+<h3 id="24-client-渲染">2.4 Client 渲染</h3>
 
-<h5 id="伪代码-1">伪代码</h5>
+<h4 id="伪代码-1">伪代码</h4>
 <p>simple-egl.c</p>
 <div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/*-------------------- egl 初始化工作 ------------------------*/</span>
 
@@ -488,14 +488,14 @@ renderer接口供backend内部使用，外部通过调用backend接口触发</p>
 <span class="p">...</span>
 </code></pre></div></div>
 
-<h4 id="25-client-提交渲染好的surface">2.5. Client 提交渲染好的surface</h4>
+<h3 id="25-client-提交渲染好的surface">2.5. Client 提交渲染好的surface</h3>
 
-<h6 id="提交函数">提交函数</h6>
+<h4 id="提交函数">提交函数</h4>
 <p>wl_surface_commit( )</p>
 
-<h3 id="三-weston-合成各个app的surface并呈现">三. Weston 合成各个App的surface并呈现</h3>
+<h1 id="三-weston-合成各个app的surface并呈现">三. Weston 合成各个App的surface并呈现</h1>
 
-<h5 id="流程-1">流程</h5>
+<h2 id="流程-1">流程</h2>
 <ol>
   <li>compositor遍历每个weston_output 发起repaint。weston_output_schedule_repaint( )</li>
   <li>通知weston_output具体实现–backend_output, 开始repaint的前期准备工作, 对应函数start_repaint_loop( )， drm实现暂无内容</li>
