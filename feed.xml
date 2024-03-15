@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.2">Jekyll</generator><link href="http://localhost:4000/blog/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/blog/" rel="alternate" type="text/html" /><updated>2024-03-13T10:40:48+08:00</updated><id>http://localhost:4000/blog/feed.xml</id><title type="html">学习笔记</title><subtitle>Build Jekyll site with the GitBook style.
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.2">Jekyll</generator><link href="http://localhost:4000/blog/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/blog/" rel="alternate" type="text/html" /><updated>2024-03-15T10:36:52+08:00</updated><id>http://localhost:4000/blog/feed.xml</id><title type="html">学习笔记</title><subtitle>Build Jekyll site with the GitBook style.
 </subtitle><author><name>kevin_zh</name></author><entry><title type="html">位运算</title><link href="http://localhost:4000/blog/jekyll/2023-04-27-bit.html" rel="alternate" type="text/html" title="位运算" /><published>2023-04-27T00:00:00+08:00</published><updated>2023-04-27T00:00:00+08:00</updated><id>http://localhost:4000/blog/jekyll/bit</id><content type="html" xml:base="http://localhost:4000/blog/jekyll/2023-04-27-bit.html"><![CDATA[<h3 id="1位运算概述">1.位运算概述</h3>
 
 <p>从现代计算机中所有的数据二进制的形式存储在设备中。即 0、1 两种状态，计算机对二进制数据进行的运算(+、-、*、/)都是叫位运算，即将符号位共同参与运算的运算。</p>
@@ -752,7 +752,7 @@ dsf</p>
   </tbody>
 </table>
 
-<p><a href="/blog/assets/abc.md" title=":include">test_abc</a></p>]]></content><author><name>Tao He</name></author><category term="Jekyll" /><summary type="html"><![CDATA[only for test new txt]]></summary></entry><entry><title type="html">YUV 资料</title><link href="http://localhost:4000/blog/jekyll/2018-03-21-YUV.html" rel="alternate" type="text/html" title="YUV 资料" /><published>2018-03-21T00:00:00+08:00</published><updated>2018-03-21T00:00:00+08:00</updated><id>http://localhost:4000/blog/jekyll/YUV</id><content type="html" xml:base="http://localhost:4000/blog/jekyll/2018-03-21-YUV.html"><![CDATA[<h1 id="1简介">1.简介</h1>
+<p><a href="/blog/assets/abc.md" title=":include">test_abc</a></p>]]></content><author><name>Tao He</name></author><category term="Jekyll" /><summary type="html"><![CDATA[only for test new txt]]></summary></entry><entry><title type="html">YUV资料</title><link href="http://localhost:4000/blog/jekyll/2018-03-21-YUV.html" rel="alternate" type="text/html" title="YUV资料" /><published>2018-03-21T00:00:00+08:00</published><updated>2018-03-21T00:00:00+08:00</updated><id>http://localhost:4000/blog/jekyll/YUV</id><content type="html" xml:base="http://localhost:4000/blog/jekyll/2018-03-21-YUV.html"><![CDATA[<h1 id="1简介">1.简介</h1>
 
 <p>YUV数据由Y、U、V三个分量组成，现在通常说的YUV指的是YCbCr。</p>
 
@@ -796,18 +796,29 @@ dsf</p>
 
 <p>由上可以推算出不同采样方式下每个像素需要的平均字节数。</p>
 
-<p>4:4:4 
-一个像素YUV各占一个字节，总共3个字节 24bit</p>
+<ul>
+  <li>
+    <p>4:4:4</p>
 
-<p>4:2:2
-8个像素 ： 8个Y + 2个U +2个V +2个U +2个V = 16字节 
-每个像素：16字节/8 = 2个字节 16bit</p>
+    <p>一个像素YUV各占一个字节，总共3个字节 24bit</p>
+  </li>
+  <li>
+    <p>4:2:2</p>
 
-<p>4:2:0
-8个像素 ： 8个Y + 2个U +2个V  = 12字节 
-每个像素：12字节/8 = 1.5个字节 12bit</p>
+    <p>8个像素 ： 8个Y + 2个U +2个V +2个U +2个V = 16字节</p>
 
-<h1 id="3-存储方式planar-semi-planar和packed的区别">3. 存储方式(Planar, Semi-Planar和Packed的区别)</h1>
+    <p>每个像素：16字节/8 = 2个字节 16bit</p>
+  </li>
+  <li>
+    <p>4:2:0</p>
+
+    <p>8个像素 ： 8个Y + 2个U +2个V  = 12字节</p>
+
+    <p>每个像素：12字节/8 = 1.5个字节 12bit</p>
+  </li>
+</ul>
+
+<h1 id="3存储方式planar-semi-planar和packed的区别">3.存储方式(Planar, Semi-Planar和Packed的区别)</h1>
 
 <p>存储格式，表示的是Y、U、V数据是如何排列和存储的。 读取或写入Y、U、V数据时用到.</p>
 
@@ -885,7 +896,7 @@ dsf</p>
 
 <p><img src="/blog/assets/YUV/420_pixel.png" alt="" width="540px" height="350px" /></p>
 
-<h1 id="4-借助ffmpeg格式转换">4. 借助ffmpeg格式转换</h1>
+<h1 id="4借助ffmpeg格式转换">4.借助ffmpeg格式转换</h1>
 
 <ol>
   <li>PNG -&gt; YUV
@@ -902,7 +913,7 @@ dsf</p>
 
 <p><strong>PNG 文件含有尺寸信息，所以转YUV时可以不指定大小，默认原大小</strong></p>
 
-<h1 id="5-借助ffplay显示yuv">5. 借助ffplay显示YUV</h1>
+<h1 id="5借助ffplay显示yuv">5.借助ffplay显示YUV</h1>
 
 <p>可以通过ffplay显示YUV数据。</p>
 
@@ -920,7 +931,238 @@ dsf</p>
 <span class="c"># -s已经过期，建议改为：-video_size</span>
 <span class="c"># -pix_fmt已经过期，建议改为：-pixel_format</span>
 ffplay <span class="nt">-video_size</span> 512x512 <span class="nt">-pixel_format</span> yuv420p <span class="k">in</span>.yuv
-</code></pre></div></div>]]></content><author><name>Kevin</name></author><category term="Jekyll" /><summary type="html"><![CDATA[1.简介]]></summary></entry><entry><title type="html">硬中断</title><link href="http://localhost:4000/blog/jekyll/2018-02-27-interrupte.html" rel="alternate" type="text/html" title="硬中断" /><published>2018-02-27T00:00:00+08:00</published><updated>2018-02-27T00:00:00+08:00</updated><id>http://localhost:4000/blog/jekyll/interrupte</id><content type="html" xml:base="http://localhost:4000/blog/jekyll/2018-02-27-interrupte.html"><![CDATA[<p>【转帖】</p>
+</code></pre></div></div>
+
+<h1 id="6glsl实现yuv转rgba">6.GLSL实现YUV转RGBA</h1>
+
+<h2 id="61-基本计算公式">6.1 基本计算公式</h2>
+
+<p>根据的标准不同，有不同的计算公式。下面是一个可以在shader中使用的计算方法。 只要先得到Y,U,V， 就可以按下面方法转换RGB</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="s">"   yuv.y = yuv.y - 0.5;                                  </span><span class="se">\n</span><span class="s">"</span>
+    <span class="s">"   yuv.z = yuv.z - 0.5;                                  </span><span class="se">\n</span><span class="s">"</span>
+    <span class="s">"                                                         </span><span class="se">\n</span><span class="s">"</span>
+    <span class="s">"   rgb.r = yuv.x + 1.402 * yuv.z;                        </span><span class="se">\n</span><span class="s">"</span>
+    <span class="s">"   rgb.g = yuv.x - 0.34413 * yuv.y - 0.71414 * yuv.z;    </span><span class="se">\n</span><span class="s">"</span>
+    <span class="s">"   rgb.b = yuv.x + 1.772 * yuv.y;                        </span><span class="se">\n</span><span class="s">"</span>
+</code></pre></div></div>
+<p>YUV到RGBA的转换其实就两个要点</p>
+<ul>
+  <li>构建合适的纹理</li>
+  <li>在shader中提前YUV</li>
+</ul>
+
+<h2 id="62-yuv444p-argb">6.2 YUV444P-&gt;ARGB</h2>
+
+<h3 id="621-构建纹理">6.2.1 构建纹理</h3>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">static</span> <span class="n">GLuint</span> <span class="nf">build_texture_4_yuv444p</span><span class="p">(</span><span class="kt">int</span> <span class="n">width</span><span class="p">,</span> <span class="kt">int</span> <span class="n">height</span><span class="p">,</span> <span class="kt">void</span> <span class="o">*</span><span class="n">data</span><span class="p">){</span>
+    <span class="n">GLuint</span> <span class="n">texture</span><span class="p">;</span>
+    <span class="n">glGenTextures</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">texture</span><span class="p">);</span>
+    <span class="n">glBindTexture</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="n">texture</span><span class="p">);</span>
+
+    <span class="n">glTexParameteri</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="n">GL_TEXTURE_WRAP_S</span><span class="p">,</span> <span class="n">GL_REPEAT</span><span class="p">);</span>    
+    <span class="n">glTexParameteri</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="n">GL_TEXTURE_WRAP_T</span><span class="p">,</span> <span class="n">GL_REPEAT</span><span class="p">);</span>        
+    <span class="n">glTexParameteri</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="n">GL_TEXTURE_MIN_FILTER</span><span class="p">,</span> <span class="n">GL_LINEAR</span><span class="p">);</span>    
+    <span class="n">glTexParameteri</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="n">GL_TEXTURE_MAG_FILTER</span><span class="p">,</span> <span class="n">GL_LINEAR</span><span class="p">);</span>
+
+    <span class="n">glTexImage2D</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">GL_RED</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">GL_RED</span><span class="p">,</span> <span class="n">GL_UNSIGNED_BYTE</span><span class="p">,</span> <span class="n">data</span><span class="p">);</span>
+
+    <span class="n">glBindTexture</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span> 
+    <span class="k">return</span> <span class="n">texture</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="622-在shader中提取yuv">6.2.2 在shader中提取YUV</h3>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">static</span> <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">yuv444_2_rgba_frag_src</span> <span class="o">=</span>    
+    <span class="s">"uniform sampler2D    Sampler;                              </span><span class="se">\n</span><span class="s">"</span>
+    <span class="s">"varying highp vec2   TexCoord;                             </span><span class="se">\n</span><span class="s">"</span>
+    <span class="s">"void main (void)                                           </span><span class="se">\n</span><span class="s">"</span>
+    <span class="s">"{                                                          </span><span class="se">\n</span><span class="s">"</span>
+    <span class="s">"   highp vec3 yuv;                                         </span><span class="se">\n</span><span class="s">"</span>
+    <span class="s">"   highp vec3 rgb;                                         </span><span class="se">\n</span><span class="s">"</span>    
+    <span class="s">"   yuv.x = texture2D(Sampler, TexCoord).r;                 </span><span class="se">\n</span><span class="s">"</span>
+    <span class="s">"   yuv.y = texture2D(Sampler, vec2(TexCoord.x, TexCoord.y+0.3333333)).r;</span><span class="se">\n</span><span class="s">"</span>
+    <span class="s">"   yuv.z = texture2D(Sampler, vec2(TexCoord.x, TexCoord.y+0.6666667)).r;</span><span class="se">\n</span><span class="s">"</span>
+    <span class="s">"                                                         </span><span class="se">\n</span><span class="s">"</span>
+    <span class="s">"   yuv.y = yuv.y - 0.5;                                  </span><span class="se">\n</span><span class="s">"</span>
+    <span class="s">"   yuv.z = yuv.z - 0.5;                                  </span><span class="se">\n</span><span class="s">"</span>
+<span class="c1">// 矩阵计算方法</span>
+    <span class="s">"   rgb = mat3(                                           </span><span class="se">\n</span><span class="s">"</span>
+                    <span class="s">"1,       1,        1,                    </span><span class="se">\n</span><span class="s">"</span>
+                    <span class="s">"0,     -.34413,    1.772,                </span><span class="se">\n</span><span class="s">"</span>
+                    <span class="s">"1.402, -.71414,    0                     </span><span class="se">\n</span><span class="s">"</span>
+    <span class="s">"              ) * yuv;                                   </span><span class="se">\n</span><span class="s">"</span>
+    <span class="s">"                                                         </span><span class="se">\n</span><span class="s">"</span>    
+    <span class="s">"   gl_FragColor = vec4(rgb, 1.0);                        </span><span class="se">\n</span><span class="s">"</span>
+    <span class="s">"}                                                        </span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+
+</code></pre></div></div>
+
+<h2 id="63-nv24-argb">6.3 NV24-&gt;ARGB</h2>
+
+<h3 id="631-构建纹理">6.3.1 构建纹理</h3>
+
+<p>这里需要构建两个纹理，一个是Y的纹理， 一个是UV的纹理</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">static</span> <span class="n">GLuint</span> <span class="nf">build_texture_4_nv24_y</span><span class="p">(</span><span class="kt">int</span> <span class="n">width</span><span class="p">,</span> <span class="kt">int</span> <span class="n">height</span><span class="p">,</span> <span class="kt">void</span> <span class="o">*</span><span class="n">y_data</span><span class="p">){</span>
+    <span class="n">GLuint</span> <span class="n">texture</span><span class="p">;</span>
+  
+    <span class="n">glGenTextures</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">texture</span><span class="p">);</span>
+    <span class="n">glBindTexture</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="n">texture</span><span class="p">);</span>
+
+    <span class="n">glTexParameteri</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="n">GL_TEXTURE_WRAP_S</span><span class="p">,</span> <span class="n">GL_CLAMP_TO_EDGE</span><span class="p">);</span>    
+    <span class="n">glTexParameteri</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="n">GL_TEXTURE_WRAP_T</span><span class="p">,</span> <span class="n">GL_CLAMP_TO_EDGE</span><span class="p">);</span>        
+    <span class="n">glTexParameteri</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="n">GL_TEXTURE_MIN_FILTER</span><span class="p">,</span> <span class="n">GL_LINEAR</span><span class="p">);</span>    
+    <span class="n">glTexParameteri</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="n">GL_TEXTURE_MAG_FILTER</span><span class="p">,</span> <span class="n">GL_LINEAR</span><span class="p">);</span>
+    
+    <span class="n">glTexImage2D</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">GL_LUMINANCE</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">GL_LUMINANCE</span><span class="p">,</span> <span class="n">GL_UNSIGNED_BYTE</span><span class="p">,</span> <span class="n">y_data</span><span class="p">);</span>
+    
+    <span class="n">glBindTexture</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span> 
+    <span class="k">return</span> <span class="n">texture</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">static</span> <span class="n">GLuint</span> <span class="nf">build_texture_4_nv24_uv</span><span class="p">(</span><span class="kt">int</span> <span class="n">width</span><span class="p">,</span> <span class="kt">int</span> <span class="n">height</span><span class="p">,</span> <span class="kt">void</span> <span class="o">*</span><span class="n">uv_data</span><span class="p">){</span>
+    <span class="n">GLuint</span> <span class="n">texture</span><span class="p">;</span>
+  
+    <span class="n">glGenTextures</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">texture</span><span class="p">);</span>
+    <span class="n">glBindTexture</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="n">texture</span><span class="p">);</span>
+
+    <span class="n">glTexParameteri</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="n">GL_TEXTURE_WRAP_S</span><span class="p">,</span> <span class="n">GL_CLAMP_TO_EDGE</span><span class="p">);</span>    
+    <span class="n">glTexParameteri</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="n">GL_TEXTURE_WRAP_T</span><span class="p">,</span> <span class="n">GL_CLAMP_TO_EDGE</span><span class="p">);</span>        
+    <span class="n">glTexParameteri</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="n">GL_TEXTURE_MIN_FILTER</span><span class="p">,</span> <span class="n">GL_LINEAR</span><span class="p">);</span>    
+    <span class="n">glTexParameteri</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="n">GL_TEXTURE_MAG_FILTER</span><span class="p">,</span> <span class="n">GL_LINEAR</span><span class="p">);</span>
+    
+    <span class="n">glTexImage2D</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">GL_LUMINANCE_ALPHA</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">GL_LUMINANCE_ALPHA</span><span class="p">,</span> <span class="n">GL_UNSIGNED_BYTE</span><span class="p">,</span> <span class="n">uv_data</span><span class="p">);</span>
+    
+    <span class="n">glBindTexture</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span> 
+    <span class="k">return</span> <span class="n">texture</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="632-在shader中提取yuv">6.3.2 在shader中提取YUV</h3>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">static</span> <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">nv24_2_rgba_frag_src</span> <span class="o">=</span>        
+    <span class="s">"uniform sampler2D    Sampler_y;                            </span><span class="se">\n</span><span class="s">"</span>
+    <span class="s">"uniform sampler2D    Sampler_uv;                           </span><span class="se">\n</span><span class="s">"</span>    
+    <span class="s">"varying highp vec2   TexCoord;                             </span><span class="se">\n</span><span class="s">"</span>
+    <span class="s">"void main (void)                                           </span><span class="se">\n</span><span class="s">"</span>
+    <span class="s">"{                                                          </span><span class="se">\n</span><span class="s">"</span>
+    <span class="s">"   highp vec3 yuv;                                         </span><span class="se">\n</span><span class="s">"</span>
+    <span class="s">"   highp vec3 rgb;                                         </span><span class="se">\n</span><span class="s">"</span>    
+    <span class="s">"                                                           </span><span class="se">\n</span><span class="s">"</span>    
+    <span class="s">"   yuv.x = texture2D(Sampler_y, TexCoord).r;             </span><span class="se">\n</span><span class="s">"</span>
+    <span class="s">"   yuv.y = texture2D(Sampler_uv, TexCoord).r;            </span><span class="se">\n</span><span class="s">"</span>    
+    <span class="s">"   yuv.z = texture2D(Sampler_uv, TexCoord).a;            </span><span class="se">\n</span><span class="s">"</span>
+    <span class="s">"                                                         </span><span class="se">\n</span><span class="s">"</span>
+    <span class="s">"   yuv.y = yuv.y - 0.5;                                  </span><span class="se">\n</span><span class="s">"</span>
+    <span class="s">"   yuv.z = yuv.z - 0.5;                                  </span><span class="se">\n</span><span class="s">"</span>
+    <span class="s">"                                                         </span><span class="se">\n</span><span class="s">"</span>
+    <span class="s">"   rgb.r = yuv.x + 1.402 * yuv.z;                        </span><span class="se">\n</span><span class="s">"</span>
+    <span class="s">"   rgb.g = yuv.x - 0.34413 * yuv.y - 0.71414 * yuv.z;    </span><span class="se">\n</span><span class="s">"</span>
+    <span class="s">"   rgb.b = yuv.x + 1.772 * yuv.y;                        </span><span class="se">\n</span><span class="s">"</span>        
+    <span class="s">"                                                         </span><span class="se">\n</span><span class="s">"</span>    
+    <span class="s">"   gl_FragColor = vec4(rgb, 1.0);                        </span><span class="se">\n</span><span class="s">"</span>
+    <span class="s">"}                                                        </span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+</code></pre></div></div>
+
+<h2 id="64-nv16-argb">6.4 NV16-&gt;ARGB</h2>
+
+<h3 id="641-构建纹理">6.4.1 构建纹理</h3>
+
+<p>这里需要构建两个纹理，一个是Y的纹理， 一个是UV的纹理</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">static</span> <span class="n">GLuint</span> <span class="nf">build_texture_4_nv16_y</span><span class="p">(</span><span class="kt">int</span> <span class="n">width</span><span class="p">,</span> <span class="kt">int</span> <span class="n">height</span><span class="p">,</span> <span class="kt">void</span> <span class="o">*</span><span class="n">data</span><span class="p">){</span>
+    <span class="n">GLuint</span> <span class="n">texture</span><span class="p">;</span>
+  
+    <span class="n">glGenTextures</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">texture</span><span class="p">);</span>
+    <span class="n">glBindTexture</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="n">texture</span><span class="p">);</span>
+
+    <span class="n">glTexParameteri</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="n">GL_TEXTURE_WRAP_S</span><span class="p">,</span> <span class="n">GL_CLAMP_TO_EDGE</span><span class="p">);</span>    
+    <span class="n">glTexParameteri</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="n">GL_TEXTURE_WRAP_T</span><span class="p">,</span> <span class="n">GL_CLAMP_TO_EDGE</span><span class="p">);</span>        
+    <span class="n">glTexParameteri</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="n">GL_TEXTURE_MIN_FILTER</span><span class="p">,</span> <span class="n">GL_LINEAR</span><span class="p">);</span>    
+    <span class="n">glTexParameteri</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="n">GL_TEXTURE_MAG_FILTER</span><span class="p">,</span> <span class="n">GL_LINEAR</span><span class="p">);</span>
+    
+    <span class="n">glTexImage2D</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">GL_LUMINANCE</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">GL_LUMINANCE</span><span class="p">,</span> <span class="n">GL_UNSIGNED_BYTE</span><span class="p">,</span> <span class="n">data</span><span class="p">);</span>
+    
+    <span class="n">glBindTexture</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span> 
+    <span class="k">return</span> <span class="n">texture</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p><strong>注意glTexImage2D()的第四参数值发生了变化</strong></p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">static</span> <span class="n">GLuint</span> <span class="nf">build_texture_4_nv16_uv</span><span class="p">(</span><span class="kt">int</span> <span class="n">width</span><span class="p">,</span> <span class="kt">int</span> <span class="n">height</span><span class="p">,</span> <span class="kt">void</span> <span class="o">*</span><span class="n">data</span><span class="p">){</span>
+    <span class="n">GLuint</span> <span class="n">texture</span><span class="p">;</span>
+  
+    <span class="n">glGenTextures</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">texture</span><span class="p">);</span>
+    <span class="n">glBindTexture</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="n">texture</span><span class="p">);</span>
+
+    <span class="n">glTexParameteri</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="n">GL_TEXTURE_WRAP_S</span><span class="p">,</span> <span class="n">GL_CLAMP_TO_EDGE</span><span class="p">);</span>    
+    <span class="n">glTexParameteri</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="n">GL_TEXTURE_WRAP_T</span><span class="p">,</span> <span class="n">GL_CLAMP_TO_EDGE</span><span class="p">);</span>        
+    <span class="n">glTexParameteri</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="n">GL_TEXTURE_MIN_FILTER</span><span class="p">,</span> <span class="n">GL_LINEAR</span><span class="p">);</span>    
+    <span class="n">glTexParameteri</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="n">GL_TEXTURE_MAG_FILTER</span><span class="p">,</span> <span class="n">GL_LINEAR</span><span class="p">);</span>
+    
+    <span class="n">glTexImage2D</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">GL_LUMINANCE_ALPHA</span><span class="p">,</span> <span class="n">width</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">GL_LUMINANCE_ALPHA</span><span class="p">,</span> <span class="n">GL_UNSIGNED_BYTE</span><span class="p">,</span> <span class="n">data</span><span class="p">);</span>
+    
+    <span class="n">glBindTexture</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span> 
+    <span class="k">return</span> <span class="n">texture</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<h3 id="642-在shader中提取yuv">6.4.2 在shader中提取YUV</h3>
+
+<p>与NV24方法相同</p>
+
+<h2 id="65-nv12-argb">6.5 NV12-&gt;ARGB</h2>
+
+<h3 id="651-构建纹理">6.5.1 构建纹理</h3>
+
+<p>这里需要构建两个纹理，一个是Y的纹理， 一个是UV的纹理</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">static</span> <span class="n">GLuint</span> <span class="nf">build_texture_4_nv12_y</span><span class="p">(</span><span class="kt">int</span> <span class="n">width</span><span class="p">,</span> <span class="kt">int</span> <span class="n">height</span><span class="p">,</span> <span class="kt">void</span> <span class="o">*</span><span class="n">data</span><span class="p">){</span>
+    <span class="n">GLuint</span> <span class="n">texture</span><span class="p">;</span>
+  
+    <span class="n">glGenTextures</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">texture</span><span class="p">);</span>
+    <span class="n">glBindTexture</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="n">texture</span><span class="p">);</span>
+
+    <span class="n">glTexParameteri</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="n">GL_TEXTURE_WRAP_S</span><span class="p">,</span> <span class="n">GL_CLAMP_TO_EDGE</span><span class="p">);</span>    
+    <span class="n">glTexParameteri</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="n">GL_TEXTURE_WRAP_T</span><span class="p">,</span> <span class="n">GL_CLAMP_TO_EDGE</span><span class="p">);</span>        
+    <span class="n">glTexParameteri</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="n">GL_TEXTURE_MIN_FILTER</span><span class="p">,</span> <span class="n">GL_LINEAR</span><span class="p">);</span>    
+    <span class="n">glTexParameteri</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="n">GL_TEXTURE_MAG_FILTER</span><span class="p">,</span> <span class="n">GL_LINEAR</span><span class="p">);</span>
+    
+    <span class="n">glTexImage2D</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">GL_LUMINANCE</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">GL_LUMINANCE</span><span class="p">,</span> <span class="n">GL_UNSIGNED_BYTE</span><span class="p">,</span> <span class="n">data</span><span class="p">);</span>
+    
+    <span class="n">glBindTexture</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span> 
+    <span class="k">return</span> <span class="n">texture</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<p><strong>注意glTexImage2D()的第四,五参数值发生了变化</strong></p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">static</span> <span class="n">GLuint</span> <span class="nf">build_texture_4_nv12_uv</span><span class="p">(</span><span class="kt">int</span> <span class="n">width</span><span class="p">,</span> <span class="kt">int</span> <span class="n">height</span><span class="p">,</span> <span class="kt">void</span> <span class="o">*</span><span class="n">data</span><span class="p">){</span>
+    <span class="n">GLuint</span> <span class="n">texture</span><span class="p">;</span>
+  
+    <span class="n">glGenTextures</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">texture</span><span class="p">);</span>
+    <span class="n">glBindTexture</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="n">texture</span><span class="p">);</span>
+
+    <span class="n">glTexParameteri</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="n">GL_TEXTURE_WRAP_S</span><span class="p">,</span> <span class="n">GL_CLAMP_TO_EDGE</span><span class="p">);</span>    
+    <span class="n">glTexParameteri</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="n">GL_TEXTURE_WRAP_T</span><span class="p">,</span> <span class="n">GL_CLAMP_TO_EDGE</span><span class="p">);</span>        
+    <span class="n">glTexParameteri</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="n">GL_TEXTURE_MIN_FILTER</span><span class="p">,</span> <span class="n">GL_LINEAR</span><span class="p">);</span>    
+    <span class="n">glTexParameteri</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="n">GL_TEXTURE_MAG_FILTER</span><span class="p">,</span> <span class="n">GL_LINEAR</span><span class="p">);</span>
+    <span class="n">CHK_GL_ERR</span><span class="p">();</span>
+    
+    <span class="n">glTexImage2D</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">GL_LUMINANCE_ALPHA</span><span class="p">,</span> <span class="n">width</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">height</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">GL_LUMINANCE_ALPHA</span><span class="p">,</span> <span class="n">GL_UNSIGNED_BYTE</span><span class="p">,</span> <span class="n">data</span><span class="p">);</span>
+    <span class="n">CHK_GL_ERR</span><span class="p">();</span>
+    
+    <span class="n">glBindTexture</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span> 
+    <span class="k">return</span> <span class="n">texture</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="652-在shader中提取yuv">6.5.2 在shader中提取YUV</h3>
+
+<p>与NV24方法相同</p>]]></content><author><name>Kevin</name></author><category term="Jekyll" /><summary type="html"><![CDATA[1.简介]]></summary></entry><entry><title type="html">硬中断</title><link href="http://localhost:4000/blog/jekyll/2018-02-27-interrupte.html" rel="alternate" type="text/html" title="硬中断" /><published>2018-02-27T00:00:00+08:00</published><updated>2018-02-27T00:00:00+08:00</updated><id>http://localhost:4000/blog/jekyll/interrupte</id><content type="html" xml:base="http://localhost:4000/blog/jekyll/2018-02-27-interrupte.html"><![CDATA[<p>【转帖】</p>
 
 <p>本来想写内核如何接收一个网络包这个过程，但发现把整个过程捋顺了，还是很难的。</p>
 

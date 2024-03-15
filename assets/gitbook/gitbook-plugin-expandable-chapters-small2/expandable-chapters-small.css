@@ -24,9 +24,22 @@
   	top: 12px;
 }
 
-.book .book-summary ul.summary li a,
+.book .book-summary {
+/*	background: #F3EACB;*/
+	font-size: 7px;
+}
+.book .book-summary ul.summary li{
+/*	list-style-type: circle;*/
+/*	padding: 2px 15px 3px 30px;	*/
+}
+.book .book-summary ul.summary li a{
+	padding: 2px 15px 3px 30px;	
+/*	padding-left: 10px;	*/
+}
 .book .book-summary ul.summary li span {
-	padding-left: 30px;
+/*	padding-left: 5px;*/
+	padding: 2px 15px 3px 10px;	
+/*	list-style-type: circle;*/
 }
 
 .book .book-summary .exc-trigger:before {
