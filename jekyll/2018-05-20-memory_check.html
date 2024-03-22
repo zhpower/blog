@@ -463,6 +463,19 @@
 
 <h1 id="4strace与ltrace">4.strace与ltrace</h1>
 
+<p>ltrace 用于跟踪程序的库函数调用，而 strace 则用于跟踪系统调用。
+它们都基于 ptrace 系统调用，但跟踪库函数和跟踪系统调用之间存在差异。 通过它们，我们也可以对应用的内存申请、释放进行跟踪。</p>
+
+<p>ltrace 的工作原理：</p>
+<ul>
+  <li>ptrace 附加到正在运行的程序。</li>
+  <li>定位程序的 PLT。</li>
+  <li>使用 PTRACE_POKETEXT 设置软件断点（int $3 指令）覆盖库函数的 PLT 中的汇编 trampoline。</li>
+  <li>恢复程序执行。</li>
+</ul>
+
+<p>strace 应该也是相类似的工作原理</p>
+
 <h2 id="41-strace">4.1 strace</h2>
 
 <p>strace 是一个强大的 Linux 命令，用于诊断、调试和统计。它允许您跟踪正在运行的程序的系统调用和接收的信号。下面是一些关于 strace 的参数使用方法。</p>

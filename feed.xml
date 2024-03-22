@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.2">Jekyll</generator><link href="http://localhost:4000/blog/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/blog/" rel="alternate" type="text/html" /><updated>2024-03-22T09:14:11+08:00</updated><id>http://localhost:4000/blog/feed.xml</id><title type="html">学习笔记</title><subtitle>Build Jekyll site with the GitBook style.
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.2">Jekyll</generator><link href="http://localhost:4000/blog/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/blog/" rel="alternate" type="text/html" /><updated>2024-03-22T18:04:08+08:00</updated><id>http://localhost:4000/blog/feed.xml</id><title type="html">学习笔记</title><subtitle>Build Jekyll site with the GitBook style.
 </subtitle><author><name>kevin_zh</name></author><entry><title type="html">位运算</title><link href="http://localhost:4000/blog/jekyll/2023-04-27-bit.html" rel="alternate" type="text/html" title="位运算" /><published>2023-04-27T00:00:00+08:00</published><updated>2023-04-27T00:00:00+08:00</updated><id>http://localhost:4000/blog/jekyll/bit</id><content type="html" xml:base="http://localhost:4000/blog/jekyll/2023-04-27-bit.html"><![CDATA[<h3 id="1位运算概述">1.位运算概述</h3>
 
 <p>从现代计算机中所有的数据二进制的形式存储在设备中。即 0、1 两种状态，计算机对二进制数据进行的运算(+、-、*、/)都是叫位运算，即将符号位共同参与运算的运算。</p>
@@ -951,6 +951,19 @@ end
 <img src="/blog/assets/memory_check/mtrace_2.png" alt="mtrace" width="650px" height="250px" /></p>
 
 <h1 id="4strace与ltrace">4.strace与ltrace</h1>
+
+<p>ltrace 用于跟踪程序的库函数调用，而 strace 则用于跟踪系统调用。
+它们都基于 ptrace 系统调用，但跟踪库函数和跟踪系统调用之间存在差异。 通过它们，我们也可以对应用的内存申请、释放进行跟踪。</p>
+
+<p>ltrace 的工作原理：</p>
+<ul>
+  <li>ptrace 附加到正在运行的程序。</li>
+  <li>定位程序的 PLT。</li>
+  <li>使用 PTRACE_POKETEXT 设置软件断点（int $3 指令）覆盖库函数的 PLT 中的汇编 trampoline。</li>
+  <li>恢复程序执行。</li>
+</ul>
+
+<p>strace 应该也是相类似的工作原理</p>
 
 <h2 id="41-strace">4.1 strace</h2>
 
