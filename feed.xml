@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.2">Jekyll</generator><link href="http://localhost:4000/blog/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/blog/" rel="alternate" type="text/html" /><updated>2024-03-26T19:38:09+08:00</updated><id>http://localhost:4000/blog/feed.xml</id><title type="html">学习笔记</title><subtitle>Build Jekyll site with the GitBook style.
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.2">Jekyll</generator><link href="http://localhost:4000/blog/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/blog/" rel="alternate" type="text/html" /><updated>2024-04-03T09:42:26+08:00</updated><id>http://localhost:4000/blog/feed.xml</id><title type="html">学习笔记</title><subtitle>Build Jekyll site with the GitBook style.
 </subtitle><author><name>kevin_zh</name></author><entry><title type="html">位运算</title><link href="http://localhost:4000/blog/jekyll/2023-04-27-bit.html" rel="alternate" type="text/html" title="位运算" /><published>2023-04-27T00:00:00+08:00</published><updated>2023-04-27T00:00:00+08:00</updated><id>http://localhost:4000/blog/jekyll/bit</id><content type="html" xml:base="http://localhost:4000/blog/jekyll/2023-04-27-bit.html"><![CDATA[<h1 id="1位运算概述">1.位运算概述</h1>
 
 <p>从现代计算机中所有的数据二进制的形式存储在设备中。即 0、1 两种状态，计算机对二进制数据进行的运算(+、-、*、\/)都是叫位运算，即将符号位共同参与运算的运算。</p>
@@ -838,7 +838,296 @@ idr_alloc 函数用于在 Linux 内核中分配 IDR（ID Range）对象中的未
     <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
 <span class="p">}</span>
 
-</code></pre></div></div>]]></content><author><name>kevin</name></author><category term="Jekyll" /><summary type="html"><![CDATA[kref]]></summary></entry><entry><title type="html">进程内存检查</title><link href="http://localhost:4000/blog/jekyll/2018-05-20-memory_check.html" rel="alternate" type="text/html" title="进程内存检查" /><published>2018-05-20T00:00:00+08:00</published><updated>2018-05-20T00:00:00+08:00</updated><id>http://localhost:4000/blog/jekyll/memory_check</id><content type="html" xml:base="http://localhost:4000/blog/jekyll/2018-05-20-memory_check.html"><![CDATA[<h1 id="1进程内存映射文件smaps">1.进程内存映射文件smaps</h1>
+</code></pre></div></div>
+
+<h1 id="非一致性内存-和一致性">非一致性内存 和一致性</h1>
+
+<h2 id="dma_alloc_noncoherent">dma_alloc_noncoherent</h2>
+
+<p>它是Linux内核中的一个DMA内存分配函数，用于分配一段物理内存，使其可以被DMA硬件访问12. 这个函数的作用是在非一致性内存（non-coherent memory）上分配一块区域，以便设备可以使用它作为DMA的源或目标地址。让我详细解释一下这个函数的用途和参数。</p>
+
+<p>dma_alloc_noncoherent函数的原型如下：</p>
+
+<p><code class="language-plaintext highlighter-rouge">void *dma_alloc_noncoherent(struct device *dev, size_t size, dma_addr_t *dma_handle, gfp_t flag);</code></p>
+
+<ul>
+  <li>dev: 指向设备结构的指针，表示要为哪个设备分配内存。</li>
+  <li>size: 要分配的内存大小（以字节为单位）。</li>
+  <li>dma_handle: 用于返回DMA地址的指针。这个地址可以转换为与总线宽度相同的无符号整数，并传递给设备作为分配区域的DMA地址基址。</li>
+  <li>flag: 用于指定内存分配的GFP_标志（类似于kmalloc()中的标志）。例如，可以使用GFP_KERNEL来分配普通内核内存。
+非一致性内存是一种特殊类型的内存，写入它的数据可以立即被处理器或设备读取，而无需考虑缓存效应。需要注意的是，CPU不能直接引用dma_addr_t，因为物理地址空间和DMA地址空间之间可能存在转换。</li>
+</ul>
+
+<p>使用dma_alloc_noncoherent分配的内存区域不保证一致性，因此在使用之前，可能需要手动刷新处理器的写缓冲区，以确保设备可以正确读取该内存。
+释放由dma_alloc_noncoherent分配的内存时，应使用dma_free_noncoherent函数：</p>
+
+<p><code class="language-plaintext highlighter-rouge">void dma_free_noncoherent(struct device *dev, size_t size, void *cpu_addr, dma_addr_t dma_handle);</code></p>
+
+<p>dev、size和dma_handle参数必须与传递给dma_alloc_noncoherent的相同。
+cpu_addr是由dma_alloc_noncoherent返回的虚拟地址。
+请注意，与其他内存分配函数不同，这些函数只能在启用IRQ的情况下调用。</p>
+
+<p>如果你的驱动程序需要大量较小的DMA一致性内存区域，你可以使用DMA池（dma_pool）来分配和管理这些区域，而不是使用dma_alloc_coherent()。DMA池类似于kmem_cache，但它使用dma_alloc_coherent()而不是__get_free_pages()</p>
+
+<h2 id="dma_alloc_wc">dma_alloc_wc</h2>
+<p>这个函数允许驱动程序申请带缓存一致性的DMA内存。缓存一致性是指确保CPU和DMA设备之间的数据一致性，以避免数据不一致的问题。使用dma_alloc_wc分配的内存区域旨在在CPU和DMA设备之间保持一致，以便数据正确传输。</p>
+
+<p>释放由dma_alloc_wc分配的内存时，应使用dma_free_wc函数：</p>
+
+<p><code class="language-plaintext highlighter-rouge">void dma_free_wc(struct device *dev, size_t size, void *cpu_addr, dma_addr_t dma_handle);</code></p>
+
+<ul>
+  <li>dev、size和dma_handle参数必须与传递给dma_alloc_wc的相同。</li>
+  <li>cpu_addr是由dma_alloc_wc返回的虚拟地址。</li>
+</ul>
+
+<p><u>adf</u></p>
+<h1 id="timer_setup">timer_setup</h1>
+
+<p>它是Linux内核中用于初始化定时器的函数。它能够方便地设置和初始化一个计时器，并通过设置参数来灵活地控制计时器的行为1. 合理使用timer_setup函数可以让我们更好地处理时间相关的任务，提高操作系统的性能和可靠性。</p>
+
+<p>在Linux内核中，定时器通常使用timer_list结构体来表示。下面是timer_list结构体的一些关键字段：</p>
+
+<ul>
+  <li>entry: 定时器列表元素，用于将定时器挂载在内核定时器链表上。</li>
+  <li>expires: 定时器定时时间。</li>
+  <li>function: 定时器回调函数，定时器时间到时执行该函数。</li>
+  <li>flags: 标志位，用于设置定时器的属性。</li>
+</ul>
+
+<p>在旧版本的内核中，我们使用init_timer函数来初始化定时器。而在新版本中，这个函数变成了timer_setup函数。下面是timer_setup函数的定义：</p>
+
+<p><code class="language-plaintext highlighter-rouge">void timer_setup(struct timer_list *timer, void (*callback)(struct timer_list *), unsigned int flags);</code></p>
+
+<p>使用timer_setup函数时，我们需要传入以下参数：</p>
+
+<ul>
+  <li>timer: 要初始化的定时器。</li>
+  <li>callback: 定时器的回调函数，此函数的形参是当前定时器的变量。</li>
+  <li>flags: 标志位，可以设置定时器的属性。</li>
+</ul>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;linux/kernel.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;linux/module.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;linux/timer.h&gt;</span><span class="cp">
+</span>
+<span class="n">MODULE_LICENSE</span><span class="p">(</span><span class="s">"GPL"</span><span class="p">);</span>
+
+<span class="k">static</span> <span class="k">struct</span> <span class="n">timer_list</span> <span class="n">my_timer</span><span class="p">;</span>
+
+<span class="kt">void</span> <span class="nf">my_timer_callback</span><span class="p">(</span><span class="k">struct</span> <span class="n">timer_list</span> <span class="o">*</span><span class="n">timer</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">printk</span><span class="p">(</span><span class="n">KERN_ALERT</span> <span class="s">"This line is printed after 5 seconds.</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="k">static</span> <span class="kt">int</span> <span class="nf">init_module_with_timer</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">printk</span><span class="p">(</span><span class="n">KERN_ALERT</span> <span class="s">"Initializing a module with timer.</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+
+    <span class="c1">// Setup the timer for initial use</span>
+    <span class="n">timer_setup</span><span class="p">(</span><span class="o">&amp;</span><span class="n">my_timer</span><span class="p">,</span> <span class="n">my_timer_callback</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+
+    <span class="c1">// Set the timer interval to 5000 milliseconds (5 seconds)</span>
+    <span class="n">mod_timer</span><span class="p">(</span><span class="o">&amp;</span><span class="n">my_timer</span><span class="p">,</span> <span class="n">jiffies</span> <span class="o">+</span> <span class="n">msecs_to_jiffies</span><span class="p">(</span><span class="mi">5000</span><span class="p">));</span>
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">static</span> <span class="kt">void</span> <span class="nf">exit_module_with_timer</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">printk</span><span class="p">(</span><span class="n">KERN_ALERT</span> <span class="s">"Goodbye, cruel world!</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+    <span class="n">del_timer</span><span class="p">(</span><span class="o">&amp;</span><span class="n">my_timer</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="n">module_init</span><span class="p">(</span><span class="n">init_module_with_timer</span><span class="p">);</span>
+<span class="n">module_exit</span><span class="p">(</span><span class="n">exit_module_with_timer</span><span class="p">);</span>
+
+</code></pre></div></div>
+
+<h1 id="kthread_create_worker">kthread_create_worker</h1>
+
+<p>函数是Linux内核中用于创建内核线程的一个函数。通过设置标志参数和格式化字符串，可以指定创建内核线程的行为和名称。它分配并初始化了一个kthread_worker结构体，并使用它来创建内核线程12.</p>
+
+<p>以下是kthread_create_worker函数的一些关键参数：</p>
+
+<ul>
+  <li>cpu: 如果大于等于0，将创建特定于某个CPU的工作线程；如果不想创建特定于CPU的工作线程，可以将CPU域赋值为-1。</li>
+  <li>flags: 可以设置一些标志位，根据需要来控制内核线程的行为。</li>
+  <li>namefmt: 一个格式化字符串，用于指定内核线程的名称。</li>
+</ul>
+
+<p>这个函数会分配内存并初始化kthread_worker结构，然后返回指向该结构的指针。您可以根据具体需求使用这个函数来创建和管理内核线程。</p>
+
+<p>如果您需要一个示例代码，以下是一个简单的例子，展示了如何在模块初始化时创建一个内核线程，以及如何在卸载模块时关闭该内核线程：</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;linux/module.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;linux/kthread.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;linux/delay.h&gt;</span><span class="cp">
+</span>
+<span class="n">MODULE_LICENSE</span><span class="p">(</span><span class="s">"GPL"</span><span class="p">);</span>
+
+<span class="k">static</span> <span class="kt">int</span> <span class="nf">demo_thr</span><span class="p">(</span><span class="kt">void</span> <span class="o">*</span><span class="n">data</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">kthread_should_stop</span><span class="p">())</span> <span class="p">{</span>
+        <span class="n">msleep_interruptible</span><span class="p">(</span><span class="mi">2000</span><span class="p">);</span>
+        <span class="n">printk</span><span class="p">(</span><span class="n">KERN_INFO</span> <span class="s">"Thread is running...</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">static</span> <span class="k">struct</span> <span class="n">task_struct</span> <span class="o">*</span><span class="n">thr</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+
+<span class="k">static</span> <span class="kt">int</span> <span class="nf">kthread_demo_init</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">thr</span> <span class="o">=</span> <span class="n">kthread_run</span><span class="p">(</span><span class="n">demo_thr</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="s">"kthread-demo"</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">thr</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">printk</span><span class="p">(</span><span class="n">KERN_ERR</span> <span class="s">"Failed to create kthread</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+        <span class="k">return</span> <span class="o">-</span><span class="n">ENOMEM</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">static</span> <span class="kt">void</span> <span class="nf">kthread_demo_exit</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">thr</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">kthread_stop</span><span class="p">(</span><span class="n">thr</span><span class="p">);</span>
+        <span class="n">thr</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="n">module_init</span><span class="p">(</span><span class="n">kthread_demo_init</span><span class="p">);</span>
+<span class="n">module_exit</span><span class="p">(</span><span class="n">kthread_demo_exit</span><span class="p">);</span>
+</code></pre></div></div>
+<p>在这个示例中，我们使用kthread_run函数创建一个名为kthread-demo的内核线程，它每隔2秒打印一条信息。在卸载模块时，我们使用kthread_stop来关闭该内核线程。</p>
+
+<h1 id="schedule_work">schedule_work</h1>
+
+<p>函数是Linux内核中的一个重要函数，用于将一个工作项（work）添加到工作队列（workqueue）中。这个函数的作用是在后台执行一些延迟较长的任务，而不会阻塞主线程的执行。</p>
+
+<p>以下是关于schedule_work函数的一些要点：</p>
+
+<ul>
+  <li>功能：将工作项添加到默认的工作队列（通常是system_wq）中，以便稍后执行。</li>
+  <li>调用方式：schedule_work(&amp;my_work);，其中my_work是一个已经初始化的工作项。</li>
+  <li>工作队列：工作队列是一种异步执行机制，用于处理延迟的或非实时的任务。</li>
+  <li>延迟执行：schedule_work会将工作项添加到工作队列中，等待系统调度执行。这样，主线程可以继续执行其他任务，而不必等待工作项完成。</li>
+  <li>工作项回调函数：工作项的实际执行逻辑由回调函数定义。当工作项被调度执行时，会调用这个回调函数。</li>
+</ul>
+
+<p>以下是一个简单的示例代码，展示了如何使用INIT_WORK和schedule_work来创建和调度一个工作项：</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;linux/init.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;linux/module.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;linux/kernel.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;linux/workqueue.h&gt;</span><span class="cp">
+</span>
+<span class="n">MODULE_LICENSE</span><span class="p">(</span><span class="s">"GPL"</span><span class="p">);</span>
+
+<span class="k">static</span> <span class="k">struct</span> <span class="n">workqueue_struct</span> <span class="o">*</span><span class="n">my_workqueue</span><span class="p">;</span>
+<span class="k">static</span> <span class="k">struct</span> <span class="n">work_struct</span> <span class="n">my_work</span><span class="p">;</span>
+
+<span class="c1">// 工作项的回调函数</span>
+<span class="k">static</span> <span class="kt">void</span> <span class="nf">my_work_handler</span><span class="p">(</span><span class="k">struct</span> <span class="n">work_struct</span> <span class="o">*</span><span class="n">work</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">printk</span><span class="p">(</span><span class="n">KERN_INFO</span> <span class="s">"My work handler is running...</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+    <span class="c1">// 在这里执行您的工作逻辑</span>
+<span class="p">}</span>
+
+<span class="k">static</span> <span class="kt">int</span> <span class="nf">init_my_module</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">printk</span><span class="p">(</span><span class="n">KERN_INFO</span> <span class="s">"Initializing my kernel module with workqueue...</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+
+    <span class="c1">// 创建工作队列</span>
+    <span class="n">my_workqueue</span> <span class="o">=</span> <span class="n">create_singlethread_workqueue</span><span class="p">(</span><span class="s">"my_workqueue"</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">my_workqueue</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">printk</span><span class="p">(</span><span class="n">KERN_ERR</span> <span class="s">"Failed to create workqueue</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+        <span class="k">return</span> <span class="o">-</span><span class="n">ENOMEM</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="c1">// 初始化工作项</span>
+    <span class="n">INIT_WORK</span><span class="p">(</span><span class="o">&amp;</span><span class="n">my_work</span><span class="p">,</span> <span class="n">my_work_handler</span><span class="p">);</span>
+
+    <span class="c1">// 将工作项添加到工作队列</span>
+    <span class="n">schedule_work</span><span class="p">(</span><span class="o">&amp;</span><span class="n">my_work</span><span class="p">);</span>
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">static</span> <span class="kt">void</span> <span class="nf">cleanup_my_module</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">printk</span><span class="p">(</span><span class="n">KERN_INFO</span> <span class="s">"Cleaning up my kernel module...</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+
+    <span class="c1">// 销毁工作队列</span>
+    <span class="n">destroy_workqueue</span><span class="p">(</span><span class="n">my_workqueue</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="n">module_init</span><span class="p">(</span><span class="n">init_my_module</span><span class="p">);</span>
+<span class="n">module_exit</span><span class="p">(</span><span class="n">cleanup_my_module</span><span class="p">);</span>
+</code></pre></div></div>
+<p>在这个示例中，我们首先定义了一个名为my_workqueue的工作队列结构体，以及一个名为my_work的工作项。然后，在init_my_module函数中使用create_singlethread_workqueue来创建一个名为my_workqueue的工作队列。接着，我们使用INIT_WORK来初始化工作项，并使用schedule_work来调度它。</p>
+
+<h1 id="drm-blob">DRM Blob</h1>
+
+<p>当涉及到 DRM（Direct Rendering Manager）中的“blob”时，我们实际上在讨论一种特定类型的属性。让我详细解释一下：</p>
+
+<ol>
+  <li>什么是 Blob？</li>
+</ol>
+
+<ul>
+  <li>在 DRM 中，Blob 是一种特殊的属性，用于存储自定义数据块。它允许用户空间应用程序将自定义结构体数据传递给内核空间。</li>
+  <li>Blob 通常用于存储一些不适合使用标准属性的数据，例如模式信息、LUT（查找表）数据、校准数据等。</li>
+</ul>
+
+<ol>
+  <li>Blob 的结构和用法：</li>
+</ol>
+
+<ul>
+  <li>
+    <p>Blob 由两部分组成：</p>
+
+    <ul>
+      <li>
+        <p>Blob ID：每个 Blob 都有一个唯一的 ID，用于在内核中标识该 Blob。</p>
+      </li>
+      <li>
+        <p>Blob 数据：这是一个自定义长度的内存块，可以存储任何类型的数据。</p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p>Blob 可以存储各种信息，例如显示模式（mode）的详细信息、颜色校准数据、Gamma 表等。</p>
+  </li>
+</ul>
+
+<ol>
+  <li>Blob 的示例用途：</li>
+</ol>
+
+<ul>
+  <li>
+    <p>模式信息（Mode Information）：Blob 可以存储显示模式的详细信息，例如分辨率、刷新率、像素格式等。</p>
+  </li>
+  <li>
+    <p>颜色校准数据：如果您需要在显示设备上进行颜色校准，可以使用 Blob 存储校准数据。</p>
+  </li>
+  <li>
+    <p>Gamma 表：Gamma 表用于调整显示设备的亮度和对比度。这些数据可以存储在 Blob 中。</p>
+  </li>
+</ul>
+
+<ol>
+  <li>如何操作 Blob？</li>
+</ol>
+
+<ul>
+  <li>
+    <p>用户空间应用程序可以通过 DRM 接口来创建、获取和设置 Blob。</p>
+  </li>
+  <li>
+    <p>创建 Blob：使用 drmModeCreatePropertyBlob 函数来创建一个 Blob，并将自定义数据传递给内核。</p>
+  </li>
+  <li>
+    <p>获取 Blob 数据：使用 drmModeGetPropertyBlob 函数来获取 Blob 中存储的数据。</p>
+  </li>
+  <li>
+    <p>设置 Blob 数据：使用 drmModeAtomicAddProperty 函数将 Blob ID 添加到 Atomic 请求中，从而修改 Blob 数据。</p>
+  </li>
+</ul>
+
+<p>总之，Blob 是一种用于存储自定义数据的特殊属性，允许用户空间应用程序与内核交换非标准化的信息。它在 DRM 中的应用范围很广，例如显示模式、颜色校准和 Gamma 表等。</p>]]></content><author><name>kevin</name></author><category term="Jekyll" /><summary type="html"><![CDATA[kref]]></summary></entry><entry><title type="html">进程内存检查</title><link href="http://localhost:4000/blog/jekyll/2018-05-20-memory_check.html" rel="alternate" type="text/html" title="进程内存检查" /><published>2018-05-20T00:00:00+08:00</published><updated>2018-05-20T00:00:00+08:00</updated><id>http://localhost:4000/blog/jekyll/memory_check</id><content type="html" xml:base="http://localhost:4000/blog/jekyll/2018-05-20-memory_check.html"><![CDATA[<h1 id="1进程内存映射文件smaps">1.进程内存映射文件smaps</h1>
 
 <p>在内核的数据结构中，进程、进程使用内存、虚拟内存块和一个二进制程序文件的对应关系图如下。</p>
 
@@ -2367,6 +2656,8 @@ dumb buffer 和 smart buffer 的区别就在于，你写到显存里的数据，
   </tbody>
 </table>
 
+<p><img src="/blog/assets/DRM/dumb_based_on_GEM.png" alt="drm_dumb_based_on_GEM" /></p>
+
 <div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;linux/module.h&gt;</span><span class="cp">
 #include</span> <span class="cpf">&lt;linux/platform_device.h&gt;</span><span class="cp">
 #include</span> <span class="cpf">&lt;drm/drm_gem.h&gt;</span><span class="cp">
@@ -2596,6 +2887,7 @@ dumb buffer 和 smart buffer 的区别就在于，你写到显存里的数据，
 
 <h4 id="2122-流程图">2.1.2.2 流程图</h4>
 <p><img src="/blog/assets/DRM/DRM_DUMB_gem.svg" alt="drm_dumb_gem" /></p>
+
 <h2 id="22-prime">2.2 PRIME</h2>
 
 <p>PRIME 在 DRM 驱动中其实是一种buffer共享机制，它是基于 dma-buf 来实现的.</p>
@@ -2607,9 +2899,13 @@ dumb buffer 和 smart buffer 的区别就在于，你写到显存里的数据，
 <p>他将这项技术命名为“PRIME”。 命名为<code class="language-plaintext highlighter-rouge">PRIME</code> 主要是映射<code class="language-plaintext highlighter-rouge">Optimus</code>
 Optimus Prime 就是变形金刚 擎天柱的名字！ NVIDIA 当初给他们 Optimus 技术命名的精妙之处：擎天柱本身所具有的变形能力，形象的表达了 Optimus 这项技术可以在功耗和性能之间来回自由变换。 Dave 将他这项 Linux 下的技术命名为 “PRIME”，其实是很巧妙的玩了一把文字游戏，隐晦的告诉大家：DRM Prime 技术就是用来对标 NVIDIA Optimus 技术的。</p>
 
-<h3 id="221-prime的实现">2.2.1 PRIME的实现</h3>
+<h3 id="221-prime的基本实现">2.2.1 PRIME的基本实现</h3>
 
 <p>为了实现设备间的buffer共享，需要有一套机制来导出、导入buffer。提供buffer的驱动负责导出buffer，使用buffer的设备导入buffer。 DMA_BUF已经提供了这样一套机制。 在DRM的实现中就使用了这套机制，具体是通过借助dmabuf fd来完成的。 导出buffer的驱动对外提供一个fd，来代表一个buffer， 而要使用这个buffer的其他设备驱动就通过这个fd导入buffer，从而访问该buffer。 在DRM中我们需要实现一定的DMA_BUF接口来支持buffer的导出、导入。</p>
+
+<p>下图是一个在不同设备驱动之间导入、导出dma_buf的简单示意图</p>
+
+<p><img src="/blog/assets/DRM/import_export_dma_buf.png" alt="import_export_dma_buf" /></p>
 
 <h4 id="2211-export驱动实现">2.2.1.1 export驱动实现</h4>
 
@@ -2634,12 +2930,17 @@ Optimus Prime 就是变形金刚 擎天柱的名字！ NVIDIA 当初给他们 Op
   </tbody>
 </table>
 
+<p><img src="/blog/assets/DRM/prime.png" alt="drm_prime" /></p>
+
 <p>下面是支持buffer导出的简单实现. 在前面code的基础上添加了对dma-buf export的支持,主要是对struct dma_buf_ops的实现。</p>
+
+<h5 id="结构dma_buf_ops">结构dma_buf_ops</h5>
 
 <p>struct dma_buf_ops结构如下：</p>
 
-<!-- ![dma_buf_ops](/blog/assets/DRM/dma_buf_ops.png) -->
-<p><img src="/blog/assets/DRM/dma_buf_ops.png" width="300" /></p>
+<p><img src="/blog/assets/DRM/dma_buf_ops.png" alt="dma_buf_ops" />
+<!-- <img src="/blog/assets/DRM/dma_buf_ops.png" width="300"> -->
+<img src="/blog/assets/DRM/dma_buf_attach.png" alt="dma_buf_attach" /></p>
 
 <div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;linux/module.h&gt;</span><span class="cp">
 #include</span> <span class="cpf">&lt;linux/platform_device.h&gt;</span><span class="cp">
@@ -3339,8 +3640,23 @@ Optimus Prime 就是变形金刚 擎天柱的名字！ NVIDIA 当初给他们 Op
 <span class="p">}</span>
 </code></pre></div></div>
 
-<h2 id="23-系统现有的两种实现">2.3 系统现有的两种实现</h2>
+<h3 id="222-基于gem的prime实现">2.2.2 基于GEM的PRIME实现</h3>
+
+<p>下图展示了基于GEM如何去实现PRIME特性，代码冗长，就不再贴出。</p>
+
+<p>在实现driver时，主要工作有两个方面。</p>
+<ul>
+  <li>实现 struct drm_driver，如图所示，就是各函数指针直接设定为GEM的对应函数即可</li>
+  <li>实现 drm_gem_object_funcs. 只要实现图中drm_gem_object_funcs 各项即可。它所要实现接口对应调用关系如图所示，从中也可看出它们需要实现的内容。</li>
+</ul>
+
+<p><img src="/blog/assets/DRM/prime_based_on_GEM.png" alt="prime_based_on_gem" /></p>
+
+<h2 id="23-系统现有的三种实现">2.3 系统现有的三种实现</h2>
+
 <h3 id="231-share-memory">2.3.1 share memory</h3>
+
+<p>它是基于GEM和share memory实现的一组DRM操作，方便上层使用。</p>
 
 <div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/**
  * DRM_GEM_SHMEM_DRIVER_OPS - Default shmem GEM operations
@@ -3361,6 +3677,29 @@ Optimus Prime 就是变形金刚 擎天柱的名字！ NVIDIA 当初给他们 Op
 </span>
 </code></pre></div></div>
 
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// GEM 提供的可供driver使用的struct file_operations</span>
+<span class="cp">#define DEFINE_DRM_GEM_FOPS(name) \
+    static const struct file_operations name = {\
+        .owner      = THIS_MODULE,\
+        .open       = drm_open,\
+        .release    = drm_release,\
+        .unlocked_ioctl = drm_ioctl,\
+        .compat_ioctl   = drm_compat_ioctl,\
+        .poll       = drm_poll,\
+        .read       = drm_read,\
+        .llseek     = noop_llseek,\
+        .mmap       = drm_gem_mmap,\
+    }
+</span>
+</code></pre></div></div>
+
+<p>在现有的udl, hyperv, vkms, tiny, mgag200和gud 驱动中，都使用了DEFINE_DRM_GEM_FOPS 和DRM_GEM_SHMEM_DRIVER_OPS 来简化driver的开发。</p>
+
+<p>shem_helper的实现，主要就是针对share memory，实现drm_gem_object_funcs中定义的各个函数接口。</p>
+
+<p>关系图如下：
+<img src="/blog/assets/DRM/shmem_helper.png" alt="shmem_helper" /></p>
+
 <h4 id="2311-create-dumb">2.3.1.1 create dumb</h4>
 
 <p>实现流程图如下：</p>
@@ -3380,8 +3719,423 @@ Optimus Prime 就是变形金刚 擎天柱的名字！ NVIDIA 当初给他们 Op
 <p><img src="/blog/assets/DRM/shmem_helpr_for_gem.svg" alt="shmem_helpr_for_gem" /></p>
 
 <h3 id="232-cma">2.3.2 CMA</h3>
-<h3 id="232-vram">2.3.2 vram</h3>
 
-<h1 id="3kms的相关">3.KMS的相关</h1>
-<h2 id="31-传统实现">3.1 传统实现</h2>
-<h2 id="32-atomic实现">3.2 atomic实现</h2>]]></content><author><name>kevin</name></author><category term="DRM" /><summary type="html"><![CDATA[1.DRM总述]]></summary></entry></feed>
+<p>CMA: Contiguous Memory Allocator， CMA是一种内存分配机制，确保分配物理上连续的内存区域，它特别适用于需要具有连续内存的设备（例如显示控制器）的情况。</p>
+
+<p>DRM的CMA helper提供了一种分配既具有物理连续性又适用于DMA（直接内存访问）操作的内存的方法，适合在硬件缺乏IOMMU（输入/输出内存管理单元）来映射分散的缓冲区的场景使用。</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/**
+ * DRM_GEM_CMA_DRIVER_OPS_WITH_DUMB_CREATE - CMA GEM driver operations
+ * @dumb_create_func: callback function for .dumb_create
+ *
+ * This macro provides a shortcut for setting the default GEM operations in the
+ * &amp;drm_driver structure.
+ *
+ * This macro is a variant of DRM_GEM_CMA_DRIVER_OPS for drivers that
+ * override the default implementation of &amp;struct rm_driver.dumb_create. Use
+ * DRM_GEM_CMA_DRIVER_OPS if possible. Drivers that require a virtual address
+ * on imported buffers should use
+ * DRM_GEM_CMA_DRIVER_OPS_VMAP_WITH_DUMB_CREATE() instead.
+ * 
+ * 使用到它的现有驱动有: aspeed, sti vc4 hisilicon ingenic shmobile xlnx imx sun4i tiny meson 等
+ */</span>
+<span class="cp">#define DRM_GEM_CMA_DRIVER_OPS_WITH_DUMB_CREATE(dumb_create_func) \
+    .dumb_create        = (dumb_create_func), \
+    .prime_handle_to_fd = drm_gem_prime_handle_to_fd, \
+    .prime_fd_to_handle = drm_gem_prime_fd_to_handle, \
+    .gem_prime_import_sg_table = drm_gem_cma_prime_import_sg_table, \
+    .gem_prime_mmap     = drm_gem_prime_mmap
+</span>
+<span class="cp">#define DRM_GEM_CMA_DRIVER_OPS \
+    DRM_GEM_CMA_DRIVER_OPS_WITH_DUMB_CREATE(drm_gem_cma_dumb_create)
+</span>
+</code></pre></div></div>
+<p>cma_helper的实现，主要就是针对CMA的特性调用DMA的接口实现drm_gem_object_funcs中定义的各个函数接口。</p>
+
+<p>一些在CMA中实现的函数</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>function</th>
+      <th>功能</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>drm_gem_cma_create</td>
+      <td>分配由CMA内存支持的GEM对象。</td>
+    </tr>
+    <tr>
+      <td>drm_gem_cma_dumb_create_internal</td>
+      <td>为DRM帧缓冲创建内存区域。</td>
+    </tr>
+    <tr>
+      <td>drm_gem_cma_dumb_map_offset</td>
+      <td>将DRM帧缓冲的内存区域映射到用户空间。</td>
+    </tr>
+    <tr>
+      <td>drm_gem_cma_mmap</td>
+      <td>为用户空间访问映射分配的内存。</td>
+    </tr>
+    <tr>
+      <td>drm_gem_cma_free_object</td>
+      <td>释放GEM对象。</td>
+    </tr>
+    <tr>
+      <td>drm_gem_cma_prime_get_sg_table</td>
+      <td>获取导入PRIME缓冲区的散射/聚集表。</td>
+    </tr>
+    <tr>
+      <td>drm_gem_cma_prime_import_sg_table</td>
+      <td>从散射/聚集表导入GEM对象。</td>
+    </tr>
+    <tr>
+      <td>drm_gem_cma_prime_mmap</td>
+      <td>为PRIME mmap映射GEM对象。</td>
+    </tr>
+    <tr>
+      <td>drm_gem_cma_prime_vmap和drm_gem_cma_prime_vunmap</td>
+      <td>为PRIME映射和取消映射GEM对象。</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>关系图如下：
+<img src="/blog/assets/DRM/cma_helper.png" alt="cma_helper" /></p>
+
+<h4 id="2321-create-dumb">2.3.2.1 create dumb</h4>
+
+<p>实现流程图如下：</p>
+
+<p><img src="/blog/assets/DRM/cma_helper_create_dumb.svg" alt="cma_helper_create_dumb" /></p>
+
+<h4 id="2322-mmap">2.3.2.2 mmap</h4>
+
+<p>实现流程图如下：</p>
+
+<p><img src="/blog/assets/DRM/cma_helper_for_mmap.svg" alt="cma_helper_for_mmap" /></p>
+
+<h4 id="2323-其他关于gem的实现">2.3.2.3 其他关于GEM的实现</h4>
+
+<p>实现流程图如下：</p>
+
+<p><img src="/blog/assets/DRM/cma_helper_for_gem.svg" alt="cma_helpr_for_gem" /></p>
+
+<h3 id="233-vram">2.3.3 VRAM</h3>
+
+<p>VRAM: Video RAM</p>
+
+<p>VRAM是<strong>显卡上的专用内存</strong>，用于存储图像、纹理、帧缓冲区和其他与图形相关的数据。在显卡中，VRAM是用于显示输出的内存池。它通常位于显卡芯片上，具有高带宽和低延迟，适用于图形渲染。VRAM的大小直接影响显卡的性能。更大的VRAM允许存储更多图像数据，从而提高图形处理速度。</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/**
+ * define DRM_GEM_VRAM_DRIVER - default callback functions for \
+    &amp;struct drm_driver
+ *
+ * Drivers that use VRAM MM and GEM VRAM can use this macro to initialize
+ * &amp;struct drm_driver with default functions.
+ * 
+* 使用到它的现有驱动有: ast, tiny vboxvideo
+ */</span>
+<span class="cp">#define DRM_GEM_VRAM_DRIVER \
+    .debugfs_init             = drm_vram_mm_debugfs_init, \
+    .dumb_create          = drm_gem_vram_driver_dumb_create, \
+    .dumb_map_offset      = drm_gem_ttm_dumb_map_offset, \
+    .gem_prime_mmap       = drm_gem_prime_mmap
+</span>
+</code></pre></div></div>
+
+<p>vram_helper的实现，主要是对TTM接口的封装调用来实现drm_gem_object_funcs中定义的各个函数接口。</p>
+
+<p><strong>GEM、 TTM使用场景</strong></p>
+
+<p>GEM通常用于UMA（Unified Memory Architecture）设备，而TTM更适用于具有专用视频RAM的设备。</p>
+
+<p>关系图如下：
+<img src="/blog/assets/DRM/vram_helper.png" alt="vram_helper" /></p>
+
+<h4 id="2331-create-dumb">2.3.3.1 create dumb</h4>
+
+<p>实现流程图如下：</p>
+
+<p><img src="/blog/assets/DRM/vram_helper_create_dumb.svg" alt="vram_helper_create_dumb" /></p>
+
+<h4 id="2332-mmap">2.3.3.2 mmap</h4>
+
+<p>实现流程图如下：</p>
+
+<p><img src="/blog/assets/DRM/vram_helper_for_mmap.svg" alt="vram_helper_for_mmap" /></p>
+
+<h4 id="2333-其他关于gem的实现">2.3.3.3 其他关于GEM的实现</h4>
+
+<p>实现流程图如下：</p>
+
+<p><img src="/blog/assets/DRM/vram_helper_for_gem.svg" alt="vram_helpr_for_gem" /></p>
+
+<h1 id="3kms">3.KMS</h1>
+
+<h2 id="31-相关概念">3.1 相关概念</h2>
+
+<p>KMS（Kernel Mode Setting）是DRM框架的一个重要模块，</p>
+
+<p><strong>主要两个功能</strong>：</p>
+
+<ol>
+  <li>
+    <p>显示参数设置：</p>
+
+    <p>KMS负责设置显卡或图形适配器的模式，包括分辨率、刷新率、电源状态（休眠唤醒）等。</p>
+  </li>
+  <li>
+    <p>显示画面控制：</p>
+
+    <p>KMS管理显示缓冲区的切换、多图层的合成方式，以及每个图层的显示位置。</p>
+  </li>
+</ol>
+
+<p><strong>KMS的组成部分</strong>：</p>
+
+<ol>
+  <li>
+    <p>DRM FrameBuffer：</p>
+
+    <p>这是一个软件抽象，与硬件无关，描述了图层显示内容的信息，如宽度、高度、像素格式和行距等。</p>
+  </li>
+  <li>
+    <p>Planes：</p>
+
+    <p>基本的显示控制单元，每个图像都有一个Plane。Planes的属性控制着图像的显示区域、翻转方式和色彩混合方式。</p>
+  </li>
+  <li>
+    <p>CRTC：</p>
+
+    <p>CRTC负责将要显示的图像转化为底层硬件上的具体时序要求。它还负责帧切换、电源控制和色彩调整，可以连接多个Encoder，实现屏幕复制功能。</p>
+  </li>
+  <li>
+    <p>Encoder：</p>
+
+    <p>将内存中的像素转换成显示器所需的信号。</p>
+  </li>
+  <li>
+    <p>Connector：</p>
+
+    <p>连接器负责硬件设备的接入，如HDMI、VGA等，还可以获取设备的EDID和DPMS连接状态。</p>
+  </li>
+</ol>
+
+<p>这些组件共同构成了一个完整的DRM显示控制过程。KMS的目标是适应现代显示设备的逻辑，使其能够更好地支持新特性，如显示覆盖、GPU加速和硬件光标等功能。</p>
+
+<h2 id="32-函数流程">3.2 函数流程</h2>
+
+<h3 id="devm_drm_dev_alloc">devm_drm_dev_alloc()</h3>
+
+<p><img src="/blog/assets/DRM/devm_drm_dev_alloc.svg" alt="devm_drm_dev_alloc" /></p>
+
+<h3 id="drm_vblank_init">drm_vblank_init()</h3>
+<p><img src="/blog/assets/DRM/drm_vblank_init.svg" alt="drm_vblank_init" /></p>
+
+<h3 id="drm_mode_config_init">drm_mode_config_init()</h3>
+<p><img src="/blog/assets/DRM/drm_mode_config_init.svg" alt="drm_mode_config_init" /></p>
+
+<h3 id="drmmodeaddfb">drmModeAddFb()</h3>
+
+<p><img src="/blog/assets/DRM/drmModeAddFb.svg" alt="drmModeAddFb" /></p>
+
+<h3 id="init-crtc">init CRTC</h3>
+
+<p><img src="/blog/assets/DRM/init_crtc.svg" alt="init_crtc" /></p>
+
+<h3 id="init-plane">init plane</h3>
+
+<p><img src="/blog/assets/DRM/init_plane.svg" alt="init_plane" /></p>
+
+<h3 id="init-connector">init connector</h3>
+
+<p><img src="/blog/assets/DRM/init_connector.svg" alt="init_connector" /></p>
+
+<h2 id="33-传统实现">3.3 传统实现</h2>
+
+<h3 id="drmmodesetcrtc">drmModeSetCrtc</h3>
+
+<p><img src="/blog/assets/DRM/drmModeSetCrtc.svg" alt="drmModeSetCrtc" /></p>
+
+<h2 id="34-atomic实现">3.4 atomic实现</h2>
+
+<h3 id="smaple-code">smaple code</h3>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#define _GNU_SOURCE
+#include</span> <span class="cpf">&lt;errno.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;fcntl.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;stdbool.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;stdint.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;stdlib.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;string.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;sys/mman.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;time.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;unistd.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;xf86drm.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;xf86drmMode.h&gt;</span><span class="cp">
+</span><span class="k">struct</span> <span class="n">buffer_object</span> <span class="p">{</span>
+    <span class="kt">uint32_t</span> <span class="n">width</span><span class="p">;</span>
+    <span class="kt">uint32_t</span> <span class="n">height</span><span class="p">;</span>
+    <span class="kt">uint32_t</span> <span class="n">pitch</span><span class="p">;</span>
+    <span class="kt">uint32_t</span> <span class="n">handle</span><span class="p">;</span>
+    <span class="kt">uint32_t</span> <span class="n">size</span><span class="p">;</span>
+    <span class="kt">uint32_t</span> <span class="n">fb_id</span><span class="p">;</span>
+<span class="p">};</span>
+<span class="k">struct</span> <span class="n">buffer_object</span> <span class="n">buf</span><span class="p">;</span>
+<span class="k">static</span> <span class="kt">int</span> <span class="nf">modeset_create_fb</span><span class="p">(</span><span class="kt">int</span> <span class="n">fd</span><span class="p">,</span> <span class="k">struct</span> <span class="n">buffer_object</span> <span class="o">*</span><span class="n">bo</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">struct</span> <span class="n">drm_mode_create_dumb</span> <span class="n">create</span> <span class="o">=</span> <span class="p">{};</span>
+    <span class="k">struct</span> <span class="n">drm_mode_map_dumb</span> <span class="n">map</span> <span class="o">=</span> <span class="p">{};</span>
+
+    <span class="n">create</span><span class="p">.</span><span class="n">width</span> <span class="o">=</span> <span class="n">bo</span><span class="o">-&gt;</span><span class="n">width</span><span class="p">;</span>
+    <span class="n">create</span><span class="p">.</span><span class="n">height</span> <span class="o">=</span> <span class="n">bo</span><span class="o">-&gt;</span><span class="n">height</span><span class="p">;</span>
+    <span class="n">create</span><span class="p">.</span><span class="n">bpp</span> <span class="o">=</span> <span class="mi">32</span><span class="p">;</span>
+    <span class="n">drmIoctl</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">DRM_IOCTL_MODE_CREATE_DUMB</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">create</span><span class="p">);</span>    
+    <span class="n">bo</span><span class="o">-&gt;</span><span class="n">pitch</span> <span class="o">=</span> <span class="n">create</span><span class="p">.</span><span class="n">pitch</span><span class="p">;</span>
+    <span class="n">bo</span><span class="o">-&gt;</span><span class="n">size</span> <span class="o">=</span> <span class="n">create</span><span class="p">.</span><span class="n">size</span><span class="p">;</span>
+    <span class="n">bo</span><span class="o">-&gt;</span><span class="n">handle</span> <span class="o">=</span> <span class="n">create</span><span class="p">.</span><span class="n">handle</span><span class="p">;</span>
+    <span class="n">drmModeAddFB</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">bo</span><span class="o">-&gt;</span><span class="n">width</span><span class="p">,</span> <span class="n">bo</span><span class="o">-&gt;</span><span class="n">height</span><span class="p">,</span> <span class="mi">24</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="n">bo</span><span class="o">-&gt;</span><span class="n">pitch</span><span class="p">,</span><span class="n">bo</span><span class="o">-&gt;</span><span class="n">handle</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">bo</span><span class="o">-&gt;</span><span class="n">fb_id</span><span class="p">);</span>
+        
+    <span class="c1">// drmModeAddFB2 可以传递多个handle</span>
+    <span class="c1">// drmModeAddFB(fd, bo-&gt;width, bo-&gt;height, 24, 32, bo-&gt;pitch,</span>
+    <span class="c1">//         bo-&gt;handle, &amp;bo-&gt;fb_id);  //--&gt; calling mode_config_funcs.fb_create()</span>
+
+    <span class="n">map</span><span class="p">.</span><span class="n">handle</span> <span class="o">=</span> <span class="n">create</span><span class="p">.</span><span class="n">handle</span><span class="p">;</span>
+    <span class="n">drmIoctl</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">DRM_IOCTL_MODE_MAP_DUMB</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">map</span><span class="p">);</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">static</span> <span class="kt">void</span> <span class="nf">modeset_destroy_fb</span><span class="p">(</span><span class="kt">int</span> <span class="n">fd</span><span class="p">,</span> <span class="k">struct</span> <span class="n">buffer_object</span> <span class="o">*</span><span class="n">bo</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">struct</span> <span class="n">drm_mode_destroy_dumb</span> <span class="n">destroy</span> <span class="o">=</span> <span class="p">{};</span>
+    <span class="n">drmModeRmFB</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">bo</span><span class="o">-&gt;</span><span class="n">fb_id</span><span class="p">);</span>
+    <span class="n">destroy</span><span class="p">.</span><span class="n">handle</span> <span class="o">=</span> <span class="n">bo</span><span class="o">-&gt;</span><span class="n">handle</span><span class="p">;</span>
+    <span class="n">drmIoctl</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">DRM_IOCTL_MODE_DESTROY_DUMB</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">destroy</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="k">static</span> <span class="kt">uint32_t</span> <span class="nf">get_property_id</span><span class="p">(</span><span class="kt">int</span> <span class="n">fd</span><span class="p">,</span> <span class="n">drmModeObjectProperties</span> <span class="o">*</span><span class="n">props</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">name</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">drmModePropertyPtr</span> <span class="n">property</span><span class="p">;</span>
+    <span class="kt">uint32_t</span> <span class="n">i</span><span class="p">,</span> <span class="n">id</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">props</span><span class="o">-&gt;</span><span class="n">count_props</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">property</span> <span class="o">=</span> <span class="n">drmModeGetProperty</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">props</span><span class="o">-&gt;</span><span class="n">props</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">strcmp</span><span class="p">(</span><span class="n">property</span><span class="o">-&gt;</span><span class="n">name</span><span class="p">,</span> <span class="n">name</span><span class="p">)){</span>
+            <span class="n">id</span> <span class="o">=</span> <span class="n">property</span><span class="o">-&gt;</span><span class="n">prop_id</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">drmModeFreeProperty</span><span class="p">(</span><span class="n">property</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">id</span><span class="p">)</span>
+            <span class="k">break</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">id</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">**</span><span class="n">argv</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">fd</span><span class="p">;</span>
+    <span class="n">drmModeConnector</span> <span class="o">*</span><span class="n">conn</span><span class="p">;</span>
+    <span class="n">drmModeRes</span> <span class="o">*</span><span class="n">res</span><span class="p">;</span>
+    <span class="n">drmModePlaneRes</span> <span class="o">*</span><span class="n">plane_res</span><span class="p">;</span>
+    <span class="n">drmModeObjectProperties</span> <span class="o">*</span><span class="n">props</span><span class="p">;</span>
+    <span class="n">drmModeAtomicReq</span> <span class="o">*</span><span class="n">req</span><span class="p">;</span>
+    <span class="kt">uint32_t</span> <span class="n">conn_id</span><span class="p">;</span>
+    <span class="kt">uint32_t</span> <span class="n">crtc_id</span><span class="p">;</span>
+    <span class="kt">uint32_t</span> <span class="n">plane_id</span><span class="p">;</span>
+    <span class="kt">uint32_t</span> <span class="n">blob_id</span><span class="p">;</span>
+    <span class="kt">uint32_t</span> <span class="n">property_crtc_id</span><span class="p">;</span>
+    <span class="kt">uint32_t</span> <span class="n">property_mode_id</span><span class="p">;</span>
+    <span class="kt">uint32_t</span> <span class="n">property_active</span><span class="p">;</span>
+    <span class="kt">uint32_t</span> <span class="n">property_fb_id</span><span class="p">;</span>
+    <span class="kt">uint32_t</span> <span class="n">property_crtc_x</span><span class="p">;</span>
+    <span class="kt">uint32_t</span> <span class="n">property_crtc_y</span><span class="p">;</span>
+    <span class="kt">uint32_t</span> <span class="n">property_crtc_w</span><span class="p">;</span>
+    <span class="kt">uint32_t</span> <span class="n">property_crtc_h</span><span class="p">;</span>
+    <span class="kt">uint32_t</span> <span class="n">property_src_x</span><span class="p">;</span>
+    <span class="kt">uint32_t</span> <span class="n">property_src_y</span><span class="p">;</span>
+    <span class="kt">uint32_t</span> <span class="n">property_src_w</span><span class="p">;</span>
+    <span class="kt">uint32_t</span> <span class="n">property_src_h</span><span class="p">;</span>
+
+    <span class="n">fd</span> <span class="o">=</span> <span class="n">open</span><span class="p">(</span><span class="s">"/dev/dri/card0"</span><span class="p">,</span> <span class="n">O_RDWR</span> <span class="o">|</span> <span class="n">O_CLOEXEC</span><span class="p">);</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="n">drmModeGetResources</span><span class="p">(</span><span class="n">fd</span><span class="p">);</span>
+    <span class="n">crtc_id</span> <span class="o">=</span> <span class="n">res</span><span class="o">-&gt;</span><span class="n">crtcs</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+    <span class="n">conn_id</span> <span class="o">=</span> <span class="n">res</span><span class="o">-&gt;</span><span class="n">connectors</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+    <span class="n">drmSetClientCap</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">DRM_CLIENT_CAP_UNIVERSAL_PLANES</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+    <span class="n">plane_res</span> <span class="o">=</span> <span class="n">drmModeGetPlaneResources</span><span class="p">(</span><span class="n">fd</span><span class="p">);</span>
+    <span class="n">plane_id</span> <span class="o">=</span> <span class="n">plane_res</span><span class="o">-&gt;</span><span class="n">planes</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+    <span class="n">conn</span> <span class="o">=</span> <span class="n">drmModeGetConnector</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">conn_id</span><span class="p">);</span>
+    <span class="n">buf</span><span class="p">.</span><span class="n">width</span> <span class="o">=</span> <span class="n">conn</span><span class="o">-&gt;</span><span class="n">modes</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">hdisplay</span><span class="p">;</span>
+    <span class="n">buf</span><span class="p">.</span><span class="n">height</span> <span class="o">=</span> <span class="n">conn</span><span class="o">-&gt;</span><span class="n">modes</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">vdisplay</span><span class="p">;</span>
+    <span class="n">modeset_create_fb</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">buf</span><span class="p">);</span>
+    <span class="n">drmSetClientCap</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">DRM_CLIENT_CAP_ATOMIC</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+
+    <span class="n">props</span> <span class="o">=</span> <span class="n">drmModeObjectGetProperties</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">conn_id</span><span class="p">,</span> <span class="n">DRM_MODE_OBJECT_CONNECTOR</span><span class="p">);</span>
+    <span class="n">property_crtc_id</span> <span class="o">=</span> <span class="n">get_property_id</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">props</span><span class="p">,</span> <span class="s">"CRTC_ID"</span><span class="p">);</span>
+    <span class="n">drmModeFreeObjectProperties</span><span class="p">(</span><span class="n">props</span><span class="p">);</span>
+
+    <span class="n">props</span> <span class="o">=</span> <span class="n">drmModeObjectGetProperties</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">crtc_id</span><span class="p">,</span> <span class="n">DRM_MODE_OBJECT_CRTC</span><span class="p">);</span>
+    <span class="n">property_active</span> <span class="o">=</span> <span class="n">get_property_id</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">props</span><span class="p">,</span> <span class="s">"ACTIVE"</span><span class="p">);</span>
+    <span class="n">property_mode_id</span> <span class="o">=</span> <span class="n">get_property_id</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">props</span><span class="p">,</span> <span class="s">"MODE_ID"</span><span class="p">);</span>
+    <span class="n">drmModeFreeObjectProperties</span><span class="p">(</span><span class="n">props</span><span class="p">);</span>
+
+    <span class="n">drmModeCreatePropertyBlob</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">conn</span><span class="o">-&gt;</span><span class="n">modes</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">conn</span><span class="o">-&gt;</span><span class="n">modes</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="o">&amp;</span><span class="n">blob_id</span><span class="p">);</span>
+
+    <span class="n">req</span> <span class="o">=</span> <span class="n">drmModeAtomicAlloc</span><span class="p">();</span>
+    <span class="n">drmModeAtomicAddProperty</span><span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="n">crtc_id</span><span class="p">,</span> <span class="n">property_active</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+    <span class="n">drmModeAtomicAddProperty</span><span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="n">crtc_id</span><span class="p">,</span> <span class="n">property_mode_id</span><span class="p">,</span> <span class="n">blob_id</span><span class="p">);</span>
+    <span class="n">drmModeAtomicAddProperty</span><span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="n">conn_id</span><span class="p">,</span> <span class="n">property_crtc_id</span><span class="p">,</span> <span class="n">crtc_id</span><span class="p">);</span>
+    <span class="n">drmModeAtomicCommit</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">req</span><span class="p">,</span> <span class="n">DRM_MODE_ATOMIC_ALLOW_MODESET</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+    <span class="n">drmModeAtomicFree</span><span class="p">(</span><span class="n">req</span><span class="p">);</span>
+    
+    <span class="cm">/* get plane properties */</span>
+    <span class="n">props</span> <span class="o">=</span> <span class="n">drmModeObjectGetProperties</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">plane_id</span><span class="p">,</span> <span class="n">DRM_MODE_OBJECT_PLANE</span><span class="p">);</span>
+    <span class="n">property_crtc_id</span> <span class="o">=</span> <span class="n">get_property_id</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">props</span><span class="p">,</span> <span class="s">"CRTC_ID"</span><span class="p">);</span>
+    <span class="n">property_fb_id</span> <span class="o">=</span> <span class="n">get_property_id</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">props</span><span class="p">,</span> <span class="s">"FB_ID"</span><span class="p">);</span>
+    <span class="n">property_crtc_x</span> <span class="o">=</span> <span class="n">get_property_id</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">props</span><span class="p">,</span> <span class="s">"CRTC_X"</span><span class="p">);</span>
+    <span class="n">property_crtc_y</span> <span class="o">=</span> <span class="n">get_property_id</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">props</span><span class="p">,</span> <span class="s">"CRTC_Y"</span><span class="p">);</span>
+    <span class="n">property_crtc_w</span> <span class="o">=</span> <span class="n">get_property_id</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">props</span><span class="p">,</span> <span class="s">"CRTC_W"</span><span class="p">);</span>
+    <span class="n">property_crtc_h</span> <span class="o">=</span> <span class="n">get_property_id</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">props</span><span class="p">,</span> <span class="s">"CRTC_H"</span><span class="p">);</span>
+    <span class="n">property_src_x</span> <span class="o">=</span> <span class="n">get_property_id</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">props</span><span class="p">,</span> <span class="s">"SRC_X"</span><span class="p">);</span>
+    <span class="n">property_src_y</span> <span class="o">=</span> <span class="n">get_property_id</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">props</span><span class="p">,</span> <span class="s">"SRC_Y"</span><span class="p">);</span>
+    <span class="n">property_src_w</span> <span class="o">=</span> <span class="n">get_property_id</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">props</span><span class="p">,</span> <span class="s">"SRC_W"</span><span class="p">);</span>
+    <span class="n">property_src_h</span> <span class="o">=</span> <span class="n">get_property_id</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">props</span><span class="p">,</span> <span class="s">"SRC_H"</span><span class="p">);</span>
+    <span class="n">drmModeFreeObjectProperties</span><span class="p">(</span><span class="n">props</span><span class="p">);</span>
+
+    <span class="cm">/* atomic plane update */</span>
+    <span class="n">req</span> <span class="o">=</span> <span class="n">drmModeAtomicAlloc</span><span class="p">();</span>
+    <span class="n">drmModeAtomicAddProperty</span><span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="n">plane_id</span><span class="p">,</span> <span class="n">property_crtc_id</span><span class="p">,</span> <span class="n">crtc_id</span><span class="p">);</span>
+    <span class="n">drmModeAtomicAddProperty</span><span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="n">plane_id</span><span class="p">,</span> <span class="n">property_fb_id</span><span class="p">,</span> <span class="n">buf</span><span class="p">.</span><span class="n">fb_id</span><span class="p">);</span>
+    <span class="n">drmModeAtomicAddProperty</span><span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="n">plane_id</span><span class="p">,</span> <span class="n">property_crtc_x</span><span class="p">,</span> <span class="mi">50</span><span class="p">);</span>
+    <span class="n">drmModeAtomicAddProperty</span><span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="n">plane_id</span><span class="p">,</span> <span class="n">property_crtc_y</span><span class="p">,</span> <span class="mi">50</span><span class="p">);</span>
+    <span class="n">drmModeAtomicAddProperty</span><span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="n">plane_id</span><span class="p">,</span> <span class="n">property_crtc_w</span><span class="p">,</span> <span class="mi">320</span><span class="p">);</span>
+    <span class="n">drmModeAtomicAddProperty</span><span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="n">plane_id</span><span class="p">,</span> <span class="n">property_crtc_h</span><span class="p">,</span> <span class="mi">320</span><span class="p">);</span>
+    <span class="n">drmModeAtomicAddProperty</span><span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="n">plane_id</span><span class="p">,</span> <span class="n">property_src_x</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+    <span class="n">drmModeAtomicAddProperty</span><span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="n">plane_id</span><span class="p">,</span> <span class="n">property_src_y</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+    <span class="n">drmModeAtomicAddProperty</span><span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="n">plane_id</span><span class="p">,</span> <span class="n">property_src_w</span><span class="p">,</span> <span class="mi">320</span> <span class="o">&lt;&lt;</span> <span class="mi">16</span><span class="p">);</span>
+    <span class="n">drmModeAtomicAddProperty</span><span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="n">plane_id</span><span class="p">,</span> <span class="n">property_src_h</span><span class="p">,</span> <span class="mi">320</span> <span class="o">&lt;&lt;</span> <span class="mi">16</span><span class="p">);</span>
+    <span class="n">drmModeAtomicCommit</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">req</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+    <span class="n">drmModeAtomicFree</span><span class="p">(</span><span class="n">req</span><span class="p">);</span>
+
+    <span class="n">printf</span><span class="p">(</span><span class="s">"drmModeAtomicCommit SetPlane done</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+    <span class="n">getchar</span><span class="p">();</span>
+
+    <span class="n">modeset_destroy_fb</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">buf</span><span class="p">);</span>
+    <span class="n">drmModeFreeConnector</span><span class="p">(</span><span class="n">conn</span><span class="p">);</span>
+    <span class="n">drmModeFreePlaneResources</span><span class="p">(</span><span class="n">plane_res</span><span class="p">);</span>
+    <span class="n">drmModeFreeResources</span><span class="p">(</span><span class="n">res</span><span class="p">);</span>
+
+    <span class="n">close</span><span class="p">(</span><span class="n">fd</span><span class="p">);</span>
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+</code></pre></div></div>
+
+<h3 id="drmmodegetproperty">drmModeGetProperty</h3>
+
+<p><img src="/blog/assets/DRM/drm_get_property.svg" alt="drm_get_property" /></p>
+
+<h3 id="drmmodeatomiccommit">drmModeAtomicCommit</h3>
+
+<p><img src="/blog/assets/DRM/drmModeAtomicCommit.svg" alt="drmModeAtomicCommit" /></p>]]></content><author><name>kevin</name></author><category term="DRM" /><summary type="html"><![CDATA[1.DRM总述]]></summary></entry></feed>
