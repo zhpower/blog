@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html lang="en" >
     <head><meta charset="UTF-8">
-<meta content="text/html; charset=utf-8" http-equiv="Content-Type"><title>Wayland · 学习笔记</title><meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type"><title>Wayland&amp;Weston · 学习笔记</title><meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta name="description" content="Build Jekyll site with the GitBook style.
 "><meta name="generator" content="Jekyll (using style of GitBook 3.2.3)"><meta name="author" content="kevin_zh"><link rel="stylesheet" href="/blog/assets/gitbook/style.css">
 <link rel="stylesheet" href="/blog/assets/gitbook/gitbook-plugin-back-to-top-button/plugin.css">
@@ -25,11 +25,11 @@
 
 
 
-            <link rel="prev" href="/blog/linux/2018-08-01-DeviceResourceManage.html" />
+            <link rel="prev" href="/blog/jekyll/2018-03-21-YUV.html" />
         
 
         
-            <link rel="next" href="/blog/jekyll/2021-04-27-Weston.html" />
+            <link rel="next" href="/blog/jekyll/2018-05-20-memory_check.html" />
         
     </head>
     <body>
@@ -109,21 +109,10 @@
                         </li>
                     
                         
-                        <li class="chapter" data-level="1.1" data-path="/blog/jekyll/2018-02-27-interrupte.html">
-                        
-                            <a href="/blog/jekyll/2018-02-27-interrupte.html" onclick="pageScrollToTop(this)">
-                                硬中断
-                            </a>
-                            
-                                
-                            
-                        </li>
-                    
-                        
                         <li class="chapter" data-level="1.1" data-path="/blog/jekyll/2018-03-21-YUV.html">
                         
                             <a href="/blog/jekyll/2018-03-21-YUV.html" onclick="pageScrollToTop(this)">
-                                YUV资料
+                                YUV编码
                             </a>
                             
                                 
@@ -131,12 +120,15 @@
                         </li>
                     
                         
-                        <li class="chapter" data-level="1.1" data-path="/blog/jekyll/2018-04-27-test.html">
+                        <li class="chapter active" data-level="1.2" data-path="/blog/jekyll/2018-05-15-Wayland&Weston.html">
                         
-                            <a href="/blog/jekyll/2018-04-27-test.html" onclick="pageScrollToTop(this)">
-                                only test
+                            <a href="/blog/jekyll/2018-05-15-Wayland&Weston.html" onclick="pageScrollToTop(this)">
+                                Wayland&amp;Weston
                             </a>
                             
+                                
+                                    <ul><li><a href="#1编译" onclick="mobilePageScrollToAnchor(this)" >1.编译</a></li><li><a href="#2运行" onclick="mobilePageScrollToAnchor(this)" >2.运行</a></li><li><a href="#3wayland" onclick="mobilePageScrollToAnchor(this)" >3.Wayland</a><ul><li><a href="#31-code的组成" onclick="mobilePageScrollToAnchor(this)" >3.1 code的组成</a></li><li><a href="#32-基本对象" onclick="mobilePageScrollToAnchor(this)" >3.2 基本对象</a><ul><li><a href="#321-client端object的使用" onclick="mobilePageScrollToAnchor(this)" >3.2.1 Client端object的使用</a></li><li><a href="#322-server端object的实现" onclick="mobilePageScrollToAnchor(this)" >3.2.2 Server端object的实现</a></li><li><a href="#323-client-server通讯" onclick="mobilePageScrollToAnchor(this)" >3.2.3 Client Server通讯</a></li></ul></li><li><a href="#33-简单的wayland-app-流程" onclick="mobilePageScrollToAnchor(this)" >3.3 简单的wayland app 流程</a></li><li><a href="#34-wayland-log" onclick="mobilePageScrollToAnchor(this)" >3.4 Wayland log</a></li></ul></li><li><a href="#4weston-简介" onclick="mobilePageScrollToAnchor(this)" >4.Weston 简介</a><ul><li><a href="#41-框架与对象" onclick="mobilePageScrollToAnchor(this)" >4.1 框架与对象</a></li><li><a href="#42-main函数的基本框架" onclick="mobilePageScrollToAnchor(this)" >4.2 main函数的基本框架</a></li><li><a href="#43-backend创建" onclick="mobilePageScrollToAnchor(this)" >4.3 backend创建</a></li><li><a href="#44-shell创建" onclick="mobilePageScrollToAnchor(this)" >4.4 shell创建</a></li><li><a href="#45-head和output" onclick="mobilePageScrollToAnchor(this)" >4.5 head和output</a></li><li><a href="#46-layer-view-surface" onclick="mobilePageScrollToAnchor(this)" >4.6 layer, view, surface</a></li><li><a href="#47-create_surface" onclick="mobilePageScrollToAnchor(this)" >4.7 create_surface</a></li><li><a href="#48-get_shell_surface" onclick="mobilePageScrollToAnchor(this)" >4.8 get_shell_surface</a></li><li><a href="#49-create_pool" onclick="mobilePageScrollToAnchor(this)" >4.9 create_pool</a></li><li><a href="#410-surface_attach-surface_damage" onclick="mobilePageScrollToAnchor(this)" >4.10 surface_attach surface_damage</a></li><li><a href="#411-surface_commit" onclick="mobilePageScrollToAnchor(this)" >4.11 surface_commit</a></li><li><a href="#412-create_shm_buffer" onclick="mobilePageScrollToAnchor(this)" >4.12 create_shm_buffer</a></li><li><a href="#413-weston-event-loop" onclick="mobilePageScrollToAnchor(this)" >4.13 weston event loop</a></li><li><a href="#414-weston-idle-处理" onclick="mobilePageScrollToAnchor(this)" >4.14 weston idle 处理</a></li><li><a href="#415-gl-renderer" onclick="mobilePageScrollToAnchor(this)" >4.15 gl-renderer</a></li><li><a href="#416-libinput" onclick="mobilePageScrollToAnchor(this)" >4.16 libinput</a></li><li><a href="#417-client创建窗口" onclick="mobilePageScrollToAnchor(this)" >4.17 Client创建窗口</a><ul><li><a href="#4171-创建shm窗口" onclick="mobilePageScrollToAnchor(this)" >4.17.1 创建shm窗口</a></li><li><a href="#4172-创建egl窗口" onclick="mobilePageScrollToAnchor(this)" >4.17.2 创建egl窗口</a></li></ul></li><li><a href="#418-调用的backtrace" onclick="mobilePageScrollToAnchor(this)" >4.18 调用的backtrace</a><ul><li><a href="#4181-client-eglswapbuffers" onclick="mobilePageScrollToAnchor(this)" >4.18.1 Client eglSwapBuffers</a></li><li><a href="#4182-wl_output-global的创建" onclick="mobilePageScrollToAnchor(this)" >4.18.2 wl_output global的创建</a></li><li><a href="#4183-wl_surface_commit" onclick="mobilePageScrollToAnchor(this)" >4.18.3 wl_surface_commit</a></li><li><a href="#4184-drm_output_repaint" onclick="mobilePageScrollToAnchor(this)" >4.18.4 drm_output_repaint()</a></li><li><a href="#4185-repaint_views" onclick="mobilePageScrollToAnchor(this)" >4.18.5 repaint_views</a></li><li><a href="#4186-第一次repaint的触发" onclick="mobilePageScrollToAnchor(this)" >4.18.6 第一次repaint的触发</a></li><li><a href="#4187-送显的backtrace" onclick="mobilePageScrollToAnchor(this)" >4.18.7 送显的backtrace</a></li><li><a href="#4188-weston-desktop-shell" onclick="mobilePageScrollToAnchor(this)" >4.18.8 weston-desktop-shell</a></li><li><a href="#4189-weston_keyboard-进程的创建" onclick="mobilePageScrollToAnchor(this)" >4.18.9 Weston_keyboard 进程的创建</a></li><li><a href="#41810-key的处理" onclick="mobilePageScrollToAnchor(this)" >4.18.10 key的处理</a></li></ul></li><li><a href="#419-weston-misc" onclick="mobilePageScrollToAnchor(this)" >4.19 weston misc</a><ul><li><a href="#4191-定时器函数" onclick="mobilePageScrollToAnchor(this)" >4.19.1 定时器函数</a></li><li><a href="#4192-wayland-signal" onclick="mobilePageScrollToAnchor(this)" >4.19.2 wayland signal</a></li><li><a href="#4-123-libwayland-eglsoxxx" onclick="mobilePageScrollToAnchor(this)" >4 12.3 libwayland-egl.so.xxx</a></li><li><a href="#4194-weston_client_start" onclick="mobilePageScrollToAnchor(this)" >4.19.4 weston_client_start()</a></li><li><a href="#4195-weston-screenshooter" onclick="mobilePageScrollToAnchor(this)" >4.19.5 weston-screenshooter</a></li><li><a href="#4196-显示一帧的过程" onclick="mobilePageScrollToAnchor(this)" >4.19.6 显示一帧的过程</a></li><li><a href="#4197-repaint_timer_triger" onclick="mobilePageScrollToAnchor(this)" >4.19.7 repaint_timer_triger</a></li><li><a href="#4198-compositor-sleep-相关" onclick="mobilePageScrollToAnchor(this)" >4.19.8 Compositor sleep 相关</a></li><li><a href="#4199-surface与buffer" onclick="mobilePageScrollToAnchor(this)" >4.19.9 surface与buffer</a></li><li><a href="#41910-drm_virtual_output" onclick="mobilePageScrollToAnchor(this)" >4.19.10 drm_virtual_output</a></li><li><a href="#41911-explicit-synchronization" onclick="mobilePageScrollToAnchor(this)" >4.19.11 explicit-synchronization</a></li></ul></li></ul></li></ul>
+
                                 
                             
                         </li>
@@ -146,17 +138,6 @@
                         
                             <a href="/blog/jekyll/2018-05-20-memory_check.html" onclick="pageScrollToTop(this)">
                                 进程内存检查
-                            </a>
-                            
-                                
-                            
-                        </li>
-                    
-                        
-                        <li class="chapter" data-level="1.1" data-path="/blog/jekyll/2018-06-22-misc.html">
-                        
-                            <a href="/blog/jekyll/2018-06-22-misc.html" onclick="pageScrollToTop(this)">
-                                misc
                             </a>
                             
                                 
@@ -175,24 +156,10 @@
                         </li>
                     
                         
-                        <li class="chapter active" data-level="1.2" data-path="/blog/jekyll/2020-03-15-Wayland.html">
+                        <li class="chapter" data-level="1.1" data-path="/blog/jekyll/2019-01-11-Weston.html">
                         
-                            <a href="/blog/jekyll/2020-03-15-Wayland.html" onclick="pageScrollToTop(this)">
-                                Wayland
-                            </a>
-                            
-                                
-                                    <ul><li><a href="#编译" onclick="mobilePageScrollToAnchor(this)" >编译</a><ul><li><a href="#wayland编译" onclick="mobilePageScrollToAnchor(this)" >Wayland编译</a></li></ul></li><li><a href="#weston的输入管理" onclick="mobilePageScrollToAnchor(this)" >weston的输入管理</a></li><li><a href="#run-weston" onclick="mobilePageScrollToAnchor(this)" >Run Weston</a></li><li><a href="#wayland-理解" onclick="mobilePageScrollToAnchor(this)" >Wayland 理解</a></li><li><a href="#wayland-全局对象" onclick="mobilePageScrollToAnchor(this)" >wayland 全局对象</a><ul><li><a href="#client端global-object-resouce-object-的使用" onclick="mobilePageScrollToAnchor(this)" >Client端global object ，Resouce object 的使用</a></li><li><a href="#server端-global-object-resouce-object-的实现" onclick="mobilePageScrollToAnchor(this)" >Server端 global object ，Resouce object 的实现</a></li></ul></li></ul></li><li><a href="#weston-简介" onclick="mobilePageScrollToAnchor(this)" >Weston 简介</a><ul><li><a href="#backend" onclick="mobilePageScrollToAnchor(this)" >backend</a></li><li><a href="#shell" onclick="mobilePageScrollToAnchor(this)" >shell</a></li><li><a href="#head-and-output" onclick="mobilePageScrollToAnchor(this)" >head and output</a></li><li><a href="#weston_backend_init" onclick="mobilePageScrollToAnchor(this)" >weston_backend_init</a></li></ul></li><li><a href="#基本流程" onclick="mobilePageScrollToAnchor(this)" >基本流程</a><ul><li><a href="#创建简单窗口" onclick="mobilePageScrollToAnchor(this)" >创建简单窗口</a></li><li><a href="#创建egl窗口" onclick="mobilePageScrollToAnchor(this)" >创建egl窗口</a></li></ul></li><li><a href="#调用的backtrace" onclick="mobilePageScrollToAnchor(this)" >调用的backtrace</a></li><li><a href="#weston-event-loop" onclick="mobilePageScrollToAnchor(this)" >weston event loop</a></li><li><a href="#weston-idle-处理" onclick="mobilePageScrollToAnchor(this)" >weston idle 处理</a></li><li><a href="#drm-backend" onclick="mobilePageScrollToAnchor(this)" >drm-backend</a></li><li><a href="#layer-view-surface" onclick="mobilePageScrollToAnchor(this)" >layer, view, surface</a></li><li><a href="#weston-misc" onclick="mobilePageScrollToAnchor(this)" >weston misc</a></li><li><a href="#wayland-log" onclick="mobilePageScrollToAnchor(this)" >Wayland log</a></li></ul>
-
-                                
-                            
-                        </li>
-                    
-                        
-                        <li class="chapter" data-level="1.1" data-path="/blog/jekyll/2021-04-27-Weston.html">
-                        
-                            <a href="/blog/jekyll/2021-04-27-Weston.html" onclick="pageScrollToTop(this)">
-                                weston
+                            <a href="/blog/jekyll/2019-01-11-Weston.html" onclick="pageScrollToTop(this)">
+                                Weston
                             </a>
                             
                                 
@@ -200,9 +167,20 @@
                         </li>
                     
                         
-                        <li class="chapter" data-level="1.1" data-path="/blog/jekyll/2022-04-27-ffmpeg.html">
+                        <li class="chapter" data-level="1.1" data-path="/blog/jekyll/2019-02-03-interrupte.html">
                         
-                            <a href="/blog/jekyll/2022-04-27-ffmpeg.html" onclick="pageScrollToTop(this)">
+                            <a href="/blog/jekyll/2019-02-03-interrupte.html" onclick="pageScrollToTop(this)">
+                                硬中断
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/blog/jekyll/2021-04-27-ffmpeg.html">
+                        
+                            <a href="/blog/jekyll/2021-04-27-ffmpeg.html" onclick="pageScrollToTop(this)">
                                 ffmpeg命令
                             </a>
                             
@@ -211,10 +189,21 @@
                         </li>
                     
                         
-                        <li class="chapter" data-level="1.1" data-path="/blog/jekyll/2023-04-27-bit.html">
+                        <li class="chapter" data-level="1.1" data-path="/blog/jekyll/2022-04-27-bit.html">
                         
-                            <a href="/blog/jekyll/2023-04-27-bit.html" onclick="pageScrollToTop(this)">
+                            <a href="/blog/jekyll/2022-04-27-bit.html" onclick="pageScrollToTop(this)">
                                 位运算
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/blog/jekyll/2022-06-22-misc.html">
+                        
+                            <a href="/blog/jekyll/2022-06-22-misc.html" onclick="pageScrollToTop(this)">
+                                misc
                             </a>
                             
                                 
@@ -236,7 +225,7 @@
                     <h1>
                         <i class="fa fa-circle-o-notch fa-spin"></i>
                         
-                            <a href="." >Wayland</a>
+                            <a href="." >Wayland&amp;Weston</a>
                         
                     </h1>
                 </div>
@@ -249,20 +238,18 @@
             <div class="search-noresults">
                 <section class="normal markdown-section">
                     
-                        <h1 id="/jekyll/Wayland">Wayland</h1>
+                        <h1 id="/jekyll/Wayland&Weston">Wayland&amp;Weston</h1>
                     
 
-                    <h1 id="编译">编译</h1>
-
-<h2 id="wayland编译">Wayland编译</h2>
+                    <h1 id="1编译">1.编译</h1>
 
 <ul>
   <li>预设环境</li>
 </ul>
 
 <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$export</span> <span class="nv">WLD</span><span class="o">=</span>“~/xxxxxxxxx”  //定义一个wayland目录，编译生成到这里
-apt <span class="nb">install </span>meson
-apt <span class="nb">install </span>some_depenced_libs
+<span class="nb">sudo </span>apt <span class="nb">install </span>meson
+<span class="nb">sudo </span>apt <span class="nb">install </span>some_depenced_libs
 </code></pre></div></div>
 
 <ul>
@@ -316,8 +303,8 @@ libpixman-1-dev
 libcairo2-dev
 libudev
 </code></pre></div></div>
-<p>它们可能通过configure 配置然后make， 也可能通过mesa ninja编译.  需要注意设置正确的PKG_CONFIG_PATH，使的pkg-config可以找到相关的库信息。
-如果是mesa，留意目录下是否有meson_options.txt, 其中就定义了编译选项，可对它进行修改。</p>
+<p>它们有的通过configure配置然后make， 有的通过mesa, ninja编译.  需要注意设置正确的PKG_CONFIG_PATH，使的pkg-config可以找到相关的库信息。
+如果是mesa，留意目录下是否有meson_options.txt, 其中定义了各种编译选项，可对它进行修改。</p>
 
 <ul>
   <li>meson</li>
@@ -350,36 +337,7 @@ endian <span class="o">=</span> <span class="s1">'little
   <p>meson  build_dir/  sourc_code_dir/</p>
 </blockquote>
 
-<h1 id="weston的输入管理">weston的输入管理</h1>
-
-<p><strong>libinput</strong></p>
-
-<p>为了提高输入管理部分的模块性，Weston将对输入设备(键盘，鼠标，触摸屏等)的处理分离到一个单独的库，也就是libinput 中。具体地，它提供了<strong>设备检测</strong>，<strong>设备处理</strong>，<strong>输入事件处理</strong>等基本功能，类似于Android 中的EventHub。此外它还有<strong>pointer acceleration</strong>, <strong>touchpad support</strong> 及<strong>gesture recognition</strong>等功能。</p>
-
-<p>libinput更像是一个框架，它将几个更底层的库的功能整合起来。它主要依赖于以下几个库:</p>
-
-<ol>
-  <li>mtdev: Multi-touch 设备处理，比如它会将不带tracking ID的protocol A转化为 protocol B。</li>
-  <li>libevdev: 与kernel中evdev 模块对接。</li>
-  <li>libudev:主要用于和 udevd的通信，从而获取设备的增加删除事件。也可从kernel获取。</li>
-</ol>
-
-<p>Weston 中的输入管理模块与libinput对接，它实现了两大部分的功能:</p>
-
-<ul>
-  <li>对输入设备的维护，</li>
-  <li>对输入事件的处理。</li>
-</ul>
-
-<p>对于输入事件既会在Weston中做处理，也会传给相应的 client。</p>
-
-<p>从事件处理模型上来看，libinput主循环监听udev monitor fd，它主要用于监听设备的添加删除事件。如果有设备添加，会打开该设备并把fd加入到libinput的主循环上。另一方面，Weston中会将 libinput 的 epoll fd加入主循环。这样形成级联的epoll，无论是 udev monitor 还是input device的fd有事件来，都会通知到Weston和libinput的主循环。</p>
-
-<p>Weston中支持三种输入设备，分别是键盘，触摸和鼠标。一套输入设备属于一个seat(严格来说，seat中包括一套输入输出设备)。因此，weston_seat 中包含weston_keyboard,weston_pointer 和weston_touch三个结构。系统中可以有多个seat,它们的结构被串在weston_compositor 的 seat_list链表中。</p>
-
-<p>可以看到，对于焦点处理，每个设备有自己的focus,它指向焦点窗口，用于拖拽和输入等。成员focus_resource_list 中包含了焦点窗口所在client中输入设备 proxy对应的 resource 对象。在这个 list 中意味着可以接收到相应的事件。</p>
-
-<h1 id="run-weston">Run Weston</h1>
+<h1 id="2运行">2.运行</h1>
 
 <ul>
   <li>
@@ -414,14 +372,19 @@ Client: weston-simple-dmabuf-egl
 Client./weston-simple-damage
 </code></pre></div></div>
 
-<h1 id="wayland-理解">Wayland 理解</h1>
+<h1 id="3wayland">3.Wayland</h1>
+
+<h2 id="31-code的组成">3.1 code的组成</h2>
+
+<p>wayland主要由三部分组成。</p>
 
 <ul>
-  <li>Wayland提供了Protocol的定义方式。</li>
+  <li><strong>Wayland提供了protocol的定义方式</strong></li>
 </ul>
 
-<p>在路径protocol文件夹下，以xml的形式定义了Wayland的核心协议。
-如wl_display: 用于获取display全局对象。</p>
+<p>在路径protocol文件夹下，以xml的形式定义了Wayland的核心协议。</p>
+
+<p>如下面的xml，就定义了wl_display</p>
 
 <div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;interface</span> <span class="na">name=</span><span class="s">"wl_display"</span> <span class="na">version=</span><span class="s">"1"</span><span class="nt">&gt;</span>  
        <span class="nt">&lt;description</span> <span class="na">summary=</span><span class="s">"core global object"</span><span class="nt">&gt;</span>
@@ -432,10 +395,15 @@ Client./weston-simple-damage
 <span class="nt">&lt;/interface&gt;</span>
 
 </code></pre></div></div>
+<ul>
+  <li><strong>xml到code的转换工具</strong></li>
+</ul>
+
+<p>xml到code的转换工具是wayland-scanner，它的source code在wayland目录下，可通过编译生成它。</p>
 
 <ul>
   <li>
-    <p>wayland源码中，除了协议部分。剩下的主要内容，就是实现了一个高效率的 Server+Client通信模式</p>
+    <p><strong>wayland还实现了一个高效率的 Server+Client通信模式</strong></p>
 
     <ul>
       <li>
@@ -452,9 +420,9 @@ Client./weston-simple-damage
   </li>
 </ul>
 
-<p>总结：官方提供的Wayland源码，主要包括协议的定义、协议到代码的生成工具，以及一套实现好的通信模型</p>
+<p>总之，官方提供的Wayland源码，主要包括协议的定义、协议到代码的生成工具，以及一套实现好的通信模型</p>
 
-<h1 id="wayland-全局对象">wayland 全局对象</h1>
+<h2 id="32-基本对象">3.2 基本对象</h2>
 
 <p>几乎所有的Wayland API都需要Wayland全局对象作为参数。</p>
 
@@ -503,13 +471,9 @@ Client./weston-simple-damage
 
 <p>Wayland没有提供Get函数来获取以上全局对象，只能通过wl_registry获取全局对象</p>
 
-<p><img src="/blog/assets/wayland/weston_object.png" alt="weston_object" /></p>
+<h3 id="321-client端object的使用">3.2.1 Client端object的使用</h3>
 
-<p><img src="/blog/assets/wayland/weston_architecture.png" alt="weston_architecture" /></p>
-
-<h3 id="client端global-object-resouce-object-的使用">Client端global object ，Resouce object 的使用</h3>
-
-<p>Wayland 中 server提供给client使用的对象可以归为 global object和 resource object。 Global 也是一中resource。</p>
+<p>Wayland中server提供给client使用的对象可以归为 global object和 resource object。 Global 也是一中resource。</p>
 
 <p>Global object如 wl_display, wl_compositor, wl_seat 等。 它们在client端是通过bind来获取到一个client 对应对象，然后就可以对它进行操作</p>
 
@@ -517,11 +481,9 @@ Client./weston-simple-damage
 
 <p><img src="/blog/assets/wayland/client_object.png" alt="client_object" /></p>
 
-<p>Listener 是server –&gt; client 的通知方式. Client 注册listener 给server，有监听事件发生，server发信息给client.</p>
+<p><img src="/blog/assets/wayland/object_generation.png" alt="object_generation" /></p>
 
-<p>Server侧发生通知的函数命名特征:   xxxx_send_xxxx( )</p>
-
-<h3 id="server端-global-object-resouce-object-的实现">Server端 global object ，Resouce object 的实现</h3>
+<h3 id="322-server端object的实现">3.2.2 Server端object的实现</h3>
 
 <p><strong>Global 资源的创建</strong>：</p>
 <ol>
@@ -541,78 +503,151 @@ Client./weston-simple-damage
   <li>wl_resource_set_implementation( )</li>
 </ol>
 
-<p><img src="/blog/assets/wayland/object_generation.png" alt="object_generation" /></p>
+<h3 id="323-client-server通讯">3.2.3 Client Server通讯</h3>
 
-<p><img src="/blog/assets/wayland/client_server_create_object.png" alt="client_server_create_object" /></p>
+<p>Listener 是server –&gt; client 的通知方式. Client 注册listener 给server，有监听事件发生，server发信息给client.</p>
 
-<p><img src="/blog/assets/wayland/client_server_create_shell.png" alt="client_server_create_shell" /></p>
+<p>Server侧发生通知的函数命名特征:   xxxx_send_xxxx( )</p>
 
-<p><img src="/blog/assets/wayland/client_server_create_buffer.png" alt="client_server_create_buffer" /></p>
-
-<p><img src="/blog/assets/wayland/client_server_surface_attach.png" alt="client_server_surface_attach" /></p>
-
-<p><img src="/blog/assets/wayland/client_server_surface_commit.png" alt="client_server_surface_commit" /></p>
+<h2 id="33-简单的wayland-app-流程">3.3 简单的wayland app 流程</h2>
 
 <p><img src="/blog/assets/wayland/simple_wayland_app.png" alt="simple_wayland_app" /></p>
 
-<p><img src="/blog/assets/wayland/compositor_create_surface.svg" alt="compositor_create_surface" /></p>
+<h2 id="34-wayland-log">3.4 Wayland log</h2>
 
-<p><img src="/blog/assets/wayland/create_shm_buffer.svg" alt="create_shm_buffer" /></p>
+<p>需设置环境变量： <code class="language-plaintext highlighter-rouge">export WAYLAND_DEBUG=1</code></p>
 
-<h1 id="weston-简介">Weston 简介</h1>
+<p><img src="/blog/assets/wayland/wayland_log.png" alt="wayland_log" /></p>
+
+<p>http://127.0.0.1:4000/blog/assets/wayland/image-20230209140244854.png</p>
+
+<h1 id="4weston-简介">4.Weston 简介</h1>
 
 <p>Weston是基于wayland协议，实现的Compositor。</p>
 
 <p>Weston的入口在（这里以10.0.0为例）:</p>
-
-<p>weston-10.0.0./compositor/main.c</p>
-
-<p>weston-10.0.0./compositor/executable.c</p>
-
-<p>实现的基本流程：</p>
-
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">wet_main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">argv</span><span class="p">[])</span>
-<span class="p">{</span>
-    <span class="c1">// 创建全局Display，并最终调用到wl_os_epoll_create_cloexec</span>
-    <span class="n">display</span> <span class="o">=</span> <span class="n">wl_display_create</span><span class="p">();</span>
-
-    <span class="c1">// 创建Compositor</span>
-    <span class="n">ec</span> <span class="o">=</span> <span class="n">weston_compositor_create</span><span class="p">(</span><span class="n">display</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">user_data</span><span class="p">);</span>
-
-    <span class="c1">// 创建Shell</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">wet_load_shell</span><span class="p">(</span><span class="n">ec</span><span class="p">,</span> <span class="n">shell</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">argc</span><span class="p">,</span> <span class="n">argv</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
-        <span class="k">goto</span> <span class="n">out</span><span class="p">;</span>
-
-    <span class="c1">// while循环</span>
-    <span class="n">wl_display_run</span><span class="p">(</span><span class="n">display</span><span class="p">);</span>
-<span class="p">}</span>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>weston-10.0.0./compositor/main.c
+weston-10.0.0./compositor/executable.c
 </code></pre></div></div>
-<p>Weston中有四个主要部分：Shell、Compositor、Render、Input</p>
+
+<h2 id="41-框架与对象">4.1 框架与对象</h2>
 
 <ul>
-  <li>
-    <p>Shell：窗口管理器，画面层级、窗口信息、窗口生命周期、Focus窗口等等一些偏向于业务层的处理。默认的shell为desktop-shell，同时提供了其他shell实现（如ivi-shell）</p>
-  </li>
-  <li>
-    <p>Compositor：负责画面的合成，使用DRM连接output，将画面输出到实际显示设备。</p>
-  </li>
-  <li>
-    <p>Render：负责渲染，比如gl-render，做一些纹理贴图操作。</p>
-  </li>
-  <li>
-    <p>Input：libinput模块，与evdev、uvdev模块交互，从底层设备节点接收touch、key等输入</p>
+  <li><strong>框架</strong></li>
+</ul>
+
+<p><img src="/blog/assets/wayland/weston_architecture.png" alt="weston_architecture" /></p>
+
+<p>Weston中有以下几个主要部分：Shell、Compositor、Render、backend、Input</p>
+
+<ol>
+  <li>Shell：窗口管理器，画面层级、窗口信息、窗口生命周期、Focus窗口等等一些偏向于业务层的处理。默认的shell为desktop-shell，同时提供了其他shell实现（如ivi-shell）</li>
+  <li>Compositor：负责画面的合成，使用DRM连接output，将画面输出到实际显示设备。</li>
+  <li>Render：负责渲染，比如gl-render，做一些纹理贴图操作。</li>
+  <li>Input：libinput模块，与evdev、uvdev模块交互，从底层设备节点接收touch、key等输入</li>
+  <li>backend: Weston 使用后端的概念来抽象其运行环境的底层接口。后端负责处理输入和生成输出</li>
+</ol>
+
+<ul>
+  <li><strong>对象</strong></li>
+</ul>
+
+<p><img src="/blog/assets/wayland/weston_object.png" alt="weston_object" /></p>
+
+<p><img src="/blog/assets/wayland/image-20230209140244854.png" alt="image" /></p>
+
+<h2 id="42-main函数的基本框架">4.2 main函数的基本框架</h2>
+
+<p>实现内容：</p>
+<ol>
+  <li>解析cmdline</li>
+  <li>初始化log系统</li>
+  <li>创建wl_display对象，并侦听client接入</li>
+  <li>创建weston_compositor对象，从而创建global resource compositor 和 shm， 以前其他资源</li>
+  <li>load backend， 默认为drm_backend, 在drm_backend初始化的过程中会load gl_renderer</li>
+  <li>load shell, 默认为desktop-shell.so</li>
+  <li>调用wl_display_run( ) 循环等待event的发生</li>
+</ol>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">wet_main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">argv</span><span class="p">[],</span> <span class="k">const</span> <span class="k">struct</span> <span class="n">weston_testsuite_data</span> <span class="o">*</span><span class="n">test_data</span><span class="p">){</span>
+    <span class="c1">// 初始化 layoutput_list</span>
+    <span class="n">wl_list_init</span><span class="p">(</span><span class="o">&amp;</span><span class="n">wet</span><span class="p">.</span><span class="n">layoutput_list</span><span class="p">);</span>
+    <span class="p">...</span>
+    <span class="c1">//  parse command line</span>
+    <span class="p">...</span>
+    <span class="c1">//  init log system</span>
+    <span class="p">...</span>    
+    <span class="c1">// 调用wayland提供的函数wl_display_create()</span>
+    <span class="c1">// 创建 wl_display 对象</span>
+    <span class="n">display</span> <span class="o">=</span> <span class="n">wl_display_create</span><span class="p">();</span>
+    <span class="p">...</span>    
+    <span class="c1">// 创建 weston_compositor 对象  </span>
+    <span class="c1">// --&gt; 创建 global resource compositor and shm 以及其他resource</span>
+    <span class="n">weston_compositor_create</span><span class="p">(</span> <span class="p">);</span>    
+    <span class="c1">// 读取config for compositor</span>
+    <span class="p">...</span>    
+    <span class="c1">// load backend，通用的为load_drm_backend( )</span>
+    <span class="c1">// 最终调用 对应backend实现的weston_backend_init( )</span>
+    <span class="c1">// 在backend 初始化的过程中会装载 gl_renderer</span>
+    <span class="n">load_backend</span><span class="p">(</span><span class="n">compositor</span><span class="p">,</span> <span class="n">backend</span><span class="p">)</span>
+    <span class="p">...</span>    
+    <span class="c1">// 创建socket， 侦听client的连接请求</span>
+    <span class="n">weston_create_listening_socket</span><span class="p">(</span><span class="n">display</span><span class="p">,</span> <span class="n">socket_name</span><span class="p">)</span>
+    <span class="p">...</span>
+    <span class="c1">// load shell, 默认为 desktop-shell.so</span>
+    <span class="n">wet_load_shell</span><span class="p">(</span><span class="n">compositor</span><span class="p">,</span> <span class="n">shell</span><span class="p">,</span> <span class="p">...)</span>
+    <span class="p">...</span>
+    <span class="c1">// loop, 循环等待event的发生</span>
+    <span class="n">wl_display_run</span><span class="p">(</span><span class="n">display</span><span class="p">)</span>
+    <span class="p">...</span>
+    <span class="c1">// 退出流程，资源的释放</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h2 id="43-backend创建">4.3 backend创建</h2>
+
+<ul>
+  <li>Weston 使用后端的概念来抽象其运行环境的底层接口。后端负责处理输入和生成输出。</li>
+  <li>作为 libweston 的用户，Weston 可以在不同的后端上运行，包括嵌套在其他 Wayland 合成器中的方式（使用 wayland 后端），也可以在 X11 上运行，或者在独立的后端上运行，例如 DRM/KMS。</li>
+  <li>大多数情况下，人们应该允许 Weston 自动选择后端，因为它会产生最佳结果。例如，在已经运行另一个图形环境的机器上运行 Weston 时，它会自动选择合适的后端，无论是另一个 Wayland 合成器还是 X11 服务器。</li>
+  <li>只有在你知道 Weston 自动选择的后端不是最佳选择，或者你想使用不同于默认加载的后端时，才需要手动指定后端。在这种情况下，可以使用 -B [backend] 命令行选项来选择后端。</li>
+  <li>可用的后端包括：
+    <ul>
+      <li>drm：独立运行在 DRM/KMS 和 evdev 上（推荐）。</li>
+      <li>wayland：作为 Wayland 应用程序嵌套在另一个 Wayland 合成器实例中。</li>
+      <li>x11：作为 X11 应用程序嵌套在 X11 显示服务器实例中。</li>
+      <li>rdp：作为一个没有本地输入或输出的 RDP 服务器运行。</li>
+      <li>headless：无输入或输出运行，适用于测试套件。</li>
+      <li>pipewire：无输入，输出到 PipeWire 节点。</li>
+    </ul>
   </li>
 </ul>
 
-<h2 id="backend">backend</h2>
-
 <p><img src="/blog/assets/wayland/weston_backend.png" alt="weston_backend" /></p>
 
-<h2 id="shell">shell</h2>
+<p><strong>weston_backend_init</strong></p>
+
+<p><img src="/blog/assets/wayland/weston_backend_init.svg" alt="weston_backend_init" /></p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span>
+ <span class="n">destroy</span><span class="p">()</span>
+ <span class="n">repaint_begin</span><span class="p">()</span>   <span class="c1">//composite之前调用</span>
+ <span class="n">repaint_cancel</span><span class="p">()</span>  <span class="c1">// 中途取消</span>
+ <span class="n">repaint_flush</span><span class="p">()</span>   <span class="c1">// composite 完成后调用， 可用于实现提交到display</span>
+ <span class="n">create_output</span><span class="p">()</span>   <span class="c1">// 创建weston_output</span>
+ <span class="n">device_changed</span><span class="p">()</span>
+ <span class="n">can_scanout_dmabuf</span><span class="p">()</span>
+<span class="p">}</span><span class="n">Weston_backend</span><span class="p">,</span> <span class="n">Compositor</span><span class="o">-&gt;</span><span class="n">backend</span>
+
+</code></pre></div></div>
+
+<h2 id="44-shell创建">4.4 shell创建</h2>
+
+<p>weston提供了多种shell，比如：desktop shell，ivi-shell, kiosk shell, fullscreen shell等</p>
 
 <p><img src="/blog/assets/wayland/weston_shell.png" alt="weston_shell" /></p>
 
-<h2 id="head-and-output">head and output</h2>
+<h2 id="45-head和output">4.5 head和output</h2>
 
 <p>weston_head 和 weston_output 是libweston中的两个关键概念，用于管理显示输出和图像呈现。</p>
 
@@ -653,112 +688,168 @@ Client./weston-simple-damage
 
 <p><img src="/blog/assets/wayland/head_output.png" alt="head_output" /></p>
 
-<p>Heads are being created on compositor start-up with a backend that manages head lifetimes completely on its own</p>
+<p><strong>下面是各种case的流程图</strong></p>
+
+<ul>
+  <li>Heads are being created on compositor start-up with a backend that manages head lifetimes completely on its own</li>
+</ul>
 
 <p><img src="/blog/assets/wayland/create_head.png" alt="create_head" /></p>
 
-<p>A compositor handles libweston notification of something with heads having changed. 
-This happens on both compositor start-up and later due to hotplug
+<ul>
+  <li>
+    <p>A compositor handles libweston notification of something with heads having changed. This happens on both compositor start-up and later due to hotplug
 <img src="/blog/assets/wayland/change_on_head.png" alt="change_on_head" /></p>
-
-<p>A compositor creates and configures an output for a head or heads it wants to light up.</p>
+  </li>
+  <li>
+    <p>A compositor creates and configures an output for a head or heads it wants to light up.</p>
+  </li>
+</ul>
 
 <p><img src="/blog/assets/wayland/create_output.png" alt="create_output" /></p>
 
-<p>A compositor finds out a head has been disconnected and proceeds to destroy the corresponding output.</p>
+<ul>
+  <li>A compositor finds out a head has been disconnected and proceeds to destroy the corresponding output.</li>
+</ul>
 
 <p><img src="/blog/assets/wayland/disconnect_head.png" alt="disconnect_head" /></p>
 
-<p>The backend realises that a piece of hardware has disappeared and needs to destroy the corresponding head. 
-The head is released, and even when the compositor is not listening for head destroy signal, 
-the output gets automatically disabled, though not destroyed.</p>
+<ul>
+  <li>The backend realises that a piece of hardware has disappeared and needs to destroy the corresponding head. The head is released, and even when the compositor is not listening for head destroy signal, the output gets automatically disabled, though not destroyed.</li>
+</ul>
 
 <p><img src="/blog/assets/wayland/disable_output.png" alt="disable_output" /></p>
 
-<h2 id="weston_backend_init">weston_backend_init</h2>
+<h2 id="46-layer-view-surface">4.6 layer, view, surface</h2>
 
-<p><img src="/blog/assets/wayland/weston_backend_init.svg" alt="weston_backend_init" /></p>
+<p><img src="/blog/assets/wayland/layer_view_surface.png" alt="layer_view_surface" /></p>
 
-<h1 id="基本流程">基本流程</h1>
+<h2 id="47-create_surface">4.7 create_surface</h2>
 
-<h2 id="创建简单窗口">创建简单窗口</h2>
+<p><img src="/blog/assets/wayland/client_server_create_object.png" alt="client_server_create_object" /></p>
+
+<h2 id="48-get_shell_surface">4.8 get_shell_surface</h2>
+
+<p><img src="/blog/assets/wayland/client_server_create_shell.png" alt="client_server_create_shell" /></p>
+
+<h2 id="49-create_pool">4.9 create_pool</h2>
+<p><img src="/blog/assets/wayland/client_server_create_buffer.png" alt="client_server_create_buffer" /></p>
+
+<h2 id="410-surface_attach-surface_damage">4.10 surface_attach surface_damage</h2>
+<p><img src="/blog/assets/wayland/client_server_surface_attach.png" alt="client_server_surface_attach" /></p>
+
+<p><img src="/blog/assets/wayland/create_shm_buffer.svg" alt="create_shm_buffer" /></p>
+
+<h2 id="411-surface_commit">4.11 surface_commit</h2>
+
+<p><img src="/blog/assets/wayland/client_server_surface_commit.png" alt="client_server_surface_commit" /></p>
+
+<h2 id="412-create_shm_buffer">4.12 create_shm_buffer</h2>
+<p><img src="/blog/assets/wayland/compositor_create_surface.svg" alt="compositor_create_surface" /></p>
+
+<h2 id="413-weston-event-loop">4.13 weston event loop</h2>
+
+<p><img src="/blog/assets/wayland/weston_event_loop.png" alt="weston_event_loop" /></p>
+
+<h2 id="414-weston-idle-处理">4.14 weston idle 处理</h2>
+
+<p><img src="/blog/assets/wayland/weston_idle_handler.png" alt="weston_idle_handler" /></p>
+
+<h2 id="415-gl-renderer">4.15 gl-renderer</h2>
+
+<p><img src="/blog/assets/wayland/drm_backend.png" alt="drm_backend" /></p>
+
+<h2 id="416-libinput">4.16 libinput</h2>
+
+<p>为了提高输入管理部分的模块性，Weston将对输入设备(键盘，鼠标，触摸屏等)的处理分离到一个单独的库，也就是libinput 中。具体地，它提供了<strong>设备检测</strong>，<strong>设备处理</strong>，<strong>输入事件处理</strong>等基本功能，类似于Android 中的EventHub。此外它还有<strong>pointer acceleration</strong>, <strong>touchpad support</strong> 及<strong>gesture recognition</strong>等功能。</p>
+
+<p>libinput更像是一个框架，它将几个更底层的库的功能整合起来。它主要依赖于以下几个库:</p>
+
+<ol>
+  <li>mtdev: Multi-touch 设备处理，比如它会将不带tracking ID的protocol A转化为 protocol B。</li>
+  <li>libevdev: 与kernel中evdev 模块对接。</li>
+  <li>libudev:主要用于和 udevd的通信，从而获取设备的增加删除事件。也可从kernel获取。</li>
+</ol>
+
+<p>Weston 中的输入管理模块与libinput对接，它实现了两大部分的功能:</p>
+
+<ul>
+  <li>对输入设备的维护，</li>
+  <li>对输入事件的处理。</li>
+</ul>
+
+<p>对于输入事件既会在Weston中做处理，也会传给相应的 client。</p>
+
+<p>从事件处理模型上来看，libinput主循环监听udev monitor fd，它主要用于监听设备的添加删除事件。如果有设备添加，会打开该设备并把fd加入到libinput的主循环上。另一方面，Weston中会将 libinput 的 epoll fd加入主循环。这样形成级联的epoll，无论是 udev monitor 还是input device的fd有事件来，都会通知到Weston和libinput的主循环。</p>
+
+<p>Weston中支持三种输入设备，分别是键盘，触摸和鼠标。一套输入设备属于一个seat(严格来说，seat中包括一套输入输出设备)。因此，weston_seat 中包含weston_keyboard,weston_pointer 和weston_touch三个结构。系统中可以有多个seat,它们的结构被串在weston_compositor 的 seat_list链表中。</p>
+
+<p>可以看到，对于焦点处理，每个设备有自己的focus,它指向焦点窗口，用于拖拽和输入等。成员focus_resource_list 中包含了焦点窗口所在client中输入设备 proxy对应的 resource 对象。在这个 list 中意味着可以接收到相应的事件。</p>
+
+<h2 id="417-client创建窗口">4.17 Client创建窗口</h2>
+
+<h3 id="4171-创建shm窗口">4.17.1 创建shm窗口</h3>
 
 <p><img src="/blog/assets/wayland/simple_create_window.png" alt="simple_create_window" /></p>
 
-<h2 id="创建egl窗口">创建egl窗口</h2>
+<h3 id="4172-创建egl窗口">4.17.2 创建egl窗口</h3>
 
 <p><img src="/blog/assets/wayland/create_egl_window.png" alt="create_egl_window" /></p>
 
-<h1 id="调用的backtrace">调用的backtrace</h1>
+<h2 id="418-调用的backtrace">4.18 调用的backtrace</h2>
 
-<p><strong>Client eglSwapBuffers</strong></p>
+<h3 id="4181-client-eglswapbuffers">4.18.1 Client eglSwapBuffers</h3>
 
 <p>Client App 调用eglSwapBuffers 提交buffer给compositor的堆栈</p>
 
 <p><img src="/blog/assets/wayland/client_eglSwapBuffers.png" alt="client_eglSwapBuffers" /></p>
 
-<p><strong>wl_output global的创建</strong></p>
+<h3 id="4182-wl_output-global的创建">4.18.2 wl_output global的创建</h3>
 
 <p><img src="/blog/assets/wayland/wl_output_create.png" alt="wl_output_create" /></p>
 
-<p><strong>wl_surface_commit</strong></p>
+<h3 id="4183-wl_surface_commit">4.18.3 wl_surface_commit</h3>
 
 <p>wl_surface_commit() 触发的后继操作</p>
 
 <p><img src="/blog/assets/wayland/wl_surface_commit.png" alt="wl_surface_commit" /></p>
 
-<p><strong>drm_output_repaint()</strong></p>
+<h3 id="4184-drm_output_repaint">4.18.4 drm_output_repaint()</h3>
 
 <p>drm_output_repaint() 的调用栈</p>
 
 <p><img src="/blog/assets/wayland/drm_output_repaint.png" alt="drm_output_repaint" /></p>
 
-<p><strong>repaint_views</strong></p>
+<h3 id="4185-repaint_views">4.18.5 repaint_views</h3>
 
 <p>repaint_views() 的调用栈</p>
 
 <p><img src="/blog/assets/wayland/repaint_views.png" alt="repaint_views" /></p>
 
-<p><strong>第一次repaint的触发</strong></p>
+<h3 id="4186-第一次repaint的触发">4.18.6 第一次repaint的触发</h3>
 
 <p><img src="/blog/assets/wayland/first_repaint.png" alt="first_repaint" /></p>
 
-<p><strong>送显的backtrace</strong></p>
+<h3 id="4187-送显的backtrace">4.18.7 送显的backtrace</h3>
 
 <p><img src="/blog/assets/wayland/shown_on_display.png" alt="shown_on_display" /></p>
 
-<p><strong>weston-desktop-shell</strong></p>
+<h3 id="4188-weston-desktop-shell">4.18.8 weston-desktop-shell</h3>
 
 <p><img src="/blog/assets/wayland/weston_desktop_shell.png" alt="weston_desktop_shell" /></p>
 
-<p><strong>Weston_keyboard 进程的创建</strong></p>
+<h3 id="4189-weston_keyboard-进程的创建">4.18.9 Weston_keyboard 进程的创建</h3>
 
 <p>在weston.ini中的【input-method】设置 <code class="language-plaintext highlighter-rouge">path= 空</code> 来不创建它, 函数launch_input_method() 会检查<code class="language-plaintext highlighter-rouge">path</code>.</p>
 
 <p><img src="/blog/assets/wayland/keyboard.png" alt="keyboard" /></p>
 
-<p><strong>key的处理</strong>
-<img src="/blog/assets/wayland/handle_key.png" alt="handle_key" /></p>
+<h3 id="41810-key的处理">4.18.10 key的处理</h3>
+<p><img src="/blog/assets/wayland/handle_key.png" alt="handle_key" /></p>
 
-<h1 id="weston-event-loop">weston event loop</h1>
+<h2 id="419-weston-misc">4.19 weston misc</h2>
 
-<p><img src="/blog/assets/wayland/weston_event_loop.png" alt="weston_event_loop" /></p>
-
-<h1 id="weston-idle-处理">weston idle 处理</h1>
-
-<p><img src="/blog/assets/wayland/weston_idle_handler.png" alt="weston_idle_handler" /></p>
-
-<h1 id="drm-backend">drm-backend</h1>
-
-<p><img src="/blog/assets/wayland/drm_backend.png" alt="drm_backend" /></p>
-
-<h1 id="layer-view-surface">layer, view, surface</h1>
-
-<p><img src="/blog/assets/wayland/layer_view_surface.png" alt="layer_view_surface" /></p>
-
-<h1 id="weston-misc">weston misc</h1>
-
-<p><strong>定时器函数</strong></p>
+<h3 id="4191-定时器函数">4.19.1 定时器函数</h3>
 
 <ol>
   <li>创建定时器：wl_event_loop_add_timer()</li>
@@ -766,14 +857,14 @@ the output gets automatically disabled, though not destroyed.</p>
               // ms_delay ==0  disable</li>
 </ol>
 
-<p><strong>wayland signal</strong></p>
+<h3 id="4192-wayland-signal">4.19.2 wayland signal</h3>
 
 <ul>
   <li>wl_signal_add( , ) 添加一个listener到 listerner_list 链表</li>
   <li>wl_signal_emit( , ) 触发一个signal, 从listener_list中调用每个listener notify</li>
 </ul>
 
-<p><strong>libwayland-egl.so.xxx</strong></p>
+<h3 id="4-123-libwayland-eglsoxxx">4 12.3 libwayland-egl.so.xxx</h3>
 <ol>
   <li>由 wayland-1.20.0/egl下文件编译生成</li>
   <li>主要功能生成/销毁wl_egl_window， 并获取它的大小属性</li>
@@ -782,15 +873,15 @@ the output gets automatically disabled, though not destroyed.</p>
   <li>好像不需要再分配buffer attch到 wl_surface,  参考simple-egl-window.c</li>
 </ol>
 
-<p><strong>weston_client_start()</strong></p>
+<h3 id="4194-weston_client_start">4.19.4 weston_client_start()</h3>
 
 <p>在weston里定义， Weston call 它来 发起一个client 进程, 它会调用weston_client_launch()</p>
 
-<p><strong>weston-screenshooter</strong></p>
+<h3 id="4195-weston-screenshooter">4.19.5 weston-screenshooter</h3>
 
 <p>截屏进程， 被desktop-shell 进程call screenshooter_create( )创建</p>
 
-<p><strong>显示一帧的过程</strong></p>
+<h3 id="4196-显示一帧的过程">4.19.6 显示一帧的过程</h3>
 
 <ol>
   <li>epoll收到event</li>
@@ -802,10 +893,10 @@ the output gets automatically disabled, though not destroyed.</p>
   <li>repaint_flash()  -&gt; drm 上屏</li>
 </ol>
 
-<p><strong>repaint_timer_triger</strong>
-<img src="/blog/assets/wayland/repaint_timer_triger.png" alt="repaint_timer_triger" /></p>
+<h3 id="4197-repaint_timer_triger">4.19.7 repaint_timer_triger</h3>
+<p><img src="/blog/assets/wayland/repaint_timer_triger.png" alt="repaint_timer_triger" /></p>
 
-<p><strong>Compositor sleep 相关</strong></p>
+<h3 id="4198-compositor-sleep-相关">4.19.8 Compositor sleep 相关</h3>
 <ol>
   <li>In weston.init,  相关配置 idle-time， 单位sec</li>
   <li>在函数weston_compositor_wake()设置 多长时间无操作进入sleep状态</li>
@@ -813,7 +904,7 @@ the output gets automatically disabled, though not destroyed.</p>
   <li>在weston_compositor_offscreen() , weston_compositor_sleep() 中关闭定时器</li>
 </ol>
 
-<p><strong>surface与buffer</strong></p>
+<h3 id="4199-surface与buffer">4.19.9 surface与buffer</h3>
 
 <ul>
   <li>
@@ -839,7 +930,7 @@ the output gets automatically disabled, though not destroyed.</p>
   <li>Buffer 是实际存储像素数据的内存区域，与 Surface 关联。</li>
 </ul>
 
-<p><strong>drm_virtual_output</strong></p>
+<h3 id="41910-drm_virtual_output">4.19.10 drm_virtual_output</h3>
 
 <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>drm_backend_init_virtual_output_api <span class="o">()</span> &lt;- <span class="c">#ifdef BUILD_DRM_VIRTUAL </span>
                  &lt;- /libweston/backend-drm/meson.build
@@ -848,16 +939,9 @@ the output gets automatically disabled, though not destroyed.</p>
 </code></pre></div></div>
 <p>drm_virtual_output 用于 remoting or pipewire 场景， 在meson_options.txt 里配置</p>
 
-<p><strong>explicit-synchronization</strong></p>
+<h3 id="41911-explicit-synchronization">4.19.11 explicit-synchronization</h3>
 
 <p><img src="/blog/assets/wayland/explicit_sync.png" alt="explicit_sync" /></p>
-
-<h1 id="wayland-log">Wayland log</h1>
-
-<p>需设置环境变量： <code class="language-plaintext highlighter-rouge">export WAYLAND_DEBUG=1</code></p>
-
-<p><img src="/blog/assets/wayland/wayland_log.png" alt="wayland_log" /></p>
-
 </section>
             </div><div class="search-results">
     <div class="has-results">
@@ -946,13 +1030,13 @@ window.MathJax = {
 </script>
 
 
-                        <a href="/blog/linux/2018-08-01-DeviceResourceManage.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page: 设备资源管理模块">
+                        <a href="/blog/jekyll/2018-03-21-YUV.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page: YUV编码">
                             <i class="fa fa-angle-left"></i>
                         </a>
                     
 
                     
-                        <a href="/blog/jekyll/2021-04-27-Weston.html" class="navigation navigation-next navigation-unique" aria-label="Next page: weston">
+                        <a href="/blog/jekyll/2018-05-20-memory_check.html" class="navigation navigation-next navigation-unique" aria-label="Next page: 进程内存检查">
                             <i class="fa fa-angle-right"></i>
                         </a>
                     
@@ -969,11 +1053,11 @@ window.MathJax = {
         "depth": 1,
         
         "next": {
-            "title": "weston",
+            "title": "进程内存检查",
             "level": "1.2",
             "depth": 1,
-            "path": "_posts/2021-02-11-Weston.md",
-            "ref": "_posts/2021-02-11-Weston.md",
+            "path": "_posts/2018-05-20-memory_check.md",
+            "ref": "_posts/2018-05-20-memory_check.md",
             "articles": []
         },
         
@@ -1065,8 +1149,8 @@ window.MathJax = {
         "gitbook": "*"
     },
     "file": {
-        "path": "_posts/2020-03-15-Wayland.md",
-        "mtime": "2020-03-15 00:00:00 +0800",
+        "path": "_posts/2018-05-15-Wayland&Weston.md",
+        "mtime": "2018-05-15 00:00:00 +0800",
         "type": "markdown"
     },
     "gitbook": {
