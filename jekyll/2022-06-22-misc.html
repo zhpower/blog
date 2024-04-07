@@ -202,7 +202,7 @@
                             </a>
                             
                                 
-                                    <ul><li><a href="#kref" onclick="mobilePageScrollToAnchor(this)" >kref</a></li><li><a href="#idrid-range" onclick="mobilePageScrollToAnchor(this)" >IDR(ID Range)</a></li><li><a href="#非一致性内存-和一致性" onclick="mobilePageScrollToAnchor(this)" >非一致性内存 和一致性</a><ul><li><a href="#dma_alloc_noncoherent" onclick="mobilePageScrollToAnchor(this)" >dma_alloc_noncoherent</a></li><li><a href="#dma_alloc_wc" onclick="mobilePageScrollToAnchor(this)" >dma_alloc_wc</a></li></ul></li><li><a href="#timer_setup" onclick="mobilePageScrollToAnchor(this)" >timer_setup</a></li><li><a href="#kthread_create_worker" onclick="mobilePageScrollToAnchor(this)" >kthread_create_worker</a></li><li><a href="#schedule_work" onclick="mobilePageScrollToAnchor(this)" >schedule_work</a></li><li><a href="#drm-blob" onclick="mobilePageScrollToAnchor(this)" >DRM Blob</a></li></ul>
+                                    <ul><li><a href="#kref" onclick="mobilePageScrollToAnchor(this)" >kref</a></li><li><a href="#idrid-range" onclick="mobilePageScrollToAnchor(this)" >IDR(ID Range)</a></li><li><a href="#非一致性内存-和一致性" onclick="mobilePageScrollToAnchor(this)" >非一致性内存 和一致性</a><ul><li><a href="#dma_alloc_noncoherent" onclick="mobilePageScrollToAnchor(this)" >dma_alloc_noncoherent</a></li><li><a href="#dma_alloc_wc" onclick="mobilePageScrollToAnchor(this)" >dma_alloc_wc</a></li></ul></li><li><a href="#timer_setup" onclick="mobilePageScrollToAnchor(this)" >timer_setup</a></li><li><a href="#kthread_create_worker" onclick="mobilePageScrollToAnchor(this)" >kthread_create_worker</a></li><li><a href="#schedule_work" onclick="mobilePageScrollToAnchor(this)" >schedule_work</a></li><li><a href="#drm-blob" onclick="mobilePageScrollToAnchor(this)" >DRM Blob</a></li><li><a href="#completion" onclick="mobilePageScrollToAnchor(this)" >completion</a></li><li><a href="#benchmark" onclick="mobilePageScrollToAnchor(this)" >benchmark</a></li></ul>
 
                                 
                             
@@ -461,7 +461,7 @@ cpu_addr是由dma_alloc_noncoherent返回的虚拟地址。
 
 <h1 id="kthread_create_worker">kthread_create_worker</h1>
 
-<p>函数是Linux内核中用于创建内核线程的一个函数。通过设置标志参数和格式化字符串，可以指定创建内核线程的行为和名称。它分配并初始化了一个kthread_worker结构体，并使用它来创建内核线程12.</p>
+<p>函数是Linux内核中用于创建内核线程的一个函数。通过设置标志参数和格式化字符串，可以指定创建内核线程的行为和名称。它分配并初始化了一个kthread_worker结构体，并使用它来创建内核线程.</p>
 
 <p>以下是kthread_create_worker函数的一些关键参数：</p>
 
@@ -646,6 +646,159 @@ cpu_addr是由dma_alloc_noncoherent返回的虚拟地址。
 </ul>
 
 <p>总之，Blob 是一种用于存储自定义数据的特殊属性，允许用户空间应用程序与内核交换非标准化的信息。它在 DRM 中的应用范围很广，例如显示模式、颜色校准和 Gamma 表等。</p>
+
+<h1 id="completion">completion</h1>
+
+<p>init_completion() 是Linux内核中用于完成事件通知机制的一个函数，主要用于进程间或线程间的同步。这个函数初始化一个 completion 结构体，该结构体用于表示某个事件是否已经发生。在多线程或多进程编程中，有时需要一个线程或进程等待另一个线程或进程完成某个任务。</p>
+
+<p>让我们来详细了解一下 init_completion() 函数的功能和用法：</p>
+
+<ul>
+  <li>初始化completion结构体：
+    <ul>
+      <li>completion 结构体用于维护“complete”状态，表示某个任务是否已完成。</li>
+      <li>结构体定义如下：
+        <div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">struct</span> <span class="n">completion</span> <span class="p">{</span>
+   <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">done</span><span class="p">;</span>
+   <span class="k">struct</span> <span class="n">swait_queue_head</span> <span class="n">wait</span><span class="p">;</span>
+<span class="p">};</span>
+</code></pre></div>        </div>
+      </li>
+      <li>done 字段表示完成状态，初始值为 0。</li>
+      <li>swait_queue_head 是一个等待队列头，用于管理等待该完成事件的线程。</li>
+    </ul>
+  </li>
+  <li>init_completion() 函数：
+    <ul>
+      <li>动态定义及初始化一个信号量：
+        <div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#define init_completion(x) __init_completion(x)
+</span><span class="k">static</span> <span class="kr">inline</span> <span class="kt">void</span> <span class="nf">__init_completion</span><span class="p">(</span><span class="k">struct</span> <span class="n">completion</span> <span class="o">*</span><span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+   <span class="n">x</span><span class="o">-&gt;</span><span class="n">done</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+   <span class="n">init_swait_queue_head</span><span class="p">(</span><span class="o">&amp;</span><span class="n">x</span><span class="o">-&gt;</span><span class="n">wait</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>        </div>
+      </li>
+      <li>这个函数实际上是初始化了 completion 结构体中的信号量。</li>
+    </ul>
+  </li>
+  <li>等待完成：
+    <ul>
+      <li>等待信号量的释放：
+        <div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="n">__sched</span> <span class="nf">wait_for_completion</span><span class="p">(</span><span class="k">struct</span> <span class="n">completion</span> <span class="o">*</span><span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">wait_for_common</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">MAX_SCHEDULE_TIMEOUT</span><span class="p">,</span> <span class="n">TASK_UNINTERRUPTIBLE</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>        </div>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p>发信端：</p>
+
+    <ul>
+      <li>complete() 函数用于唤醒等待该完成事件的单个线程：
+        <div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">complete</span><span class="p">(</span><span class="k">struct</span> <span class="n">completion</span> <span class="o">*</span><span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">flags</span><span class="p">;</span>
+    <span class="n">raw_spin_lock_irqsave</span><span class="p">(</span><span class="o">&amp;</span><span class="n">x</span><span class="o">-&gt;</span><span class="n">wait</span><span class="p">.</span><span class="n">lock</span><span class="p">,</span> <span class="n">flags</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">x</span><span class="o">-&gt;</span><span class="n">done</span> <span class="o">!=</span> <span class="n">UINT_MAX</span><span class="p">)</span>
+       <span class="n">x</span><span class="o">-&gt;</span><span class="n">done</span><span class="o">++</span><span class="p">;</span>
+    <span class="n">swake_up_locked</span><span class="p">(</span><span class="o">&amp;</span><span class="n">x</span><span class="o">-&gt;</span><span class="n">wait</span><span class="p">);</span>
+    <span class="n">raw_spin_unlock_irqrestore</span><span class="p">(</span><span class="o">&amp;</span><span class="n">x</span><span class="o">-&gt;</span><span class="n">wait</span><span class="p">.</span><span class="n">lock</span><span class="p">,</span> <span class="n">flags</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>        </div>
+      </li>
+    </ul>
+  </li>
+  <li>同时唤醒所有等待线程：
+    <ul>
+      <li>complete_all() 函数用于唤醒等待此特定完成事件的所有线程：
+        <div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">complete_all</span><span class="p">(</span><span class="k">struct</span> <span class="n">completion</span> <span class="o">*</span><span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">flags</span><span class="p">;</span>
+    <span class="n">lockdep_assert_RT_in_threaded_ctx</span><span class="p">();</span>
+    <span class="n">raw_spin_lock_irqsave</span><span class="p">(</span><span class="o">&amp;</span><span class="n">x</span><span class="o">-&gt;</span><span class="n">wait</span><span class="p">.</span><span class="n">lock</span><span class="p">,</span> <span class="n">flags</span><span class="p">);</span>
+    <span class="n">x</span><span class="o">-&gt;</span><span class="n">done</span> <span class="o">=</span> <span class="n">UINT_MAX</span><span class="p">;</span>
+    <span class="n">swake_up_all_locked</span><span class="p">(</span><span class="o">&amp;</span><span class="n">x</span><span class="o">-&gt;</span><span class="n">wait</span><span class="p">);</span>
+    <span class="n">raw_spin_unlock_irqrestore</span><span class="p">(</span><span class="o">&amp;</span><span class="n">x</span><span class="o">-&gt;</span><span class="n">wait</span><span class="p">.</span><span class="n">lock</span><span class="p">,</span> <span class="n">flags</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>        </div>
+      </li>
+    </ul>
+  </li>
+  <li>完整示例</li>
+</ul>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;linux/module.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;linux/init.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;linux/completion.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;linux/delay.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;linux/kthread.h&gt;</span><span class="cp">
+</span><span class="n">MODULE_LICENSE</span><span class="p">(</span><span class="s">"GPL"</span><span class="p">);</span>
+<span class="n">MODULE_AUTHOR</span><span class="p">(</span><span class="s">"kevin"</span><span class="p">);</span>
+<span class="k">static</span> <span class="k">struct</span> <span class="n">completion</span> <span class="n">my_completion</span><span class="p">;</span>
+<span class="k">static</span> <span class="kt">int</span> <span class="nf">my_thread</span><span class="p">(</span><span class="kt">void</span> <span class="o">*</span><span class="n">data</span><span class="p">){</span>
+    <span class="n">pr_info</span><span class="p">(</span><span class="s">"My thread is waiting for completion...</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+    <span class="n">wait_for_completion</span><span class="p">(</span><span class="o">&amp;</span><span class="n">my_completion</span><span class="p">);</span>
+    <span class="n">pr_info</span><span class="p">(</span><span class="s">"My thread woke up! Event completed.</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="k">static</span> <span class="kt">int</span> <span class="n">__init</span> <span class="nf">my_init</span><span class="p">(</span><span class="kt">void</span><span class="p">){</span>
+    <span class="n">pr_info</span><span class="p">(</span><span class="s">"Initializing my module...</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+    <span class="n">init_completion</span><span class="p">(</span><span class="o">&amp;</span><span class="n">my_completion</span><span class="p">);</span>
+    <span class="c1">// Start a new kernel thread</span>
+    <span class="n">kthread_run</span><span class="p">(</span><span class="n">my_thread</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="s">"my_thread"</span><span class="p">);</span>
+    <span class="c1">// Simulate some work...</span>
+    <span class="n">msleep</span><span class="p">(</span><span class="mi">2000</span><span class="p">);</span>
+    <span class="n">pr_info</span><span class="p">(</span><span class="s">"Completing the event...</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+    <span class="n">complete</span><span class="p">(</span><span class="o">&amp;</span><span class="n">my_completion</span><span class="p">);</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="k">static</span> <span class="kt">void</span> <span class="n">__exit</span> <span class="nf">my_exit</span><span class="p">(</span><span class="kt">void</span><span class="p">){</span>
+    <span class="n">pr_info</span><span class="p">(</span><span class="s">"Exiting my module...</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="n">module_init</span><span class="p">(</span><span class="n">my_init</span><span class="p">);</span>
+<span class="n">module_exit</span><span class="p">(</span><span class="n">my_exit</span><span class="p">);</span>
+</code></pre></div></div>
+
+<h1 id="benchmark">benchmark</h1>
+
+<ul>
+  <li>
+    <p>DRM kernel aspects (display and render):</p>
+
+    <p>IGT GPU Tools (IGT): main DRM test suite, used for CI</p>
+
+    <p><a href="https://gitlab.freedesktop.org/drm/igt-gpu-tools/">https://gitlab.freedesktop.org/drm/igt-gpu-tools/</a></p>
+  </li>
+  <li>
+    <p>OpenGL aspects:</p>
+
+    <ul>
+      <li>
+        <p>drawElements Quality Program (dEQP): OpenGL/OpenGL ES/Vulkan conformance tests</p>
+
+        <p><a href="https://android.googlesource.com/platform/external/deqp/">https://android.googlesource.com/platform/external/deqp/</a></p>
+      </li>
+      <li>
+        <p>glmark2: OpenGL 2.0 and ES 2.0 benchmark tool</p>
+
+        <p><a href="https://github.com/glmark2/glmark2/">https://github.com/glmark2/glmark2/</a></p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p>Patch series continuous integration:</p>
+
+    <p>EzBench: a collection of tools to benchmark graphics-related patch-series</p>
+
+    <p><a href="https://github.com/freedesktop/ezbench/">https://github.com/freedesktop/ezbench/</a></p>
+  </li>
+  <li>
+    <p>General benchmarking (including graphics):</p>
+
+    <p>Phoronix Test Suite: automated benchmarking tool</p>
+
+    <p><a href="https://github.com/phoronix-test-suite/phoronix-test-suite/">https://github.com/phoronix-test-suite/phoronix-test-suite/</a></p>
+  </li>
+</ul>
 </section>
             </div><div class="search-results">
     <div class="has-results">
@@ -863,7 +1016,7 @@ window.MathJax = {
 <script src="/blog/assets/gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
 <script src="/blog/assets/gitbook/gitbook-plugin-search-pro/jquery.mark.min.js"></script>
 <script src="/blog/assets/gitbook/gitbook-plugin-search-pro/search.js"></script>
-<script src="/blog/assets/gitbook/gitbook-plugin-sharing/buttons.js"></script>
+<!-- <script src="/blog/assets/gitbook/gitbook-plugin-sharing/buttons.js"></script> -->
 <script src="/blog/assets/gitbook/gitbook-plugin-splitter/splitter.js"></script>
 
 <!--
