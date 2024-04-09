@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.2">Jekyll</generator><link href="http://localhost:4000/blog/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/blog/" rel="alternate" type="text/html" /><updated>2024-04-07T20:03:47+08:00</updated><id>http://localhost:4000/blog/feed.xml</id><title type="html">学习笔记</title><subtitle>Build Jekyll site with the GitBook style.
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.2">Jekyll</generator><link href="http://localhost:4000/blog/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/blog/" rel="alternate" type="text/html" /><updated>2024-04-09T09:21:59+08:00</updated><id>http://localhost:4000/blog/feed.xml</id><title type="html">学习笔记</title><subtitle>Build Jekyll site with the GitBook style.
 </subtitle><author><name>kevin_zh</name></author><entry><title type="html">misc</title><link href="http://localhost:4000/blog/jekyll/2022-06-22-misc.html" rel="alternate" type="text/html" title="misc" /><published>2022-06-22T00:00:00+08:00</published><updated>2022-06-22T00:00:00+08:00</updated><id>http://localhost:4000/blog/jekyll/misc</id><content type="html" xml:base="http://localhost:4000/blog/jekyll/2022-06-22-misc.html"><![CDATA[<h1 id="kref">kref</h1>
 
 <p>kref_init 是一个用于初始化内核对象引用计数器（krefs）的函数。它允许你为你的对象添加引用计数，确保在多个地方使用和传递对象时，代码的正确性。以下是关于 kref_init 的一些重要信息：</p>
@@ -4745,7 +4745,15 @@ Optimus Prime 就是变形金刚 擎天柱的名字！ NVIDIA 当初给他们 Op
 
 <p>这些组件共同构成了一个完整的DRM显示控制过程。KMS的目标是适应现代显示设备的逻辑，使其能够更好地支持新特性，如显示覆盖、GPU加速和硬件光标等功能。</p>
 
-<h2 id="32-函数流程">3.2 函数流程</h2>
+<h2 id="32-重要结构体">3.2 重要结构体</h2>
+
+<p><img src="/blog/assets/DRM/crtc_funcs.png" alt="crtc_funcs" /></p>
+
+<p><img src="/blog/assets/DRM/plane_funcs.png" alt="plane_funcs" /></p>
+
+<p><img src="/blog/assets/DRM/plane_helper.png" alt="plane_helper" /></p>
+
+<h2 id="33-函数流程">3.3 函数流程</h2>
 
 <h3 id="devm_drm_dev_alloc">devm_drm_dev_alloc()</h3>
 
@@ -4773,13 +4781,14 @@ Optimus Prime 就是变形金刚 擎天柱的名字！ NVIDIA 当初给他们 Op
 
 <p><img src="/blog/assets/DRM/init_connector.svg" alt="init_connector" /></p>
 
-<h2 id="33-传统实现">3.3 传统实现</h2>
+<h2 id="34-传统实现">3.4 传统实现</h2>
 
 <h3 id="drmmodesetcrtc">drmModeSetCrtc</h3>
 
-<p><img src="/blog/assets/DRM/drmModeSetCrtc.svg" alt="drmModeSetCrtc" /></p>
+<p><img src="/blog/assets/DRM/drmModeSetCrtc.svg" alt="drmModeSetCrtc" />
+<img src="/blog/assets/DRM/drmModeSetCrtc.png" alt="drmModeSetCrtc_img" /></p>
 
-<h2 id="34-atomic实现">3.4 atomic实现</h2>
+<h2 id="35-atomic实现">3.5 atomic实现</h2>
 
 <h3 id="smaple-code">smaple code</h3>
 
@@ -4958,4 +4967,72 @@ Optimus Prime 就是变形金刚 擎天柱的名字！ NVIDIA 当初给他们 Op
 
 <h3 id="drmmodeatomiccommit">drmModeAtomicCommit</h3>
 
-<p><img src="/blog/assets/DRM/drmModeAtomicCommit.svg" alt="drmModeAtomicCommit" /></p>]]></content><author><name>kevin</name></author><category term="DRM" /><summary type="html"><![CDATA[1.DRM总述]]></summary></entry></feed>
+<p><img src="/blog/assets/DRM/drmModeAtomicCommit.svg" alt="drmModeAtomicCommit" /></p>
+
+<h1 id="4-misc">4 misc</h1>
+
+<h2 id="41-modifier">4.1 modifier</h2>
+
+<p>在 DRM（Direct Rendering Manager） 中，modifier 是用于<strong>描述图像帧的内存存储方式</strong>的标志。让我们详细了解一下：</p>
+<ul>
+  <li>DRM Modifier 是什么？
+    <ul>
+      <li>DRM Modifier 是一个 64 位的、厂商前缀的、半透明的无符号整数。</li>
+      <li>大多数 modifier 表示图像的具体、厂商特定的平铺格式。</li>
+    </ul>
+  </li>
+  <li>为什么需要 Modifier？
+    <ul>
+      <li>图像帧在内存中的存储方式可能因硬件和驱动程序而异。</li>
+      <li>Modifier 描述了像素到内存样本之间的转换机制，以及缓冲区的实际内存存储方式。</li>
+    </ul>
+  </li>
+  <li>常见 Modifier 示例：
+    <ul>
+      <li>LINEAR Modifier：最直接的 Modifier，其中每个像素具有连续的存储，像素在内存中的位置可以通过步幅轻松计算。</li>
+      <li>TILED Modifier：描述了像素以 4x4 块的形式存储，按行主序排列。</li>
+      <li>其他 Modifier 可能涉及到更复杂的内存访问机制，例如平铺和可能的压缩。</li>
+    </ul>
+  </li>
+  <li>应用场景：
+    <ul>
+      <li>DRM Modifier 在跨设备的缓冲区共享中非常重要，例如在不同的图形硬件之间共享图像帧。</li>
+      <li>它们也用于描述图像帧的格式，例如颜色定义和像素格式。</li>
+    </ul>
+  </li>
+</ul>
+
+<p>总之，DRM Modifier 是描述图像帧内存存储方式的关键标志，对于图形硬件和驱动程序之间的交互至关重要。</p>
+
+<h2 id="42-gamma">4.2 gamma</h2>
+
+<p>在 DRM（Direct Rendering Manager） 中，gamma 是用于<strong>图像颜色校正</strong>的一个重要概念。让我详细解释一下：</p>
+<ul>
+  <li>Gamma 是什么？
+    <ul>
+      <li>Gamma 是一个非线性的颜色校正过程，用于<strong>调整显示设备的亮度和对比度</strong>。</li>
+      <li>它主要影响图像的中间和暗部，而不是亮部。</li>
+    </ul>
+  </li>
+  <li>Gamma 校正的作用：
+    <ul>
+      <li>Gamma 校正用于补偿显示设备的非线性响应。</li>
+      <li>显示设备（例如显示器、电视）对输入信号的响应不是线性的，而是呈现出一种非线性的亮度-输入关系。</li>
+      <li>通过应用 Gamma 校正，可以使图像在显示时更接近人眼感知的线性亮度。</li>
+    </ul>
+  </li>
+  <li>Gamma 曲线：
+    <ul>
+      <li>Gamma 曲线描述了输入信号和显示亮度之间的关系。</li>
+      <li>通常，显示设备的 Gamma 曲线是一个幂函数，通常在 2.2 到 2.5 之间。</li>
+    </ul>
+  </li>
+  <li>应用场景：
+    <ul>
+      <li>Gamma 校正在图形、视频和游戏中都很重要。</li>
+      <li>在图像处理和显示中，应用正确的 Gamma 曲线可以确保图像的亮度和对比度在不同设备上保持一致。</li>
+    </ul>
+  </li>
+</ul>
+
+<p>总之，Gamma 是一种用于调整显示设备响应的非线性颜色校正方法，以确保图像在不同设备上呈现一致的亮度和对比度。</p>]]></content><author><name>kevin</name></author><category term="DRM" /><summary type="html"><![CDATA[1.DRM总述]]></summary></entry></feed>
