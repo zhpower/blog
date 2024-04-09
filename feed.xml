@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.2">Jekyll</generator><link href="http://localhost:4000/blog/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/blog/" rel="alternate" type="text/html" /><updated>2024-04-09T14:07:09+08:00</updated><id>http://localhost:4000/blog/feed.xml</id><title type="html">学习笔记</title><subtitle>Build Jekyll site with the GitBook style.
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.2">Jekyll</generator><link href="http://localhost:4000/blog/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/blog/" rel="alternate" type="text/html" /><updated>2024-04-09T20:03:42+08:00</updated><id>http://localhost:4000/blog/feed.xml</id><title type="html">学习笔记</title><subtitle>Build Jekyll site with the GitBook style.
 </subtitle><author><name>kevin_zh</name></author><entry><title type="html">misc</title><link href="http://localhost:4000/blog/jekyll/2022-06-22-misc.html" rel="alternate" type="text/html" title="misc" /><published>2022-06-22T00:00:00+08:00</published><updated>2022-06-22T00:00:00+08:00</updated><id>http://localhost:4000/blog/jekyll/misc</id><content type="html" xml:base="http://localhost:4000/blog/jekyll/2022-06-22-misc.html"><![CDATA[<h1 id="kref">kref</h1>
 
 <p>kref_init 是一个用于初始化内核对象引用计数器（krefs）的函数。它允许你为你的对象添加引用计数，确保在多个地方使用和传递对象时，代码的正确性。以下是关于 kref_init 的一些重要信息：</p>
@@ -160,7 +160,10 @@ cpu_addr是由dma_alloc_noncoherent返回的虚拟地址。
 </ul>
 
 <p><u>adf</u></p>
-<h1 id="timer_setup">timer_setup</h1>
+
+<h1 id="定时器">定时器</h1>
+
+<h2 id="timer_setup">timer_setup</h2>
 
 <p>它是Linux内核中用于初始化定时器的函数。它能够方便地设置和初始化一个计时器，并通过设置参数来灵活地控制计时器的行为1. 合理使用timer_setup函数可以让我们更好地处理时间相关的任务，提高操作系统的性能和可靠性。</p>
 
@@ -218,10 +221,79 @@ cpu_addr是由dma_alloc_noncoherent返回的虚拟地址。
 <span class="n">module_exit</span><span class="p">(</span><span class="n">exit_module_with_timer</span><span class="p">);</span>
 
 </code></pre></div></div>
+<h2 id="高精度定时器">高精度定时器</h2>
 
-<h1 id="kthread_create_worker">kthread_create_worker</h1>
+<p><code class="language-plaintext highlighter-rouge">hrtimer_init</code> 是 Linux 内核中与高精度定时器（HRTimer）相关的函数之一。让我为您详细介绍一下，并提供一个示例代码：</p>
 
-<p>函数是Linux内核中用于创建内核线程的一个函数。通过设置标志参数和格式化字符串，可以指定创建内核线程的行为和名称。它分配并初始化了一个kthread_worker结构体，并使用它来创建内核线程.</p>
+<ol>
+  <li><strong>HRTimer 简介</strong>：
+    <ul>
+      <li>HRTimer 是 Linux 内核中的高精度定时器，用于提供纳秒级别的时钟精度。</li>
+      <li>与传统的定时器相比，HRTimer 允许更精确地控制定时事件，适用于对时间要求较高的场景，如看门狗、USB、以太网、块设备、虚拟机等子系统。</li>
+    </ul>
+  </li>
+  <li><strong><code class="language-plaintext highlighter-rouge">hrtimer_init</code> 函数</strong>：
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">hrtimer_init</code> 用于初始化一个 <code class="language-plaintext highlighter-rouge">struct hrtimer</code> 实例。</li>
+      <li>参数：
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">timer</code>：指向要初始化的 HRTimer 实例的指针。</li>
+          <li><code class="language-plaintext highlighter-rouge">clock_id</code>：时钟的种类，例如 <code class="language-plaintext highlighter-rouge">CLOCK_MONOTONIC</code> 表示自系统开机以来的单调递增时间。</li>
+          <li><code class="language-plaintext highlighter-rouge">mode</code>：定时器的模式，可以是绝对时间（<code class="language-plaintext highlighter-rouge">HRTIMER_MODE_ABS</code>）或相对时间（<code class="language-plaintext highlighter-rouge">HRTIMER_MODE_REL</code>）。</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><strong>示例代码</strong>：
+    <ul>
+      <li>下面是一个使用 HRTimer 的简单示例代码，用于在内核中启动一个相对时间的 HRTimer：
+        <div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;linux/hrtimer.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;linux/ktime.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;linux/module.h&gt;</span><span class="cp">
+</span>     
+<span class="n">MODULE_LICENSE</span><span class="p">(</span><span class="s">"GPL"</span><span class="p">);</span>
+     
+<span class="k">static</span> <span class="k">struct</span> <span class="n">hrtimer</span> <span class="n">my_timer</span><span class="p">;</span>
+<span class="k">static</span> <span class="n">ktime_t</span> <span class="n">interval</span><span class="p">;</span>
+     
+<span class="k">static</span> <span class="k">enum</span> <span class="n">hrtimer_restart</span> <span class="nf">my_timer_callback</span><span class="p">(</span><span class="k">struct</span> <span class="n">hrtimer</span> <span class="o">*</span><span class="n">timer</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// Your timer callback logic here</span>
+    <span class="c1">// For demonstration purposes, let's print a message.</span>
+    <span class="n">pr_info</span><span class="p">(</span><span class="s">"HRTimer callback executed!</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">HRTIMER_RESTART</span><span class="p">;</span>
+<span class="p">}</span>
+     
+<span class="k">static</span> <span class="kt">int</span> <span class="n">__init</span> <span class="nf">my_module_init</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// Initialize the HRTimer</span>
+    <span class="n">interval</span> <span class="o">=</span> <span class="n">ktime_set</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span> <span class="c1">// Set interval to 1 second</span>
+    <span class="n">hrtimer_init</span><span class="p">(</span><span class="o">&amp;</span><span class="n">my_timer</span><span class="p">,</span> <span class="n">CLOCK_MONOTONIC</span><span class="p">,</span> <span class="n">HRTIMER_MODE_REL</span><span class="p">);</span>
+    <span class="n">my_timer</span><span class="p">.</span><span class="n">function</span> <span class="o">=</span> <span class="n">my_timer_callback</span><span class="p">;</span>
+     
+    <span class="c1">// Start the timer</span>
+    <span class="n">hrtimer_start</span><span class="p">(</span><span class="o">&amp;</span><span class="n">my_timer</span><span class="p">,</span> <span class="n">interval</span><span class="p">,</span> <span class="n">HRTIMER_MODE_REL</span><span class="p">);</span>
+     
+    <span class="n">pr_info</span><span class="p">(</span><span class="s">"HRTimer module initialized</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+     
+<span class="k">static</span> <span class="kt">void</span> <span class="n">__exit</span> <span class="nf">my_module_exit</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// Cleanup: Stop the timer</span>
+    <span class="n">hrtimer_cancel</span><span class="p">(</span><span class="o">&amp;</span><span class="n">my_timer</span><span class="p">);</span>
+    <span class="n">pr_info</span><span class="p">(</span><span class="s">"HRTimer module removed</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+<span class="p">}</span>
+     
+<span class="n">module_init</span><span class="p">(</span><span class="n">my_module_init</span><span class="p">);</span>
+<span class="n">module_exit</span><span class="p">(</span><span class="n">my_module_exit</span><span class="p">);</span>
+</code></pre></div>        </div>
+      </li>
+      <li>在上述示例中，我们初始化了一个相对时间的 HRTimer，设置了回调函数 <code class="language-plaintext highlighter-rouge">my_timer_callback</code>，并启动了定时器。</li>
+    </ul>
+  </li>
+</ol>
+
+<h1 id="内核线程">内核线程</h1>
+
+<p><strong>kthread_create_worker()</strong> 函数是Linux内核中用于创建内核线程的一个函数。通过设置标志参数和格式化字符串，可以指定创建内核线程的行为和名称。它分配并初始化了一个kthread_worker结构体，并使用它来创建内核线程.</p>
 
 <p>以下是kthread_create_worker函数的一些关键参数：</p>
 
@@ -272,14 +344,16 @@ cpu_addr是由dma_alloc_noncoherent返回的虚拟地址。
 </code></pre></div></div>
 <p>在这个示例中，我们使用kthread_run函数创建一个名为kthread-demo的内核线程，它每隔2秒打印一条信息。在卸载模块时，我们使用kthread_stop来关闭该内核线程。</p>
 
-<h1 id="schedule_work">schedule_work</h1>
+<h1 id="工作队列">工作队列</h1>
+
+<h2 id="schedule_work">schedule_work</h2>
 
 <p>函数是Linux内核中的一个重要函数，用于将一个工作项（work）添加到工作队列（workqueue）中。这个函数的作用是在后台执行一些延迟较长的任务，而不会阻塞主线程的执行。</p>
 
 <p>以下是关于schedule_work函数的一些要点：</p>
 
 <ul>
-  <li>功能：将工作项添加到默认的工作队列（通常是system_wq）中，以便稍后执行。</li>
+  <li>功能：将工作项添加到<strong>默认的工作队列</strong>（通常是system_wq）中，以便稍后执行。</li>
   <li>调用方式：schedule_work(&amp;my_work);，其中my_work是一个已经初始化的工作项。</li>
   <li>工作队列：工作队列是一种异步执行机制，用于处理延迟的或非实时的任务。</li>
   <li>延迟执行：schedule_work会将工作项添加到工作队列中，等待系统调度执行。这样，主线程可以继续执行其他任务，而不必等待工作项完成。</li>
@@ -295,7 +369,6 @@ cpu_addr是由dma_alloc_noncoherent返回的虚拟地址。
 </span>
 <span class="n">MODULE_LICENSE</span><span class="p">(</span><span class="s">"GPL"</span><span class="p">);</span>
 
-<span class="k">static</span> <span class="k">struct</span> <span class="n">workqueue_struct</span> <span class="o">*</span><span class="n">my_workqueue</span><span class="p">;</span>
 <span class="k">static</span> <span class="k">struct</span> <span class="n">work_struct</span> <span class="n">my_work</span><span class="p">;</span>
 
 <span class="c1">// 工作项的回调函数</span>
@@ -306,13 +379,6 @@ cpu_addr是由dma_alloc_noncoherent返回的虚拟地址。
 
 <span class="k">static</span> <span class="kt">int</span> <span class="nf">init_my_module</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
     <span class="n">printk</span><span class="p">(</span><span class="n">KERN_INFO</span> <span class="s">"Initializing my kernel module with workqueue...</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
-
-    <span class="c1">// 创建工作队列</span>
-    <span class="n">my_workqueue</span> <span class="o">=</span> <span class="n">create_singlethread_workqueue</span><span class="p">(</span><span class="s">"my_workqueue"</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">my_workqueue</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">printk</span><span class="p">(</span><span class="n">KERN_ERR</span> <span class="s">"Failed to create workqueue</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
-        <span class="k">return</span> <span class="o">-</span><span class="n">ENOMEM</span><span class="p">;</span>
-    <span class="p">}</span>
 
     <span class="c1">// 初始化工作项</span>
     <span class="n">INIT_WORK</span><span class="p">(</span><span class="o">&amp;</span><span class="n">my_work</span><span class="p">,</span> <span class="n">my_work_handler</span><span class="p">);</span>
@@ -326,14 +392,150 @@ cpu_addr是由dma_alloc_noncoherent返回的虚拟地址。
 <span class="k">static</span> <span class="kt">void</span> <span class="nf">cleanup_my_module</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
     <span class="n">printk</span><span class="p">(</span><span class="n">KERN_INFO</span> <span class="s">"Cleaning up my kernel module...</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
 
-    <span class="c1">// 销毁工作队列</span>
-    <span class="n">destroy_workqueue</span><span class="p">(</span><span class="n">my_workqueue</span><span class="p">);</span>
 <span class="p">}</span>
 
 <span class="n">module_init</span><span class="p">(</span><span class="n">init_my_module</span><span class="p">);</span>
 <span class="n">module_exit</span><span class="p">(</span><span class="n">cleanup_my_module</span><span class="p">);</span>
 </code></pre></div></div>
 <p>在这个示例中，我们首先定义了一个名为my_workqueue的工作队列结构体，以及一个名为my_work的工作项。然后，在init_my_module函数中使用create_singlethread_workqueue来创建一个名为my_workqueue的工作队列。接着，我们使用INIT_WORK来初始化工作项，并使用schedule_work来调度它。</p>
+
+<h2 id="alloc_ordered_workqueue">alloc_ordered_workqueue</h2>
+
+<p>用于创建<strong>有序</strong>的工作队列（workqueue）。让我详细介绍一下，并提供一个示例代码：</p>
+
+<ol>
+  <li><strong><code class="language-plaintext highlighter-rouge">alloc_ordered_workqueue</code> 简介</strong>：
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">alloc_ordered_workqueue</code> 函数用于分配一个有序的工作队列。</li>
+      <li>有序工作队列是一种特殊类型的工作队列，它确保工作项按照提交的顺序执行。</li>
+    </ul>
+  </li>
+  <li><strong>函数签名</strong>：
+    <div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">struct</span> <span class="n">workqueue_struct</span> <span class="o">*</span><span class="nf">alloc_ordered_workqueue</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">name</span><span class="p">,</span> <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">flags</span><span class="p">);</span>
+</code></pre></div>    </div>
+  </li>
+  <li><strong>参数说明</strong>：
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">name</code>：工作队列的名称。</li>
+      <li><code class="language-plaintext highlighter-rouge">flags</code>：标志位，用于配置工作队列的行为。</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>示例代码</strong>：</p>
+
+    <p>下面是一个简单的示例代码，展示如何使用 <code class="language-plaintext highlighter-rouge">alloc_ordered_workqueue</code> 创建一个有序的工作队列：</p>
+
+    <div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;linux/init.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;linux/module.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;linux/workqueue.h&gt;</span><span class="cp">
+</span>
+<span class="k">static</span> <span class="k">struct</span> <span class="n">workqueue_struct</span> <span class="o">*</span><span class="n">my_ordered_wq</span><span class="p">;</span>
+
+<span class="k">static</span> <span class="kt">void</span> <span class="nf">my_work_handler</span><span class="p">(</span><span class="k">struct</span> <span class="n">work_struct</span> <span class="o">*</span><span class="n">work</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">pr_info</span><span class="p">(</span><span class="s">"Work item executed!</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="k">static</span> <span class="nf">DECLARE_WORK</span><span class="p">(</span><span class="n">my_work</span><span class="p">,</span> <span class="n">my_work_handler</span><span class="p">);</span>
+
+<span class="k">static</span> <span class="kt">int</span> <span class="n">__init</span> <span class="nf">my_module_init</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">my_ordered_wq</span> <span class="o">=</span> <span class="n">alloc_ordered_workqueue</span><span class="p">(</span><span class="s">"my_ordered_wq"</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">my_ordered_wq</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">pr_err</span><span class="p">(</span><span class="s">"Failed to create ordered workqueue</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+        <span class="k">return</span> <span class="o">-</span><span class="n">ENOMEM</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">queue_work</span><span class="p">(</span><span class="n">my_ordered_wq</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">my_work</span><span class="p">);</span>
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">static</span> <span class="kt">void</span> <span class="n">__exit</span> <span class="nf">my_module_exit</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">destroy_workqueue</span><span class="p">(</span><span class="n">my_ordered_wq</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="n">module_init</span><span class="p">(</span><span class="n">my_module_init</span><span class="p">);</span>
+<span class="n">module_exit</span><span class="p">(</span><span class="n">my_module_exit</span><span class="p">);</span>
+<span class="n">MODULE_LICENSE</span><span class="p">(</span><span class="s">"GPL"</span><span class="p">);</span>
+<span class="n">MODULE_DESCRIPTION</span><span class="p">(</span><span class="s">"Ordered Workqueue Example"</span><span class="p">);</span>
+</code></pre></div>    </div>
+
+    <p>在此示例中，我们创建了一个名为 “my_ordered_wq” 的有序工作队列，并将一个工作项 <code class="language-plaintext highlighter-rouge">my_work</code> 提交到队列中。工作项的处理函数 <code class="language-plaintext highlighter-rouge">my_work_handler</code> 将在有序的顺序中执行。</p>
+  </li>
+</ol>
+
+<h2 id="create_singlethread_workqueue">create_singlethread_workqueue</h2>
+
+<p><code class="language-plaintext highlighter-rouge">create_singlethread_workqueue</code> 是 Linux 内核中的一个函数，用于创建一个只包含单个工作线程的工作队列（workqueue）。让我详细介绍一下：🙂</p>
+
+<ol>
+  <li><strong><code class="language-plaintext highlighter-rouge">create_singlethread_workqueue</code> 简介</strong>：
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">create_singlethread_workqueue</code> 函数用于创建一个只包含一个工作线程的工作队列。</li>
+      <li><strong>无论系统中有多少个 CPU，这个工作队列都只会有一个工作线程</strong>。</li>
+    </ul>
+  </li>
+  <li><strong>函数签名</strong>：
+    <div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">struct</span> <span class="n">workqueue_struct</span> <span class="o">*</span><span class="nf">create_singlethread_workqueue</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">name</span><span class="p">);</span>
+</code></pre></div>    </div>
+  </li>
+  <li><strong>参数说明</strong>：
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">name</code>：工作队列的名称。</li>
+    </ul>
+  </li>
+  <li><strong>工作原理</strong>：
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">create_singlethread_workqueue</code> 创建的工作队列只有一个工作线程。</li>
+      <li>所有提交到这个工作队列的工作项都会由这个单一的工作线程按顺序执行。</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>示例代码</strong>：
+下面是一个简单的示例代码，展示如何使用 <code class="language-plaintext highlighter-rouge">create_singlethread_workqueue</code> 创建一个只包含单个工作线程的工作队列：</p>
+
+    <div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;linux/init.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;linux/module.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;linux/workqueue.h&gt;</span><span class="cp">
+</span>
+<span class="k">static</span> <span class="k">struct</span> <span class="n">workqueue_struct</span> <span class="o">*</span><span class="n">my_singlethread_wq</span><span class="p">;</span>
+
+<span class="k">static</span> <span class="kt">void</span> <span class="nf">my_work_handler</span><span class="p">(</span><span class="k">struct</span> <span class="n">work_struct</span> <span class="o">*</span><span class="n">work</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">pr_info</span><span class="p">(</span><span class="s">"Work item executed!</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="k">static</span> <span class="nf">DECLARE_WORK</span><span class="p">(</span><span class="n">my_work</span><span class="p">,</span> <span class="n">my_work_handler</span><span class="p">);</span>
+
+<span class="k">static</span> <span class="kt">int</span> <span class="n">__init</span> <span class="nf">my_module_init</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">my_singlethread_wq</span> <span class="o">=</span> <span class="n">create_singlethread_workqueue</span><span class="p">(</span><span class="s">"my_singlethread_wq"</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">my_singlethread_wq</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">pr_err</span><span class="p">(</span><span class="s">"Failed to create singlethread workqueue</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+        <span class="k">return</span> <span class="o">-</span><span class="n">ENOMEM</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">queue_work</span><span class="p">(</span><span class="n">my_singlethread_wq</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">my_work</span><span class="p">);</span>
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">static</span> <span class="kt">void</span> <span class="n">__exit</span> <span class="nf">my_module_exit</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">destroy_workqueue</span><span class="p">(</span><span class="n">my_singlethread_wq</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="n">module_init</span><span class="p">(</span><span class="n">my_module_init</span><span class="p">);</span>
+<span class="n">module_exit</span><span class="p">(</span><span class="n">my_module_exit</span><span class="p">);</span>
+<span class="n">MODULE_LICENSE</span><span class="p">(</span><span class="s">"GPL"</span><span class="p">);</span>
+<span class="n">MODULE_DESCRIPTION</span><span class="p">(</span><span class="s">"Singlethread Workqueue Example"</span><span class="p">);</span>
+</code></pre></div>    </div>
+
+    <p>在此示例中，我们创建了一个名为 “my_singlethread_wq” 的工作队列，并将一个工作项 <code class="language-plaintext highlighter-rouge">my_work</code> 提交到队列中。这个工作项的处理函数 <code class="language-plaintext highlighter-rouge">my_work_handler</code> 将在单一的工作线程中按顺序执行。</p>
+  </li>
+</ol>
 
 <h1 id="drm-blob">DRM Blob</h1>
 
