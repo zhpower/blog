@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.2">Jekyll</generator><link href="http://localhost:4000/blog/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/blog/" rel="alternate" type="text/html" /><updated>2024-04-12T14:21:11+08:00</updated><id>http://localhost:4000/blog/feed.xml</id><title type="html">学习笔记</title><subtitle>Build Jekyll site with the GitBook style.
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.2">Jekyll</generator><link href="http://localhost:4000/blog/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/blog/" rel="alternate" type="text/html" /><updated>2024-04-22T19:43:09+08:00</updated><id>http://localhost:4000/blog/feed.xml</id><title type="html">学习笔记</title><subtitle>Build Jekyll site with the GitBook style.
 </subtitle><author><name>kevin_zh</name></author><entry><title type="html">misc</title><link href="http://localhost:4000/blog/jekyll/2022-06-22-misc.html" rel="alternate" type="text/html" title="misc" /><published>2022-06-22T00:00:00+08:00</published><updated>2022-06-22T00:00:00+08:00</updated><id>http://localhost:4000/blog/jekyll/misc</id><content type="html" xml:base="http://localhost:4000/blog/jekyll/2022-06-22-misc.html"><![CDATA[<h1 id="kref">kref</h1>
 
 <p>kref_init 是一个用于初始化内核对象引用计数器（krefs）的函数。它允许你为你的对象添加引用计数，确保在多个地方使用和传递对象时，代码的正确性。以下是关于 kref_init 的一些重要信息：</p>
@@ -1888,7 +1888,936 @@ end
   <li>设备与驱动分离时, deriver_dettach时 就是driver_remove时。</li>
 </ul>
 
-<p><img src="/blog/assets/DeviceResourceManagement/7.png" alt="7.png" /></p>]]></content><author><name>kevin</name></author><category term="linux" /><summary type="html"><![CDATA[1.解决的问题]]></summary></entry><entry><title type="html">进程内存检查</title><link href="http://localhost:4000/blog/jekyll/2018-05-20-memory_check.html" rel="alternate" type="text/html" title="进程内存检查" /><published>2018-05-20T00:00:00+08:00</published><updated>2018-05-20T00:00:00+08:00</updated><id>http://localhost:4000/blog/jekyll/memory_check</id><content type="html" xml:base="http://localhost:4000/blog/jekyll/2018-05-20-memory_check.html"><![CDATA[<h1 id="1进程内存映射文件smaps">1.进程内存映射文件smaps</h1>
+<p><img src="/blog/assets/DeviceResourceManagement/7.png" alt="7.png" /></p>]]></content><author><name>kevin</name></author><category term="linux" /><summary type="html"><![CDATA[1.解决的问题]]></summary></entry><entry><title type="html">DRM ioctl</title><link href="http://localhost:4000/blog/drm/2018-06-21-DRM_IOCTL.html" rel="alternate" type="text/html" title="DRM ioctl" /><published>2018-06-21T00:00:00+08:00</published><updated>2018-06-21T00:00:00+08:00</updated><id>http://localhost:4000/blog/drm/DRM_IOCTL</id><content type="html" xml:base="http://localhost:4000/blog/drm/2018-06-21-DRM_IOCTL.html"><![CDATA[<h1 id="drm_ioctl_version">DRM_IOCTL_VERSION</h1>
+
+<p>它通过主要、次要和补丁程序级别的三元组来标识驱动程序版本。</p>
+<ul>
+  <li>这些信息在初始化时被打印到内核日志中</li>
+  <li>通过 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_VERSION</code> ioctl 传递到用户空间。</li>
+</ul>
+
+<p>驱动程序的描述是一个纯粹的信息字符串，通过 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_VERSION</code> ioctl 传递给用户空间，但在内核中没有其他用途。驱动程序的日期以 YYYYMMDD 格式表示，用于标识驱动程序的最新修改日期。<strong>由于大多数驱动程序未能更新它，其值基本上是无用的</strong>。</p>
+
+<h1 id="drm_ioctl_get_unique">DRM_IOCTL_GET_UNIQUE</h1>
+
+<p>它允许用户空间程序查询与 DRM 设备相关的唯一标识符。这个接口通常用于获取设备的 UUID 或其他唯一标识，以便在多个设备之间进行区分。</p>
+
+<h1 id="drm_ioctl_set_unique">DRM_IOCTL_SET_UNIQUE</h1>
+
+<p>它允许用户空间程序设置 DRM 设备的唯一名称。让我们深入了解一下这个接口的作用和实现。</p>
+
+<ol>
+  <li><strong>接口作用</strong>：
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_SET_UNIQUE</code> 允许用户空间程序使用指定的字符串设置 DRM 设备的唯一名称。</li>
+      <li>这个唯一名称通常用于标识不同的 DRM 设备，以便在多个设备之间进行区分。</li>
+    </ul>
+  </li>
+  <li><strong>实现细节</strong>：
+    <ul>
+      <li>在 Linux 内核中，<code class="language-plaintext highlighter-rouge">DRM_IOCTL_SET_UNIQUE</code> 的实现可能因不同的 DRM 驱动而异。</li>
+      <li>用户空间程序可以通过调用相应的 ioctl 函数来设置设备的唯一名称。</li>
+    </ul>
+  </li>
+</ol>
+
+<h1 id="drm_ioctl_irq_busid">DRM_IOCTL_IRQ_BUSID</h1>
+
+<p>它用于基于总线 ID（busid）为 PCI 设备获取中断请求（IRQ）。在过去，这个接口是通用的 DRM 模块函数，可以为多个不同的设备提供服务。然而，现在它可能需要更改，以仅返回与特定 <code class="language-plaintext highlighter-rouge">drm_device_t</code> 相关联的设备的中断号。</p>
+
+<h1 id="drm_ioctl_get_client">DRM_IOCTL_GET_CLIENT</h1>
+
+<p>它用于查询 DRM 设备的客户端信息。让我们来详细了解一下这个接口的作用和实现。</p>
+
+<ol>
+  <li><strong>接口作用</strong>：
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_GET_CLIENT</code> 允许用户空间程序查询与 DRM 设备相关的客户端信息。</li>
+      <li>这个接口通常用于获取客户端的唯一标识符或其他相关信息，以便在多个客户端之间进行区分。</li>
+    </ul>
+  </li>
+  <li><strong>实现细节</strong>：
+    <ul>
+      <li>在 Linux 内核中，<code class="language-plaintext highlighter-rouge">DRM_IOCTL_GET_CLIENT</code> 的实现可能因不同的 DRM 驱动而异。</li>
+      <li>通过调用 <code class="language-plaintext highlighter-rouge">drmGetBusid()</code> 函数，用户空间程序可以获取与总线 ID（busid）相关的客户端信息。</li>
+      <li>请注意，这个接口的具体实现可能因不同的驱动而有所不同，因此您可以查阅特定驱动的文档或源代码以获取更详细的信息。</li>
+    </ul>
+  </li>
+</ol>
+
+<h1 id="drm_ioctl_get_stats">DRM_IOCTL_GET_STATS</h1>
+
+<p>它允许用户空间程序查询与 DRM 设备相关的统计信息。让我们来详细了解一下这个接口的作用和实现。</p>
+
+<ol>
+  <li><strong>接口作用</strong>：
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_GET_STATS</code> 允许用户空间程序获取与 DRM 设备相关的统计数据。</li>
+      <li>这个接口通常用于查询设备的性能指标、资源使用情况、错误统计等信息。</li>
+    </ul>
+  </li>
+  <li><strong>实现细节</strong>：
+    <ul>
+      <li>在 Linux 内核中，<code class="language-plaintext highlighter-rouge">DRM_IOCTL_GET_STATS</code> 的实现可能因不同的 DRM 驱动而异。</li>
+      <li>用户空间程序可以通过调用相应的 ioctl 函数来获取统计数据。</li>
+      <li>请注意，这个接口的具体实现可能因不同的驱动而有所不同，因此您可以查阅特定驱动的文档或源代码以获取更详细的信息。</li>
+    </ul>
+  </li>
+</ol>
+
+<h1 id="drm_ioctl_get_cap">DRM_IOCTL_GET_CAP</h1>
+
+<p>它允许用户空间程序查询与 DRM 设备相关的能力信息。让我们来详细了解一下这个接口的作用和实现。</p>
+
+<ol>
+  <li><strong>接口作用</strong>：
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_GET_CAP</code> 允许用户空间程序获取与 DRM 设备相关的能力数据。</li>
+      <li>这个接口通常用于查询设备支持的功能、特性和限制。</li>
+    </ul>
+  </li>
+  <li><strong>实现细节</strong>：
+    <ul>
+      <li>在 Linux 内核中，<code class="language-plaintext highlighter-rouge">DRM_IOCTL_GET_CAP</code> 的实现可能因不同的 DRM 驱动而异。</li>
+      <li>用户空间程序可以通过调用相应的 ioctl 函数来获取能力数据。</li>
+      <li>请注意，这个接口的具体实现可能因不同的驱动而有所不同，因此您可以查阅特定驱动的文档或源代码以获取更详细的信息。</li>
+    </ul>
+  </li>
+</ol>
+
+<h1 id="drm_ioctl_set_client_cap">DRM_IOCTL_SET_CLIENT_CAP</h1>
+
+<p>它允许用户空间程序设置与 DRM 设备相关的能力信息。让我们来详细了解一下这个接口的作用和实现。</p>
+
+<ol>
+  <li><strong>接口作用</strong>：
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_SET_CLIENT_CAP</code> 允许用户空间程序设置与 DRM 设备相关的能力数据。</li>
+      <li>这个接口通常用于查询设备支持的功能、特性和限制。</li>
+    </ul>
+  </li>
+  <li><strong>实现细节</strong>：
+    <ul>
+      <li>在 Linux 内核中，<code class="language-plaintext highlighter-rouge">DRM_IOCTL_SET_CLIENT_CAP</code> 的实现可能因不同的 DRM 驱动而异。</li>
+      <li>用户空间程序可以通过调用相应的 ioctl 函数来设置能力数据。</li>
+      <li>请注意，这个接口的具体实现可能因不同的驱动而有所不同，因此您可以查阅特定驱动的文档或源代码以获取更详细的信息。</li>
+    </ul>
+  </li>
+</ol>
+
+<h1 id="drm_ioctl_wait_vblank">DRM_IOCTL_WAIT_VBLANK</h1>
+
+<p>它允许用户空间程序在指定的vblank事件发生时阻塞或请求信号。让我们来详细了解一下这个接口的作用和实现：</p>
+
+<ol>
+  <li><strong>接口作用</strong>：
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_WAIT_VBLANK</code> 允许用户空间程序在指定的vblank事件发生时阻塞或请求信号。</li>
+      <li>这个接口通常用于与显示相关的同步操作，例如在进行页面翻转时等待vblank。</li>
+    </ul>
+  </li>
+  <li><strong>实现细节</strong>：
+    <ul>
+      <li>DRM 核心处理大部分vblank管理逻辑，包括过滤掉虚假中断、保持无竞争的空白计数、处理计数器回绕和重置，以及保持使用计数。</li>
+      <li>用户空间程序可以通过执行相应的 ioctl 函数来使用这个接口。</li>
+      <li>这个机制确保只有经过身份验证的调用者才能访问特定的 DRM 功能。</li>
+    </ul>
+  </li>
+</ol>
+
+<h1 id="drm_ioctl_mode_getgamma">DRM_IOCTL_MODE_GETGAMMA</h1>
+
+<p>用于从 <strong>Linux 内核模式设置（KMS）</strong> 中获取特定 <strong>CRTC（Cathode Ray Tube Controller）</strong> 的 <strong>伽马校正（Gamma Correction）</strong> 信息.</p>
+
+<p>详情如下：</p>
+
+<ol>
+  <li><strong>伽马校正是什么？</strong>
+    <ul>
+      <li><strong>伽马校正</strong> 是一种图像处理技术，用于调整显示设备的亮度和对比度。</li>
+      <li>它通过改变像素的亮度值来实现，以便更准确地显示不同亮度级别的图像。</li>
+    </ul>
+  </li>
+  <li><strong>DRM_IOCTL_MODE_GETGAMMA 的作用</strong>
+    <ul>
+      <li>通过调用 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_GETGAMMA</code>，应用程序可以获取有关特定 CRTC 的伽马校正信息。</li>
+      <li>这些信息可能包括伽马校正曲线、亮度和对比度的调整等。</li>
+    </ul>
+  </li>
+  <li><strong>其他 DRM IOCTL 命令</strong>
+    <ul>
+      <li>除了 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_GETGAMMA</code>，还有其他与显示设置相关的 IOCTL 命令，例如：
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_GETCRTC</code>：获取有关特定 CRTC 的信息。</li>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_SETCRTC</code>：设置 CRTC 参数。</li>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_ADDFB</code>：添加新的帧缓冲区对象。</li>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_RMFB</code>：移除帧缓冲区对象。</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ol>
+
+<h1 id="drm_ioctl_mode_dirtyfb">DRM_IOCTL_MODE_DIRTYFB</h1>
+
+<p>用于定义一个帧缓冲区区域为“脏”（数据已更改，因此需要重新显示）。这个 ioctl 使用了 <code class="language-plaintext highlighter-rouge">drm_mode_fb_dirty_cmd</code> 结构，其中包含一个 <code class="language-plaintext highlighter-rouge">num_clips</code> 字段，指示更改的区域数量.</p>
+
+<ol>
+  <li><strong>帧缓冲区是什么？</strong>
+    <ul>
+      <li><strong>帧缓冲区</strong> 是一个抽象的内存对象，用于向 CRTC 扫描输出像素。</li>
+      <li>应用程序通过 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_ADDFB</code>（2）ioctl 显式请求创建帧缓冲区，并接收一个不透明的句柄，可以传递给 KMS CRTC 控制、平面配置和页面翻转功能。</li>
+      <li>帧缓冲区依赖于底层内存管理器进行低级内存操作。</li>
+    </ul>
+  </li>
+  <li><strong>DRM_IOCTL_MODE_DIRTYFB 的作用</strong>
+    <ul>
+      <li>通过调用 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_DIRTYFB</code>，应用程序可以将特定帧缓冲区区域标记为“脏”。</li>
+      <li>这通常用于通知显示系统需要重新扫描和显示更改的像素数据。</li>
+    </ul>
+  </li>
+  <li><strong>其他 DRM IOCTL 命令</strong>
+    <ul>
+      <li>除了 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_DIRTYFB</code>，还有其他与显示设置相关的 IOCTL 命令，例如：
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_GETCRTC</code>：获取有关特定 CRTC 的信息。</li>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_SETCRTC</code>：设置 CRTC 参数。</li>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_ADDFB</code>：添加新的帧缓冲区对象。</li>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_RMFB</code>：移除帧缓冲区对象。</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ol>
+
+<h1 id="drm_ioctl_mode_atomic">DRM_IOCTL_MODE_ATOMIC</h1>
+
+<p>用于在 <strong>Linux 内核模式设置（KMS）</strong> 中执行 <strong>原子操作（Atomic Operation）</strong>。详情如下：</p>
+
+<ol>
+  <li><strong>KMS 是什么？</strong>
+    <ul>
+      <li><strong>KMS（Kernel Mode Setting）</strong> 是一种内核级别的图形显示设置机制，用于管理显示设备的模式和状态。</li>
+      <li>它允许用户空间应用程序与内核交互，以配置显示输出。</li>
+    </ul>
+  </li>
+  <li><strong>原子操作的概念</strong>
+    <ul>
+      <li>在图形渲染中，<strong>原子操作</strong> 是指一组状态更改，要么全部成功应用，要么全部失败，不会出现部分应用的情况。</li>
+      <li>在 KMS 中，原子操作用于一次性更新多个显示对象的状态，例如 CRTC、平面、连接器等。</li>
+    </ul>
+  </li>
+  <li><strong>DRM_IOCTL_MODE_ATOMIC 的作用</strong>
+    <ul>
+      <li>通过调用 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_ATOMIC</code>，应用程序可以提交一组原子操作，以更新显示管道的状态。</li>
+      <li>这些操作可以包括更改 CRTC 模式、平面配置、连接器状态等。</li>
+    </ul>
+  </li>
+  <li><strong>其他 DRM IOCTL 命令</strong>
+    <ul>
+      <li>除了 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_ATOMIC</code>，还有其他与显示设置相关的 IOCTL 命令，例如：
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_GETCRTC</code>：获取有关特定 CRTC 的信息。</li>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_SETCRTC</code>：设置 CRTC 参数。</li>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_ADDFB</code>：添加新的帧缓冲区对象。</li>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_RMFB</code>：移除帧缓冲区对象。</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ol>
+
+<h1 id="drm_ioctl_crtc_get_sequence">DRM_IOCTL_CRTC_GET_SEQUENCE</h1>
+
+<p>用于从 <strong>Linux 内核模式设置（KMS）</strong> 中获取特定 <strong>CRTC（Cathode Ray Tube Controller）</strong> 的 <strong>帧序列（Frame Sequence）</strong> 信息.</p>
+
+<p>详情如下：</p>
+
+<ol>
+  <li><strong>CRTC 是什么？</strong>
+    <ul>
+      <li><strong>CRTC</strong> 是显示控制器，负责将图形数据发送到显示设备（例如显示器或电视）。</li>
+      <li>它管理像素时钟、扫描线和帧缓冲区的刷新。</li>
+    </ul>
+  </li>
+  <li><strong>帧序列是什么？</strong>
+    <ul>
+      <li>在图形渲染中，<strong>帧序列</strong> 是指显示设备刷新图像的顺序。</li>
+      <li>通过调用 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_CRTC_GET_SEQUENCE</code>，应用程序可以获取有关特定 CRTC 的帧序列信息，例如当前帧数、垂直同步信号等。</li>
+    </ul>
+  </li>
+  <li><strong>其他 DRM IOCTL 命令</strong>
+    <ul>
+      <li>除了 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_CRTC_GET_SEQUENCE</code>，还有其他与显示设置相关的 IOCTL 命令，例如：
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_GETCRTC</code>：获取有关特定 CRTC 的信息。</li>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_SETCRTC</code>：设置 CRTC 参数。</li>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_ADDFB</code>：添加新的帧缓冲区对象。</li>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_RMFB</code>：移除帧缓冲区对象。</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ol>
+
+<h1 id="drm_ioctl_crtc_queue_sequence">DRM_IOCTL_CRTC_QUEUE_SEQUENCE</h1>
+
+<p>用于在 <strong>Linux 内核模式设置（KMS）</strong> 中将特定 <strong>CRTC（Cathode Ray Tube Controller）</strong> 的帧序列信息添加到队列中.</p>
+
+<p>以下是关于 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_CRTC_QUEUE_SEQUENCE</code> 的一些要点：</p>
+
+<ol>
+  <li><strong>CRTC 是什么？</strong>
+    <ul>
+      <li><strong>CRTC</strong> 是显示控制器，负责将图形数据发送到显示设备（例如显示器或电视）。</li>
+      <li>它管理像素时钟、扫描线和帧缓冲区的刷新。</li>
+    </ul>
+  </li>
+  <li><strong>帧序列是什么？</strong>
+    <ul>
+      <li>在图形渲染中，<strong>帧序列</strong> 是指显示设备刷新图像的顺序。</li>
+      <li>通过调用 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_CRTC_QUEUE_SEQUENCE</code>，应用程序可以将特定 CRTC 的帧序列信息添加到队列中。</li>
+    </ul>
+  </li>
+  <li><strong>其他 DRM IOCTL 命令</strong>
+    <ul>
+      <li>除了 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_CRTC_QUEUE_SEQUENCE</code>，还有其他与显示设置相关的 IOCTL 命令，例如：
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_GETCRTC</code>：获取有关特定 CRTC 的信息。</li>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_SETCRTC</code>：设置 CRTC 参数。</li>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_ADDFB</code>：添加新的帧缓冲区对象。</li>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_RMFB</code>：移除帧缓冲区对象。</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ol>
+
+<h1 id="magic--master">Magic &amp; Master</h1>
+
+<h2 id="drm_ioctl_get_magic">DRM_IOCTL_GET_MAGIC</h2>
+
+<p>是一对 <strong>IOCTL（Input/Output Control）命令</strong>。详情如下：</p>
+
+<ol>
+  <li><strong>魔数/幻数字（Magic Number）的作用</strong>
+    <ul>
+      <li>在图形设备驱动中，<code class="language-plaintext highlighter-rouge">DRM_IOCTL_GET_MAGIC</code> 用于设置魔数/幻数字，以进行 <strong>GEM ioctl</strong> 权限检查。</li>
+      <li>魔数是一个32位的标识符，用于验证对图形资源的访问权限。</li>
+    </ul>
+  </li>
+  <li><strong>具体操作</strong>
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_GET_MAGIC</code> 函数会返回一个32位的魔数，然后将该魔数传递给 <strong>DRM-Master</strong>。</li>
+      <li><strong>DRM-Master</strong> 使用此魔数通过 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_AUTH_MAGIC</code> 给发起鉴权的非 <strong>DRM-Master</strong> 应用程序授权。</li>
+    </ul>
+  </li>
+</ol>
+
+<h2 id="drm_ioctl_auth_magic">DRM_IOCTL_AUTH_MAGIC</h2>
+
+<p>它用于对非 DRM 主用户空间程序进行身份验证。让我们详细了解一下这个接口的作用和实现：</p>
+
+<ol>
+  <li><strong>接口作用</strong>：
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_AUTH_MAGIC</code> 用于对非 DRM 主用户空间程序进行身份验证。</li>
+      <li>具体流程如下：
+        <ol>
+          <li>非 DRM 主用户空间程序通过执行 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_GET_MAGIC</code> ioctl 从 DRM 设备获取一个唯一的令牌（32 位魔数）。</li>
+          <li>然后，用户空间程序将此令牌传递给 DRM 主（例如通过 IPC 或 X 客户端中的 DRI2Authenticate 请求）。</li>
+          <li>DRM 主进程随后使用 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_AUTH_MAGIC</code> ioctl 将令牌发送回 DRM 设备。</li>
+          <li>设备根据接收到的令牌，授予发起身份验证的非 DRM 主应用特殊权限。</li>
+        </ol>
+      </li>
+    </ul>
+  </li>
+  <li><strong>实现细节</strong>：
+    <ul>
+      <li>身份验证令牌允许非 DRM 主进程执行特定的特权操作。</li>
+      <li>通过将令牌与相应的文件描述符（fd）关联，设备授权应用访问特定资源或执行受限操作。</li>
+      <li>这种机制确保只有经过身份验证的调用者才能访问特定的 DRM 功能。</li>
+    </ul>
+  </li>
+</ol>
+
+<h2 id="drm_ioctl_set_master">DRM_IOCTL_SET_MASTER</h2>
+
+<p>它允许用户空间程序成为唯一的 DRM 主显示管理程序。执行此 ioctl 后，该程序获得了独占的权限，用于管理与显示相关的操作。相反，<code class="language-plaintext highlighter-rouge">DRM_IOCTL_DROP_MASTER</code> ioctl 可用于放弃 DRM 主身份。通常情况下，X 服务器（Xorg）充当 DRM 主。</p>
+
+<p>其他非 DRM 主用户空间程序可以通过 DRM-Auth 进行身份验证。具体过程如下：</p>
+
+<ol>
+  <li>执行 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_GET_MAGIC</code> ioctl，从 DRM 设备获取一个唯一的令牌（魔数）。</li>
+  <li>将此令牌传递给 DRM 主（例如通过 IPC 或 X 客户端中的 DRI2Authenticate 请求）。</li>
+  <li>DRM 主进程随后使用 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_AUTH_MAGIC</code> ioctl 将令牌发送回 DRM 设备。</li>
+  <li>基于接收到的令牌，设备授予发起身份验证的非 DRM 主应用特殊权限。</li>
+</ol>
+
+<p>这个身份验证令牌允许非 DRM 主进程执行特定的特权操作。通过将令牌与相应的文件描述符（fd）关联，设备授权应用访问特定资源或执行受限操作。这种机制确保只有经过身份验证的调用者才能访问特定的 DRM 功能。</p>
+
+<h2 id="drm_ioctl_drop_master">DRM_IOCTL_DROP_MASTER</h2>
+
+<p>它允许用户空间程序放弃 DRM 主身份。让我们详细了解一下这个接口的作用和实现：</p>
+
+<ol>
+  <li><strong>接口作用</strong>：
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_DROP_MASTER</code> 允许用户空间程序放弃 DRM 主身份。</li>
+      <li>当程序执行此 ioctl 时，它会失去独占管理显示相关操作的特权。</li>
+      <li>相反，<code class="language-plaintext highlighter-rouge">DRM_IOCTL_SET_MASTER</code> ioctl 可用于成为 DRM 主。</li>
+    </ul>
+  </li>
+  <li><strong>实现细节</strong>：
+    <ul>
+      <li>通过执行 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_DROP_MASTER</code>，用户空间程序可以放弃 DRM 主身份。</li>
+      <li>这在需要切换 DRM 主时很有用，例如在关闭/打开主设备节点时。</li>
+      <li>通常情况下，X 服务器（Xorg）充当 DRM 主。</li>
+    </ul>
+  </li>
+</ol>
+
+<h1 id="gem">GEM</h1>
+
+<h2 id="drm_ioctl_gem_close">DRM_IOCTL_GEM_CLOSE</h2>
+
+<p>它用于关闭 GEM 缓冲区（Graphics Execution Manager）。让我们详细了解一下这个接口的作用和实现：</p>
+
+<ol>
+  <li><strong>接口作用</strong>：
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_GEM_CLOSE</code> 用于关闭 GEM 缓冲区。</li>
+      <li>在执行此 ioctl 后，GEM 缓冲区的句柄将不再可用于当前进程，并且可能被 GEM API 重新用于新的 GEM 对象。</li>
+    </ul>
+  </li>
+  <li><strong>实现细节</strong>：
+    <ul>
+      <li>用户空间程序可以通过执行 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_GEM_CLOSE</code> 来关闭 GEM 缓冲区。</li>
+      <li>这在释放资源或管理内存时非常有用。</li>
+      <li>请注意，GEM 缓冲区的关闭不会立即释放内存，而是将其标记为不再使用，以便稍后进行回收。</li>
+    </ul>
+  </li>
+</ol>
+
+<h2 id="drm_ioctl_gem_flink">DRM_IOCTL_GEM_FLINK</h2>
+
+<p>它用于为 GEM 缓冲区（Graphics Execution Manager）创建一个名称。让我们详细了解一下这个接口的作用和实现：</p>
+
+<ol>
+  <li><strong>接口作用</strong>：
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_GEM_FLINK</code> 用于为 GEM 缓冲区创建一个名称。</li>
+      <li>在执行此 ioctl 后，您可以使用这个名称来引用该 GEM 缓冲区。</li>
+    </ul>
+  </li>
+  <li><strong>实现细节</strong>：
+    <ul>
+      <li>用户空间程序可以通过执行 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_GEM_FLINK</code> 来为 GEM 缓冲区创建一个名称。</li>
+      <li>这在需要在不同进程之间引用 GEM 对象时非常有用。</li>
+      <li>请注意，这个名称不能直接用于在 DRM API 中引用对象，应用程序必须使用 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_GEM_FLINK</code> 和 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_GEM_OPEN</code> ioctl 分别将句柄转换为名称和名称转换为句柄。</li>
+    </ul>
+  </li>
+</ol>
+
+<h2 id="drm_ioctl_gem_open">DRM_IOCTL_GEM_OPEN</h2>
+
+<p>它用于为 GEM 缓冲区（Graphics Execution Manager）创建一个名称。让我们详细了解一下这个接口的作用和实现：</p>
+
+<ol>
+  <li><strong>接口作用</strong>：
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_GEM_OPEN</code> 允许用户空间程序为 GEM 缓冲区创建一个名称。</li>
+      <li>在执行此 ioctl 后，您可以使用这个名称来引用该 GEM 缓冲区。</li>
+    </ul>
+  </li>
+  <li><strong>实现细节</strong>：
+    <ul>
+      <li>用户空间程序可以通过执行 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_GEM_OPEN</code> 来为 GEM 缓冲区创建一个名称。</li>
+      <li>这在需要在不同进程之间引用 GEM 对象时非常有用。</li>
+      <li>请注意，这个名称不能直接用于在 DRM API 中引用对象，应用程序必须使用 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_GEM_FLINK</code> 和 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_GEM_OPEN</code> ioctl 分别将句柄转换为名称和名称转换为句柄。</li>
+    </ul>
+  </li>
+</ol>
+
+<h2 id="drm_ioctl_prime_handle_to_fd">DRM_IOCTL_PRIME_HANDLE_TO_FD</h2>
+
+<p>它用于将 GEM 缓冲区（Graphics Execution Manager）的句柄转换为文件描述符（fd）。让我们详细了解一下这个接口的作用和实现：</p>
+
+<ol>
+  <li><strong>接口作用</strong>：
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_PRIME_HANDLE_TO_FD</code> 允许用户空间程序将 GEM 缓冲区的句柄转换为文件描述符。</li>
+      <li>这在需要在不同进程之间共享 GEM 缓冲区时非常有用，例如用于跨进程的纹理共享。</li>
+    </ul>
+  </li>
+  <li><strong>实现细节</strong>：
+    <ul>
+      <li>用户空间程序可以通过执行 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_PRIME_HANDLE_TO_FD</code> 来获取文件描述符。</li>
+      <li>这个接口通常与其他进程之间的 IPC（进程间通信）一起使用，以便共享 GEM 缓冲区。</li>
+      <li>请注意，这个接口的实现可能因不同的 DRM 驱动而有所不同，具体细节可以查阅特定驱动的文档或源代码。</li>
+    </ul>
+  </li>
+  <li>相关CMD <strong>DRM_IOCTL_PRIME_FD_TO_HANDLE</strong></li>
+</ol>
+
+<h1 id="resource">Resource</h1>
+
+<h2 id="drm_ioctl_mode_getresources">DRM_IOCTL_MODE_GETRESOURCES</h2>
+
+<p>它允许用户空间程序获取与 DRM 设备相关的资源信息。让我们详细了解一下这个接口的作用和实现：</p>
+
+<ol>
+  <li><strong>接口作用</strong>：
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_GETRESOURCES</code> 用于获取与 DRM 设备相关的资源信息。</li>
+      <li>这个接口通常用于查询设备的帧缓冲、连接器、CRTC（显示管道）和编码器的数量和标识符。</li>
+    </ul>
+  </li>
+  <li><strong>实现细节</strong>：
+    <ul>
+      <li>用户空间程序可以通过执行 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_GETRESOURCES</code> 来获取资源信息。</li>
+      <li>返回的结构体 <code class="language-plaintext highlighter-rouge">drm_mode_card_res</code> 包含了帧缓冲、连接器、CRTC 和编码器的数量以及相应的标识符。</li>
+      <li>这个接口对于初始化显示管道、资源管理和模式设置非常重要。</li>
+    </ul>
+  </li>
+</ol>
+
+<h2 id="drm_ioctl_mode_getplaneresources">DRM_IOCTL_MODE_GETPLANERESOURCES</h2>
+
+<p>它用于获取Direct Rendering Manager (DRM)的资源。DRM是Linux内核的一部分，负责处理图形硬件的底层细节。</p>
+
+<p>在使用<code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_GETPLANERESOURCES</code>时，你需要打开一个DRM设备（例如<code class="language-plaintext highlighter-rouge">/dev/dri/card0</code>），然后使用这个ioctl调用来获取资源。这些资源包括帧缓冲区（framebuffers）、CRTC（Cathode Ray Tube Controller）、连接器（connectors）和编码器（encoders）。</p>
+
+<p>这些资源的含义如下：</p>
+<ul>
+  <li><strong>帧缓冲区（Framebuffers）</strong>：它们包含要显示的像素数据。</li>
+  <li><strong>CRTC</strong>：CRTC代表整个显示管道，它从一个或多个平面获取像素数据进行混合。</li>
+  <li><strong>连接器（Connectors）</strong>：在DRM中，连接器是显示接收器的一般抽象，包括固定面板或任何其他可以以某种形式显示像素的设备。</li>
+  <li><strong>编码器（Encoders）</strong>：编码器从CRTC获取像素数据，并将其转换为任何连接的连接器可以接受的格式。</li>
+</ul>
+
+<p>请注意，这些资源的数量可能会根据你的硬件配置和当前的显示设置而变化。在使用这些资源之前，你可能需要检查它们的可用性和状态。。</p>
+
+<h2 id="drm_ioctl_mode_getcrtc">DRM_IOCTL_MODE_GETCRTC</h2>
+
+<p>是一种用于获取有关给定 CRTC（Cathode Ray Tube Controller）的信息的 IOCTL（Input/Output Control）命令。详情如下：</p>
+
+<ol>
+  <li><strong>CRTC 是什么？</strong>
+    <ul>
+      <li>CRTC 是显示控制器，负责将图形数据发送到显示设备（例如显示器或电视）。</li>
+      <li>它管理像素时钟、扫描线和帧缓冲区的刷新。</li>
+    </ul>
+  </li>
+  <li><strong>DRM_IOCTL_MODE_GETCRTC 的作用</strong>
+    <ul>
+      <li>通过调用 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_GETCRTC</code>，应用程序可以获取有关特定 CRTC 的信息。</li>
+      <li>这些信息可能包括 CRTC 的当前模式、分辨率、刷新率等。</li>
+    </ul>
+  </li>
+  <li><strong>其他 DRM IOCTL 命令</strong>
+    <ul>
+      <li>除了 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_GETCRTC</code>，还有其他与显示设置相关的 IOCTL 命令，例如：
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_GETOUTPUT</code>：获取有关特定输出的信息。</li>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_SETCRTC</code>：设置 CRTC 参数。</li>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_ADDFB</code>：添加新的帧缓冲区对象。</li>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_RMFB</code>：移除帧缓冲区对象。</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ol>
+
+<h2 id="drm_ioctl_mode_setcrtc">DRM_IOCTL_MODE_SETCRTC</h2>
+
+<p>用于在 <strong>Linux 内核模式设置（KMS）</strong> 中设置特定 <strong>CRTC（Cathode Ray Tube Controller）</strong> 的参数。详情如下：</p>
+
+<ol>
+  <li><strong>CRTC 是什么？</strong>
+    <ul>
+      <li><strong>CRTC</strong> 是显示控制器，负责将图形数据发送到显示设备（例如显示器或电视）。</li>
+      <li>它管理像素时钟、扫描线和帧缓冲区的刷新。</li>
+    </ul>
+  </li>
+  <li><strong>DRM_IOCTL_MODE_SETCRTC 的作用</strong>
+    <ul>
+      <li>通过调用 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_SETCRTC</code>，应用程序可以设置特定 CRTC 的参数，例如分辨率、刷新率等。</li>
+      <li>这对于配置显示输出非常重要。</li>
+    </ul>
+  </li>
+  <li><strong>其他 DRM IOCTL 命令</strong>
+    <ul>
+      <li>除了 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_SETCRTC</code>，还有其他与显示设置相关的 IOCTL 命令，例如：
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_GETCRTC</code>：获取有关特定 CRTC 的信息。</li>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_ADDFB</code>：添加新的帧缓冲区对象。</li>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_RMFB</code>：移除帧缓冲区对象。</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ol>
+
+<h2 id="drm_ioctl_mode_getplane">DRM_IOCTL_MODE_GETPLANE</h2>
+
+<p>用于从 <strong>Linux 内核模式设置（KMS）</strong> 中获取特定 <strong>平面（Plane）</strong> 的信息。详情如下：</p>
+
+<ol>
+  <li><strong>DRM_IOCTL_MODE_GETPLANE 的作用</strong>
+    <ul>
+      <li>通过调用 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_GETPLANE</code>，应用程序可以获取有关特定平面的信息。</li>
+      <li>这些信息可能包括平面的当前状态、位置、大小、像素格式等。</li>
+    </ul>
+  </li>
+  <li><strong>其他 DRM IOCTL 命令</strong>
+    <ul>
+      <li>除了 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_GETPLANE</code>，还有其他与显示设置相关的 IOCTL 命令，例如：
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_GETCRTC</code>：获取有关特定 CRTC 的信息。</li>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_SETCRTC</code>：设置 CRTC 参数。</li>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_ADDFB</code>：添加新的帧缓冲区对象。</li>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_RMFB</code>：移除帧缓冲区对象。</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ol>
+
+<h2 id="drm_ioctl_mode_setplane">DRM_IOCTL_MODE_SETPLANE</h2>
+
+<p>用于在 <strong>Linux 内核模式设置（KMS）</strong> 中设置特定 <strong>平面（Plane）</strong> 的参数。详情如下：</p>
+
+<ol>
+  <li><strong>DRM_IOCTL_MODE_SETPLANE 的作用</strong>
+    <ul>
+      <li>通过调用 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_SETPLANE</code>，应用程序可以设置特定平面的参数，例如分辨率、刷新率等。</li>
+      <li>这对于配置显示输出非常重要。</li>
+    </ul>
+  </li>
+  <li><strong>其他 DRM IOCTL 命令</strong>
+    <ul>
+      <li>除了 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_SETPLANE</code>，还有其他与显示设置相关的 IOCTL 命令，例如：
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_GETCRTC</code>：获取有关特定 CRTC 的信息。</li>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_SETCRTC</code>：设置 CRTC 参数。</li>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_ADDFB</code>：添加新的帧缓冲区对象。</li>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_RMFB</code>：移除帧缓冲区对象。</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ol>
+
+<h1 id="cursor">Cursor</h1>
+
+<h2 id="drm_ioctl_mode_cursor">DRM_IOCTL_MODE_CURSOR</h2>
+
+<p>用于操作特定 <strong>CRTC（Cathode Ray Tube Controller）</strong> 的 <strong>光标平面（Cursor Plane）</strong>。详情如下：</p>
+
+<ol>
+  <li><strong>CRTC 是什么？</strong>
+    <ul>
+      <li><strong>CRTC</strong> 是显示控制器，负责将图形数据发送到显示设备（例如显示器或电视）。</li>
+      <li>它管理像素时钟、扫描线和帧缓冲区的刷新。</li>
+    </ul>
+  </li>
+  <li><strong>光标平面（Cursor Plane）的作用</strong>
+    <ul>
+      <li><strong>光标平面</strong> 是一种特殊的显示平面，用于显示光标或其他小型图形元素。</li>
+      <li>通过调用 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_CURSOR</code>，应用程序可以操作光标平面，例如设置光标的位置、大小、图像等。</li>
+    </ul>
+  </li>
+  <li><strong>其他 DRM IOCTL 命令</strong>
+    <ul>
+      <li>除了 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_CURSOR</code>，还有其他与显示设置相关的 IOCTL 命令，例如：
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_GETCRTC</code>：获取有关特定 CRTC 的信息。</li>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_SETCRTC</code>：设置 CRTC 参数。</li>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_ADDFB</code>：添加新的帧缓冲区对象。</li>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_RMFB</code>：移除帧缓冲区对象。</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ol>
+
+<h2 id="drm_ioctl_mode_cursor2">DRM_IOCTL_MODE_CURSOR2</h2>
+
+<p>用于操作特定 <strong>CRTC（Cathode Ray Tube Controller）</strong> 的 <strong>光标平面（Cursor Plane）</strong>⁵。详情如下：</p>
+
+<ol>
+  <li><strong>CRTC 是什么？</strong>
+    <ul>
+      <li><strong>CRTC</strong> 是显示控制器，负责将图形数据发送到显示设备（例如显示器或电视）。</li>
+      <li>它管理像素时钟、扫描线和帧缓冲区的刷新。</li>
+    </ul>
+  </li>
+  <li><strong>光标平面（Cursor Plane）的作用</strong>
+    <ul>
+      <li><strong>光标平面</strong> 是一种特殊的显示平面，用于显示光标或其他小型图形元素。</li>
+      <li>通过调用 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_CURSOR2</code>，应用程序可以操作光标平面，例如设置光标的位置、大小、图像等。</li>
+    </ul>
+  </li>
+  <li><strong>其他 DRM IOCTL 命令</strong>
+    <ul>
+      <li>除了 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_CURSOR2</code>，还有其他与显示设置相关的 IOCTL 命令，例如：
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_GETCRTC</code>：获取有关特定 CRTC 的信息。</li>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_SETCRTC</code>：设置 CRTC 参数。</li>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_ADDFB</code>：添加新的帧缓冲区对象。</li>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_RMFB</code>：移除帧缓冲区对象。</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ol>
+
+<h2 id="区别">区别</h2>
+
+<p><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_CURSOR</code> 和 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_CURSOR2</code> 都是 <strong>IOCTL（Input/Output Control）命令</strong>，用于操作特定 <strong>CRTC（Cathode Ray Tube Controller）</strong> 的 <strong>光标平面（Cursor Plane）</strong>。它们之间的区别如下：</p>
+
+<ol>
+  <li><strong>DRM_IOCTL_MODE_CURSOR</strong>
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_CURSOR</code> 是旧版本的命令，用于设置光标平面的参数，例如光标的位置、大小、图像等。</li>
+      <li>它遵循旧的光标平面操作语义。</li>
+    </ul>
+  </li>
+  <li><strong>DRM_IOCTL_MODE_CURSOR2</strong>
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_CURSOR2</code> 是新版本的命令，用于相同的目的，但可能具有更丰富的功能。</li>
+      <li>它可能支持更多属性，例如更灵活的光标形状、透明度等。</li>
+    </ul>
+  </li>
+</ol>
+
+<p>总之，<code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_CURSOR2</code> 可能是对 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_CURSOR</code> 的改进或扩展，以提供更好的光标平面控制。</p>
+
+<h1 id="sync-obj">Sync Obj</h1>
+
+<h2 id="drm_ioctl_syncobj_create">DRM_IOCTL_SYNCOBJ_CREATE</h2>
+
+<p>用于在 <strong>Linux 内核模式设置（KMS）</strong> 中创建 <strong>同步对象（Sync Object）</strong>。详情如下：</p>
+
+<ol>
+  <li><strong>同步对象是什么？</strong>
+    <ul>
+      <li><strong>同步对象</strong> 是一种用于协调多个并发任务之间的同步机制。</li>
+      <li>在图形渲染中，同步对象通常用于确保不同图形操作的执行顺序或避免竞态条件。</li>
+    </ul>
+  </li>
+  <li><strong>DRM_IOCTL_SYNCOBJ_CREATE 的作用</strong>
+    <ul>
+      <li>通过调用 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_SYNCOBJ_CREATE</code>，应用程序可以创建一个同步对象。</li>
+      <li>同步对象可以用于跟踪图形操作的完成状态，例如等待渲染完成或等待其他事件。</li>
+    </ul>
+  </li>
+  <li><strong>其他 DRM IOCTL 命令</strong>
+    <ul>
+      <li>除了 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_SYNCOBJ_CREATE</code>，还有其他与显示设置相关的 IOCTL 命令，例如：
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_GETCRTC</code>：获取有关特定 CRTC 的信息。</li>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_SETCRTC</code>：设置 CRTC 参数。</li>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_ADDFB</code>：添加新的帧缓冲区对象。</li>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_RMFB</code>：移除帧缓冲区对象。</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ol>
+
+<h2 id="drm_ioctl_syncobj_handle_to_fd">DRM_IOCTL_SYNCOBJ_HANDLE_TO_FD</h2>
+
+<p>用于在 <strong>Linux 内核模式设置（KMS）</strong> 中将特定 <strong>同步对象（Sync Object）</strong> 的句柄转换为文件描述符（File Descriptor）。</p>
+
+<p>详情如下：</p>
+
+<ol>
+  <li><strong>同步对象是什么？</strong>
+    <ul>
+      <li><strong>同步对象</strong> 是一种用于协调多个并发任务之间的同步机制。</li>
+      <li>在图形渲染中，同步对象通常用于确保不同图形操作的执行顺序或避免竞态条件。</li>
+    </ul>
+  </li>
+  <li><strong>DRM_IOCTL_SYNCOBJ_HANDLE_TO_FD 的作用</strong>
+    <ul>
+      <li>通过调用 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_SYNCOBJ_HANDLE_TO_FD</code>，应用程序可以将同步对象的句柄转换为文件描述符。</li>
+      <li>文件描述符是一种用于在进程之间传递句柄的机制。这些文件描述符是不透明的，只能用于传递同步对象句柄。</li>
+    </ul>
+  </li>
+  <li><strong>其他 DRM IOCTL 命令</strong>
+    <ul>
+      <li>除了 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_SYNCOBJ_HANDLE_TO_FD</code>，还有其他与显示设置相关的 IOCTL 命令，例如：
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_GETCRTC</code>：获取有关特定 CRTC 的信息。</li>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_SETCRTC</code>：设置 CRTC 参数。</li>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_ADDFB</code>：添加新的帧缓冲区对象。</li>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_RMFB</code>：移除帧缓冲区对象。</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ol>
+
+<h2 id="drm_ioctl_syncobj_signal">DRM_IOCTL_SYNCOBJ_SIGNAL</h2>
+
+<p>用于在 <strong>Linux 内核模式设置（KMS）</strong> 中直接触发特定 <strong>同步对象（Sync Object）</strong>。这个命令提供了一种用户空间手动触发同步对象的机制。</p>
+
+<p>以下是关于 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_SYNCOBJ_SIGNAL</code> 的一些要点：</p>
+
+<ol>
+  <li><strong>同步对象是什么？</strong>
+    <ul>
+      <li><strong>同步对象</strong> 是一种用于协调多个并发任务之间的同步机制。</li>
+      <li>在图形渲染中，同步对象通常用于确保不同图形操作的执行顺序或避免竞态条件。</li>
+    </ul>
+  </li>
+  <li><strong>DRM_IOCTL_SYNCOBJ_SIGNAL 的作用</strong>
+    <ul>
+      <li>通过调用 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_SYNCOBJ_SIGNAL</code>，用户空间可以直接触发特定同步对象。</li>
+      <li>这对于手动触发同步对象非常有用。</li>
+    </ul>
+  </li>
+  <li><strong>其他 DRM IOCTL 命令</strong>
+    <ul>
+      <li>除了 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_SYNCOBJ_SIGNAL</code>，还有其他与显示设置相关的 IOCTL 命令，例如：
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_GETCRTC</code>：获取有关特定 CRTC 的信息。</li>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_SETCRTC</code>：设置 CRTC 参数。</li>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_ADDFB</code>：添加新的帧缓冲区对象。</li>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_RMFB</code>：移除帧缓冲区对象。</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ol>
+
+<h1 id="lease">Lease</h1>
+
+<h2 id="drm_ioctl_mode_create_lease">DRM_IOCTL_MODE_CREATE_LEASE</h2>
+
+<p>用于在 <strong>Linux 内核模式设置（KMS）</strong> 中创建 <strong>租约（Lease）</strong>。详情如下：</p>
+
+<ol>
+  <li><strong>租约是什么？</strong>
+    <ul>
+      <li><strong>租约</strong> 是一种机制，用于管理图形资源的共享和访问权限。</li>
+      <li>在多个图形客户端之间，租约允许控制对特定资源（例如帧缓冲区、平面、连接器等）的访问。</li>
+    </ul>
+  </li>
+  <li><strong>DRM_IOCTL_MODE_CREATE_LEASE 的作用</strong>
+    <ul>
+      <li>通过调用 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_CREATE_LEASE</code>，应用程序可以创建一个租约。</li>
+      <li>租约可以用于协调多个图形客户端之间的资源共享，以确保资源的正确使用和访问权限。</li>
+    </ul>
+  </li>
+  <li><strong>其他 DRM IOCTL 命令</strong>
+    <ul>
+      <li>除了 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_CREATE_LEASE</code>，还有其他与显示设置相关的 IOCTL 命令，例如：
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_GETCRTC</code>：获取有关特定 CRTC 的信息。</li>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_SETCRTC</code>：设置 CRTC 参数。</li>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_ADDFB</code>：添加新的帧缓冲区对象。</li>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_RMFB</code>：移除帧缓冲区对象。</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ol>
+
+<h2 id="drm_ioctl_mode_list_lessees">DRM_IOCTL_MODE_LIST_LESSEES</h2>
+
+<p>用于从 <strong>Linux 内核模式设置（KMS）</strong> 中获取特定 <strong>租约（Lease）</strong> 所有租户（lessees）的标识符（identifiers）。</p>
+
+<p>以下是关于 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_LIST_LESSEES</code> 的一些要点：</p>
+
+<ol>
+  <li><strong>租约是什么？</strong>
+    <ul>
+      <li><strong>租约</strong> 是一种机制，用于管理图形资源的共享和访问权限。</li>
+      <li>在多个图形客户端之间，租约允许控制对特定资源（例如帧缓冲区、平面、连接器等）的访问。</li>
+    </ul>
+  </li>
+  <li><strong>DRM_IOCTL_MODE_LIST_LESSEES 的作用</strong>
+    <ul>
+      <li>通过调用 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_LIST_LESSEES</code>，应用程序可以获取特定租约的所有租户的标识符。</li>
+      <li>这对于了解租约的使用情况以及资源共享非常有用。</li>
+    </ul>
+  </li>
+  <li><strong>其他 DRM IOCTL 命令</strong>
+    <ul>
+      <li>除了 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_LIST_LESSEES</code>，还有其他与显示设置相关的 IOCTL 命令，例如：
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_GETCRTC</code>：获取有关特定 CRTC 的信息。</li>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_SETCRTC</code>：设置 CRTC 参数。</li>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_ADDFB</code>：添加新的帧缓冲区对象。</li>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_RMFB</code>：移除帧缓冲区对象。</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ol>
+
+<h2 id="drm_ioctl_mode_get_lease">DRM_IOCTL_MODE_GET_LEASE</h2>
+
+<p>用于从 <strong>Linux 内核模式设置（KMS）</strong> 中获取特定 <strong>租约（Lease）</strong> 的信息。详情如下：</p>
+
+<ol>
+  <li><strong>租约是什么？</strong>
+    <ul>
+      <li><strong>租约</strong> 是一种机制，用于管理图形资源的共享和访问权限。</li>
+      <li>在多个图形客户端之间，租约允许控制对特定资源（例如帧缓冲区、平面、连接器等）的访问。</li>
+    </ul>
+  </li>
+  <li><strong>DRM_IOCTL_MODE_GET_LEASE 的作用</strong>
+    <ul>
+      <li>通过调用 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_GET_LEASE</code>，应用程序可以获取有关特定租约的信息。</li>
+      <li>这些信息可能包括租约的状态、租约的资源列表、租约的持有者等。</li>
+    </ul>
+  </li>
+  <li><strong>其他 DRM IOCTL 命令</strong>
+    <ul>
+      <li>除了 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_GET_LEASE</code>，还有其他与显示设置相关的 IOCTL 命令，例如：
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_CREATE_LEASE</code>：创建租约。</li>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_LIST_LESSEES</code>：列出租约的所有租户。</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ol>
+
+<h2 id="drm_ioctl_mode_revoke_lease">DRM_IOCTL_MODE_REVOKE_LEASE</h2>
+
+<p>用于在 <strong>Linux 内核模式设置（KMS）</strong> 中撤销特定 <strong>租约（Lease）</strong> 的权限。</p>
+
+<p>以下是关于 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_REVOKE_LEASE</code> 的一些要点：</p>
+
+<ol>
+  <li><strong>租约是什么？</strong>
+    <ul>
+      <li><strong>租约</strong> 是一种机制，用于管理图形资源的共享和访问权限。</li>
+      <li>在多个图形客户端之间，租约允许控制对特定资源（例如帧缓冲区、平面、连接器等）的访问。</li>
+    </ul>
+  </li>
+  <li><strong>DRM_IOCTL_MODE_REVOKE_LEASE 的作用</strong>
+    <ul>
+      <li>通过调用 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_REVOKE_LEASE</code>，应用程序可以撤销特定租约的权限。</li>
+      <li>这对于限制资源的访问或更改租约的状态非常有用。</li>
+    </ul>
+  </li>
+  <li><strong>其他 DRM IOCTL 命令</strong>
+    <ul>
+      <li>除了 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_REVOKE_LEASE</code>，还有其他与显示设置相关的 IOCTL 命令，例如：
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_CREATE_LEASE</code>：创建租约。</li>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_LIST_LESSEES</code>：列出租约的所有租户。</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ol>]]></content><author><name>kevin</name></author><category term="DRM" /><summary type="html"><![CDATA[DRM_IOCTL_VERSION]]></summary></entry><entry><title type="html">进程内存检查</title><link href="http://localhost:4000/blog/jekyll/2018-05-20-memory_check.html" rel="alternate" type="text/html" title="进程内存检查" /><published>2018-05-20T00:00:00+08:00</published><updated>2018-05-20T00:00:00+08:00</updated><id>http://localhost:4000/blog/jekyll/memory_check</id><content type="html" xml:base="http://localhost:4000/blog/jekyll/2018-05-20-memory_check.html"><![CDATA[<h1 id="1进程内存映射文件smaps">1.进程内存映射文件smaps</h1>
 
 <p>在内核的数据结构中，进程、进程使用内存、虚拟内存块和一个二进制程序文件的对应关系图如下。</p>
 
@@ -2913,416 +3842,4 @@ weston-10.0.0./compositor/executable.c
 
 <h3 id="41911-explicit-synchronization">4.19.11 explicit-synchronization</h3>
 
-<p><img src="/blog/assets/wayland/explicit_sync.png" alt="explicit_sync" /></p>]]></content><author><name>Kevin zhang</name></author><category term="Jekyll" /><summary type="html"><![CDATA[1.编译]]></summary></entry><entry><title type="html">YUV编码</title><link href="http://localhost:4000/blog/jekyll/2018-03-21-YUV.html" rel="alternate" type="text/html" title="YUV编码" /><published>2018-03-21T00:00:00+08:00</published><updated>2018-03-21T00:00:00+08:00</updated><id>http://localhost:4000/blog/jekyll/YUV</id><content type="html" xml:base="http://localhost:4000/blog/jekyll/2018-03-21-YUV.html"><![CDATA[<h1 id="1简介">1.简介</h1>
-
-<p>YUV数据由Y、U、V三个分量组成，现在通常说的YUV指的是YCbCr。</p>
-
-<p>Y：表示<strong>亮度</strong>（Luminance、Luma），占8bit（1字节）</p>
-
-<p>Cb、Cr：表示<strong>色度</strong>（Chrominance、Chroma）</p>
-
-<p>Cb（U）：蓝色色度分量，占8bit（1字节）</p>
-
-<p>Cr（V）：红色色度分量，占8bit（1字节）</p>
-
-<h1 id="2采样方式444-422-420的区别">2.采样方式(444, 422, 420的区别)</h1>
-<p>把Y、U、V数据转变为R、G、B时用到</p>
-
-<h2 id="21-采样方式">2.1 采样方式</h2>
-<p>采样方式通常用A:B:C的形式来表示，比如4:4:4、4:2:2、4:2:0等</p>
-<ul>
-  <li>
-    <p>A：假定在一块A*2个像素的概念区域，一般都是4.</p>
-  </li>
-  <li>
-    <p>B：第1行的色度(UV)采样数目。</p>
-  </li>
-  <li>
-    <p>C：第2行的色度(UV)采样数目</p>
-  </li>
-</ul>
-
-<p>所以这里的B,C指的分别是在第一行，第二行UV采样的数目。 C的值一般要么等于B，要么等于0</p>
-
-<p>示意图1：
-<img src="/blog/assets/YUV/sampling.png" alt="sampling" /></p>
-
-<p>示意图2</p>
-
-<p><img src="/blog/assets/YUV/sampling_2.jpg" alt="sampling_2" /></p>
-
-<p>上图中，不管是哪种采样格式，Y分量都是全水平、全垂直分辨率采样的，每一个像素都有自己独立的Y分量</p>
-
-<h2 id="22-占用字节数">2.2 占用字节数</h2>
-
-<p>由上可以推算出不同采样方式下每个像素需要的平均字节数。</p>
-
-<ul>
-  <li>
-    <p>4:4:4</p>
-
-    <p>一个像素YUV各占一个字节，总共3个字节 24bit</p>
-  </li>
-  <li>
-    <p>4:2:2</p>
-
-    <p>8个像素 ： 8个Y + 2个U +2个V +2个U +2个V = 16字节</p>
-
-    <p>每个像素：16字节/8 = 2个字节 16bit</p>
-  </li>
-  <li>
-    <p>4:2:0</p>
-
-    <p>8个像素 ： 8个Y + 2个U +2个V  = 12字节</p>
-
-    <p>每个像素：12字节/8 = 1.5个字节 12bit</p>
-  </li>
-</ul>
-
-<h1 id="3存储方式planar-semi-planar和packed的区别">3.存储方式(Planar, Semi-Planar和Packed的区别)</h1>
-
-<p>存储格式，表示的是Y、U、V数据是如何排列和存储的。 读取或写入Y、U、V数据时用到.</p>
-
-<h2 id="31-分类">3.1 分类</h2>
-<p>YUV的存储格式可以分为3大类：</p>
-
-<table>
-  <thead>
-    <tr>
-      <th>名称</th>
-      <th>特点</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>Planar(平面)</td>
-      <td>Y、U、V分量分开单独存储,名称通常以字母p结尾,  3个planar</td>
-    </tr>
-    <tr>
-      <td>Semi-Planar（半平面）</td>
-      <td>Y分量单独存储，U、V分量交错存储, 名称通常以字母sp结尾, 1个planar</td>
-    </tr>
-    <tr>
-      <td>Packed（紧凑）</td>
-      <td>或者叫Interleaved(交错), Y、U、V分量交错存储,  1个planar</td>
-    </tr>
-  </tbody>
-</table>
-
-<p><img src="/blog/assets/YUV/yuv.png" alt="" /></p>
-
-<h2 id="32-444">3.2 444</h2>
-
-<p><img src="/blog/assets/YUV/444.png" alt="" width="540px" height="150px" /></p>
-
-<p>I444 和YV24 主要是UV次序的不同</p>
-
-<p><img src="/blog/assets/YUV/I444.png" alt="" width="540px" height="200px" /></p>
-
-<p>semi-planar NV24 和NV42 主要是UV交替次序的不同</p>
-
-<p><img src="/blog/assets/YUV/NV24.png" alt="" width="540px" height="200px" /></p>
-
-<h2 id="33-422">3.3 422</h2>
-
-<p><img src="/blog/assets/YUV/422.png" alt="" width="540px" height="150px" /></p>
-
-<p><strong>Planar I422 YV16 区别：VU 次序</strong></p>
-
-<p><img src="/blog/assets/YUV/YV16.png" alt="" width="540px" height="200px" /></p>
-
-<p><strong>Semi-Planar NV16 NV61 区别：VU 次序</strong></p>
-
-<p><img src="/blog/assets/YUV/NV16.png" alt="" width="540px" height="200px" /></p>
-
-<p><strong>Packed UYVY YUYV YVYU 区别：VU 次序</strong></p>
-
-<p><img src="/blog/assets/YUV/YUYV.png" alt="" width="540px" height="200px" /></p>
-
-<h2 id="34-420">3.4 420</h2>
-
-<p><img src="/blog/assets/YUV/420.png" alt="" width="540px" height="150px" /></p>
-
-<p><strong>Planar I420 YV12</strong></p>
-
-<p><img src="/blog/assets/YUV/I420.png" alt="" width="540px" height="200px" /></p>
-
-<p><strong>采样方式420 I420，像素示意图</strong></p>
-
-<p><img src="/blog/assets/YUV/I420_pixel.png" alt="" width="540px" height="200px" /></p>
-
-<p><strong>Semi-Planar NV12 NV21</strong></p>
-
-<p><img src="/blog/assets/YUV/NV12.png" alt="" width="540px" height="200px" /></p>
-
-<p><strong>采样方式420，各种存储方式， 像素示意图</strong></p>
-
-<p><img src="/blog/assets/YUV/420_pixel.png" alt="" width="540px" height="350px" /></p>
-
-<h1 id="4借助ffmpeg格式转换">4.借助ffmpeg格式转换</h1>
-
-<ol>
-  <li>PNG -&gt; YUV
-    <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code> ffmpeg <span class="nt">-i</span> <span class="k">in</span>.png <span class="nt">-s</span> 512x512 <span class="nt">-pix_fmt</span> yuv420p out.yuv
-</code></pre></div>    </div>
-  </li>
-  <li>YUV -&gt; PNG
-    <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code> ffmpeg <span class="nt">-s</span> 512x512 <span class="nt">-pix_fmt</span> yuv420p <span class="nt">-i</span> <span class="k">in</span>.yuv out.jpg
-</code></pre></div>    </div>
-  </li>
-</ol>
-
-<p><strong>YUV 文件只是存储数据的文件，没有大小信息，所以转换时一定要给出它的尺寸</strong></p>
-
-<p><strong>PNG 文件含有尺寸信息，所以转YUV时可以不指定大小，默认原大小</strong></p>
-
-<h1 id="5借助ffplay显示yuv">5.借助ffplay显示YUV</h1>
-
-<p>可以通过ffplay显示YUV数据。</p>
-
-<ul>
-  <li>
-    <p>YUV中直接存储的是所有像素的颜色信息（可以理解为是图像的一种原始数据）</p>
-  </li>
-  <li>
-    <p>必须得设置YUV的尺寸（-s）、像素格式（-pix_fmt）才能正常显示</p>
-  </li>
-</ul>
-
-<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ffplay <span class="nt">-s</span> 512x512 <span class="nt">-pix_fmt</span> yuv420p <span class="k">in</span>.yuv
-<span class="c"># 在ffplay中</span>
-<span class="c"># -s已经过期，建议改为：-video_size</span>
-<span class="c"># -pix_fmt已经过期，建议改为：-pixel_format</span>
-ffplay <span class="nt">-video_size</span> 512x512 <span class="nt">-pixel_format</span> yuv420p <span class="k">in</span>.yuv
-</code></pre></div></div>
-
-<h1 id="6glsl实现yuv转rgba">6.GLSL实现YUV转RGBA</h1>
-
-<h2 id="61-基本计算公式">6.1 基本计算公式</h2>
-
-<p>根据的标准不同，有不同的计算公式。下面是一个可以在shader中使用的计算方法。 只要先得到Y,U,V， 就可以按下面方法转换RGB</p>
-
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="s">"   yuv.y = yuv.y - 0.5;                                  </span><span class="se">\n</span><span class="s">"</span>
-    <span class="s">"   yuv.z = yuv.z - 0.5;                                  </span><span class="se">\n</span><span class="s">"</span>
-    <span class="s">"                                                         </span><span class="se">\n</span><span class="s">"</span>
-    <span class="s">"   rgb.r = yuv.x + 1.402 * yuv.z;                        </span><span class="se">\n</span><span class="s">"</span>
-    <span class="s">"   rgb.g = yuv.x - 0.34413 * yuv.y - 0.71414 * yuv.z;    </span><span class="se">\n</span><span class="s">"</span>
-    <span class="s">"   rgb.b = yuv.x + 1.772 * yuv.y;                        </span><span class="se">\n</span><span class="s">"</span>
-</code></pre></div></div>
-<p>YUV到RGBA的转换其实就两个要点</p>
-<ul>
-  <li>构建合适的纹理</li>
-  <li>在shader中提前YUV</li>
-</ul>
-
-<h2 id="62-yuv444p-argb">6.2 YUV444P-&gt;ARGB</h2>
-
-<h3 id="621-构建纹理">6.2.1 构建纹理</h3>
-
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">static</span> <span class="n">GLuint</span> <span class="nf">build_texture_4_yuv444p</span><span class="p">(</span><span class="kt">int</span> <span class="n">width</span><span class="p">,</span> <span class="kt">int</span> <span class="n">height</span><span class="p">,</span> <span class="kt">void</span> <span class="o">*</span><span class="n">data</span><span class="p">){</span>
-    <span class="n">GLuint</span> <span class="n">texture</span><span class="p">;</span>
-    <span class="n">glGenTextures</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">texture</span><span class="p">);</span>
-    <span class="n">glBindTexture</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="n">texture</span><span class="p">);</span>
-
-    <span class="n">glTexParameteri</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="n">GL_TEXTURE_WRAP_S</span><span class="p">,</span> <span class="n">GL_REPEAT</span><span class="p">);</span>    
-    <span class="n">glTexParameteri</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="n">GL_TEXTURE_WRAP_T</span><span class="p">,</span> <span class="n">GL_REPEAT</span><span class="p">);</span>        
-    <span class="n">glTexParameteri</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="n">GL_TEXTURE_MIN_FILTER</span><span class="p">,</span> <span class="n">GL_LINEAR</span><span class="p">);</span>    
-    <span class="n">glTexParameteri</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="n">GL_TEXTURE_MAG_FILTER</span><span class="p">,</span> <span class="n">GL_LINEAR</span><span class="p">);</span>
-
-    <span class="n">glTexImage2D</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">GL_RED</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">GL_RED</span><span class="p">,</span> <span class="n">GL_UNSIGNED_BYTE</span><span class="p">,</span> <span class="n">data</span><span class="p">);</span>
-
-    <span class="n">glBindTexture</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span> 
-    <span class="k">return</span> <span class="n">texture</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<h3 id="622-在shader中提取yuv">6.2.2 在shader中提取YUV</h3>
-
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">static</span> <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">yuv444_2_rgba_frag_src</span> <span class="o">=</span>    
-    <span class="s">"uniform sampler2D    Sampler;                              </span><span class="se">\n</span><span class="s">"</span>
-    <span class="s">"varying highp vec2   TexCoord;                             </span><span class="se">\n</span><span class="s">"</span>
-    <span class="s">"void main (void)                                           </span><span class="se">\n</span><span class="s">"</span>
-    <span class="s">"{                                                          </span><span class="se">\n</span><span class="s">"</span>
-    <span class="s">"   highp vec3 yuv;                                         </span><span class="se">\n</span><span class="s">"</span>
-    <span class="s">"   highp vec3 rgb;                                         </span><span class="se">\n</span><span class="s">"</span>    
-    <span class="s">"   yuv.x = texture2D(Sampler, TexCoord).r;                 </span><span class="se">\n</span><span class="s">"</span>
-    <span class="s">"   yuv.y = texture2D(Sampler, vec2(TexCoord.x, TexCoord.y+0.3333333)).r;</span><span class="se">\n</span><span class="s">"</span>
-    <span class="s">"   yuv.z = texture2D(Sampler, vec2(TexCoord.x, TexCoord.y+0.6666667)).r;</span><span class="se">\n</span><span class="s">"</span>
-    <span class="s">"                                                         </span><span class="se">\n</span><span class="s">"</span>
-    <span class="s">"   yuv.y = yuv.y - 0.5;                                  </span><span class="se">\n</span><span class="s">"</span>
-    <span class="s">"   yuv.z = yuv.z - 0.5;                                  </span><span class="se">\n</span><span class="s">"</span>
-<span class="c1">// 矩阵计算方法</span>
-    <span class="s">"   rgb = mat3(                                           </span><span class="se">\n</span><span class="s">"</span>
-                    <span class="s">"1,       1,        1,                    </span><span class="se">\n</span><span class="s">"</span>
-                    <span class="s">"0,     -.34413,    1.772,                </span><span class="se">\n</span><span class="s">"</span>
-                    <span class="s">"1.402, -.71414,    0                     </span><span class="se">\n</span><span class="s">"</span>
-    <span class="s">"              ) * yuv;                                   </span><span class="se">\n</span><span class="s">"</span>
-    <span class="s">"                                                         </span><span class="se">\n</span><span class="s">"</span>    
-    <span class="s">"   gl_FragColor = vec4(rgb, 1.0);                        </span><span class="se">\n</span><span class="s">"</span>
-    <span class="s">"}                                                        </span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
-
-</code></pre></div></div>
-
-<h2 id="63-nv24-argb">6.3 NV24-&gt;ARGB</h2>
-
-<h3 id="631-构建纹理">6.3.1 构建纹理</h3>
-
-<p>这里需要构建两个纹理，一个是Y的纹理， 一个是UV的纹理</p>
-
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">static</span> <span class="n">GLuint</span> <span class="nf">build_texture_4_nv24_y</span><span class="p">(</span><span class="kt">int</span> <span class="n">width</span><span class="p">,</span> <span class="kt">int</span> <span class="n">height</span><span class="p">,</span> <span class="kt">void</span> <span class="o">*</span><span class="n">y_data</span><span class="p">){</span>
-    <span class="n">GLuint</span> <span class="n">texture</span><span class="p">;</span>
-  
-    <span class="n">glGenTextures</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">texture</span><span class="p">);</span>
-    <span class="n">glBindTexture</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="n">texture</span><span class="p">);</span>
-
-    <span class="n">glTexParameteri</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="n">GL_TEXTURE_WRAP_S</span><span class="p">,</span> <span class="n">GL_CLAMP_TO_EDGE</span><span class="p">);</span>    
-    <span class="n">glTexParameteri</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="n">GL_TEXTURE_WRAP_T</span><span class="p">,</span> <span class="n">GL_CLAMP_TO_EDGE</span><span class="p">);</span>        
-    <span class="n">glTexParameteri</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="n">GL_TEXTURE_MIN_FILTER</span><span class="p">,</span> <span class="n">GL_LINEAR</span><span class="p">);</span>    
-    <span class="n">glTexParameteri</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="n">GL_TEXTURE_MAG_FILTER</span><span class="p">,</span> <span class="n">GL_LINEAR</span><span class="p">);</span>
-    
-    <span class="n">glTexImage2D</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">GL_LUMINANCE</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">GL_LUMINANCE</span><span class="p">,</span> <span class="n">GL_UNSIGNED_BYTE</span><span class="p">,</span> <span class="n">y_data</span><span class="p">);</span>
-    
-    <span class="n">glBindTexture</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span> 
-    <span class="k">return</span> <span class="n">texture</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">static</span> <span class="n">GLuint</span> <span class="nf">build_texture_4_nv24_uv</span><span class="p">(</span><span class="kt">int</span> <span class="n">width</span><span class="p">,</span> <span class="kt">int</span> <span class="n">height</span><span class="p">,</span> <span class="kt">void</span> <span class="o">*</span><span class="n">uv_data</span><span class="p">){</span>
-    <span class="n">GLuint</span> <span class="n">texture</span><span class="p">;</span>
-  
-    <span class="n">glGenTextures</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">texture</span><span class="p">);</span>
-    <span class="n">glBindTexture</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="n">texture</span><span class="p">);</span>
-
-    <span class="n">glTexParameteri</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="n">GL_TEXTURE_WRAP_S</span><span class="p">,</span> <span class="n">GL_CLAMP_TO_EDGE</span><span class="p">);</span>    
-    <span class="n">glTexParameteri</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="n">GL_TEXTURE_WRAP_T</span><span class="p">,</span> <span class="n">GL_CLAMP_TO_EDGE</span><span class="p">);</span>        
-    <span class="n">glTexParameteri</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="n">GL_TEXTURE_MIN_FILTER</span><span class="p">,</span> <span class="n">GL_LINEAR</span><span class="p">);</span>    
-    <span class="n">glTexParameteri</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="n">GL_TEXTURE_MAG_FILTER</span><span class="p">,</span> <span class="n">GL_LINEAR</span><span class="p">);</span>
-    
-    <span class="n">glTexImage2D</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">GL_LUMINANCE_ALPHA</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">GL_LUMINANCE_ALPHA</span><span class="p">,</span> <span class="n">GL_UNSIGNED_BYTE</span><span class="p">,</span> <span class="n">uv_data</span><span class="p">);</span>
-    
-    <span class="n">glBindTexture</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span> 
-    <span class="k">return</span> <span class="n">texture</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<h3 id="632-在shader中提取yuv">6.3.2 在shader中提取YUV</h3>
-
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">static</span> <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">nv24_2_rgba_frag_src</span> <span class="o">=</span>        
-    <span class="s">"uniform sampler2D    Sampler_y;                            </span><span class="se">\n</span><span class="s">"</span>
-    <span class="s">"uniform sampler2D    Sampler_uv;                           </span><span class="se">\n</span><span class="s">"</span>    
-    <span class="s">"varying highp vec2   TexCoord;                             </span><span class="se">\n</span><span class="s">"</span>
-    <span class="s">"void main (void)                                           </span><span class="se">\n</span><span class="s">"</span>
-    <span class="s">"{                                                          </span><span class="se">\n</span><span class="s">"</span>
-    <span class="s">"   highp vec3 yuv;                                         </span><span class="se">\n</span><span class="s">"</span>
-    <span class="s">"   highp vec3 rgb;                                         </span><span class="se">\n</span><span class="s">"</span>    
-    <span class="s">"                                                           </span><span class="se">\n</span><span class="s">"</span>    
-    <span class="s">"   yuv.x = texture2D(Sampler_y, TexCoord).r;             </span><span class="se">\n</span><span class="s">"</span>
-    <span class="s">"   yuv.y = texture2D(Sampler_uv, TexCoord).r;            </span><span class="se">\n</span><span class="s">"</span>    
-    <span class="s">"   yuv.z = texture2D(Sampler_uv, TexCoord).a;            </span><span class="se">\n</span><span class="s">"</span>
-    <span class="s">"                                                         </span><span class="se">\n</span><span class="s">"</span>
-    <span class="s">"   yuv.y = yuv.y - 0.5;                                  </span><span class="se">\n</span><span class="s">"</span>
-    <span class="s">"   yuv.z = yuv.z - 0.5;                                  </span><span class="se">\n</span><span class="s">"</span>
-    <span class="s">"                                                         </span><span class="se">\n</span><span class="s">"</span>
-    <span class="s">"   rgb.r = yuv.x + 1.402 * yuv.z;                        </span><span class="se">\n</span><span class="s">"</span>
-    <span class="s">"   rgb.g = yuv.x - 0.34413 * yuv.y - 0.71414 * yuv.z;    </span><span class="se">\n</span><span class="s">"</span>
-    <span class="s">"   rgb.b = yuv.x + 1.772 * yuv.y;                        </span><span class="se">\n</span><span class="s">"</span>        
-    <span class="s">"                                                         </span><span class="se">\n</span><span class="s">"</span>    
-    <span class="s">"   gl_FragColor = vec4(rgb, 1.0);                        </span><span class="se">\n</span><span class="s">"</span>
-    <span class="s">"}                                                        </span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
-</code></pre></div></div>
-
-<h2 id="64-nv16-argb">6.4 NV16-&gt;ARGB</h2>
-
-<h3 id="641-构建纹理">6.4.1 构建纹理</h3>
-
-<p>这里需要构建两个纹理，一个是Y的纹理， 一个是UV的纹理</p>
-
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">static</span> <span class="n">GLuint</span> <span class="nf">build_texture_4_nv16_y</span><span class="p">(</span><span class="kt">int</span> <span class="n">width</span><span class="p">,</span> <span class="kt">int</span> <span class="n">height</span><span class="p">,</span> <span class="kt">void</span> <span class="o">*</span><span class="n">data</span><span class="p">){</span>
-    <span class="n">GLuint</span> <span class="n">texture</span><span class="p">;</span>
-  
-    <span class="n">glGenTextures</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">texture</span><span class="p">);</span>
-    <span class="n">glBindTexture</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="n">texture</span><span class="p">);</span>
-
-    <span class="n">glTexParameteri</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="n">GL_TEXTURE_WRAP_S</span><span class="p">,</span> <span class="n">GL_CLAMP_TO_EDGE</span><span class="p">);</span>    
-    <span class="n">glTexParameteri</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="n">GL_TEXTURE_WRAP_T</span><span class="p">,</span> <span class="n">GL_CLAMP_TO_EDGE</span><span class="p">);</span>        
-    <span class="n">glTexParameteri</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="n">GL_TEXTURE_MIN_FILTER</span><span class="p">,</span> <span class="n">GL_LINEAR</span><span class="p">);</span>    
-    <span class="n">glTexParameteri</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="n">GL_TEXTURE_MAG_FILTER</span><span class="p">,</span> <span class="n">GL_LINEAR</span><span class="p">);</span>
-    
-    <span class="n">glTexImage2D</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">GL_LUMINANCE</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">GL_LUMINANCE</span><span class="p">,</span> <span class="n">GL_UNSIGNED_BYTE</span><span class="p">,</span> <span class="n">data</span><span class="p">);</span>
-    
-    <span class="n">glBindTexture</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span> 
-    <span class="k">return</span> <span class="n">texture</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<p><strong>注意glTexImage2D()的第四参数值发生了变化</strong></p>
-
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">static</span> <span class="n">GLuint</span> <span class="nf">build_texture_4_nv16_uv</span><span class="p">(</span><span class="kt">int</span> <span class="n">width</span><span class="p">,</span> <span class="kt">int</span> <span class="n">height</span><span class="p">,</span> <span class="kt">void</span> <span class="o">*</span><span class="n">data</span><span class="p">){</span>
-    <span class="n">GLuint</span> <span class="n">texture</span><span class="p">;</span>
-  
-    <span class="n">glGenTextures</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">texture</span><span class="p">);</span>
-    <span class="n">glBindTexture</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="n">texture</span><span class="p">);</span>
-
-    <span class="n">glTexParameteri</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="n">GL_TEXTURE_WRAP_S</span><span class="p">,</span> <span class="n">GL_CLAMP_TO_EDGE</span><span class="p">);</span>    
-    <span class="n">glTexParameteri</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="n">GL_TEXTURE_WRAP_T</span><span class="p">,</span> <span class="n">GL_CLAMP_TO_EDGE</span><span class="p">);</span>        
-    <span class="n">glTexParameteri</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="n">GL_TEXTURE_MIN_FILTER</span><span class="p">,</span> <span class="n">GL_LINEAR</span><span class="p">);</span>    
-    <span class="n">glTexParameteri</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="n">GL_TEXTURE_MAG_FILTER</span><span class="p">,</span> <span class="n">GL_LINEAR</span><span class="p">);</span>
-    
-    <span class="n">glTexImage2D</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">GL_LUMINANCE_ALPHA</span><span class="p">,</span> <span class="n">width</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">GL_LUMINANCE_ALPHA</span><span class="p">,</span> <span class="n">GL_UNSIGNED_BYTE</span><span class="p">,</span> <span class="n">data</span><span class="p">);</span>
-    
-    <span class="n">glBindTexture</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span> 
-    <span class="k">return</span> <span class="n">texture</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div></div>
-<h3 id="642-在shader中提取yuv">6.4.2 在shader中提取YUV</h3>
-
-<p>与NV24方法相同</p>
-
-<h2 id="65-nv12-argb">6.5 NV12-&gt;ARGB</h2>
-
-<h3 id="651-构建纹理">6.5.1 构建纹理</h3>
-
-<p>这里需要构建两个纹理，一个是Y的纹理， 一个是UV的纹理</p>
-
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">static</span> <span class="n">GLuint</span> <span class="nf">build_texture_4_nv12_y</span><span class="p">(</span><span class="kt">int</span> <span class="n">width</span><span class="p">,</span> <span class="kt">int</span> <span class="n">height</span><span class="p">,</span> <span class="kt">void</span> <span class="o">*</span><span class="n">data</span><span class="p">){</span>
-    <span class="n">GLuint</span> <span class="n">texture</span><span class="p">;</span>
-  
-    <span class="n">glGenTextures</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">texture</span><span class="p">);</span>
-    <span class="n">glBindTexture</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="n">texture</span><span class="p">);</span>
-
-    <span class="n">glTexParameteri</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="n">GL_TEXTURE_WRAP_S</span><span class="p">,</span> <span class="n">GL_CLAMP_TO_EDGE</span><span class="p">);</span>    
-    <span class="n">glTexParameteri</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="n">GL_TEXTURE_WRAP_T</span><span class="p">,</span> <span class="n">GL_CLAMP_TO_EDGE</span><span class="p">);</span>        
-    <span class="n">glTexParameteri</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="n">GL_TEXTURE_MIN_FILTER</span><span class="p">,</span> <span class="n">GL_LINEAR</span><span class="p">);</span>    
-    <span class="n">glTexParameteri</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="n">GL_TEXTURE_MAG_FILTER</span><span class="p">,</span> <span class="n">GL_LINEAR</span><span class="p">);</span>
-    
-    <span class="n">glTexImage2D</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">GL_LUMINANCE</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">GL_LUMINANCE</span><span class="p">,</span> <span class="n">GL_UNSIGNED_BYTE</span><span class="p">,</span> <span class="n">data</span><span class="p">);</span>
-    
-    <span class="n">glBindTexture</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span> 
-    <span class="k">return</span> <span class="n">texture</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div></div>
-<p><strong>注意glTexImage2D()的第四,五参数值发生了变化</strong></p>
-
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">static</span> <span class="n">GLuint</span> <span class="nf">build_texture_4_nv12_uv</span><span class="p">(</span><span class="kt">int</span> <span class="n">width</span><span class="p">,</span> <span class="kt">int</span> <span class="n">height</span><span class="p">,</span> <span class="kt">void</span> <span class="o">*</span><span class="n">data</span><span class="p">){</span>
-    <span class="n">GLuint</span> <span class="n">texture</span><span class="p">;</span>
-  
-    <span class="n">glGenTextures</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">texture</span><span class="p">);</span>
-    <span class="n">glBindTexture</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="n">texture</span><span class="p">);</span>
-
-    <span class="n">glTexParameteri</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="n">GL_TEXTURE_WRAP_S</span><span class="p">,</span> <span class="n">GL_CLAMP_TO_EDGE</span><span class="p">);</span>    
-    <span class="n">glTexParameteri</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="n">GL_TEXTURE_WRAP_T</span><span class="p">,</span> <span class="n">GL_CLAMP_TO_EDGE</span><span class="p">);</span>        
-    <span class="n">glTexParameteri</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="n">GL_TEXTURE_MIN_FILTER</span><span class="p">,</span> <span class="n">GL_LINEAR</span><span class="p">);</span>    
-    <span class="n">glTexParameteri</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="n">GL_TEXTURE_MAG_FILTER</span><span class="p">,</span> <span class="n">GL_LINEAR</span><span class="p">);</span>
-    <span class="n">CHK_GL_ERR</span><span class="p">();</span>
-    
-    <span class="n">glTexImage2D</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">GL_LUMINANCE_ALPHA</span><span class="p">,</span> <span class="n">width</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">height</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">GL_LUMINANCE_ALPHA</span><span class="p">,</span> <span class="n">GL_UNSIGNED_BYTE</span><span class="p">,</span> <span class="n">data</span><span class="p">);</span>
-    <span class="n">CHK_GL_ERR</span><span class="p">();</span>
-    
-    <span class="n">glBindTexture</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span> 
-    <span class="k">return</span> <span class="n">texture</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<h3 id="652-在shader中提取yuv">6.5.2 在shader中提取YUV</h3>
-
-<p>与NV24方法相同</p>]]></content><author><name>Kevin</name></author><category term="Jekyll" /><summary type="html"><![CDATA[1.简介]]></summary></entry></feed>
+<p><img src="/blog/assets/wayland/explicit_sync.png" alt="explicit_sync" /></p>]]></content><author><name>Kevin zhang</name></author><category term="Jekyll" /><summary type="html"><![CDATA[1.编译]]></summary></entry></feed>
