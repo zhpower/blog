@@ -378,6 +378,16 @@
       <li>请注意，这个接口的具体实现可能因不同的驱动而有所不同，因此您可以查阅特定驱动的文档或源代码以获取更详细的信息。</li>
     </ul>
   </li>
+  <li><strong>DRM_CLIENT_CAP_ASPECT_RATIO</strong>:
+    <ul>
+      <li>
+        <p>是一个客户端能力标志，用于指示用户空间应用程序是否支持图像的纵横比信息。如果应用程序支持此标志，内核将在模式中传递纵横比信息。这对于显示图像时保持正确的纵横比非常重要。</p>
+      </li>
+      <li>
+        <p>如果设置为 1，DRM 内核将向用户空间公开原子属性。这隐式启用了 DRM_CLIENT_CAP_UNIVERSAL_PLANES 和 DRM_CLIENT_CAP_ASPECT_RATIO。如果驱动程序不支持原子模式设置，启用此功能将失败并返回 -EOPNOTSUPP 错误。这个功能是在内核版本 4.0 中引入的1。</p>
+      </li>
+    </ul>
+  </li>
 </ol>
 
 <h1 id="drm_ioctl_wait_vblank">DRM_IOCTL_WAIT_VBLANK</h1>
@@ -396,6 +406,20 @@
       <li>DRM 核心处理大部分vblank管理逻辑，包括过滤掉虚假中断、保持无竞争的空白计数、处理计数器回绕和重置，以及保持使用计数。</li>
       <li>用户空间程序可以通过执行相应的 ioctl 函数来使用这个接口。</li>
       <li>这个机制确保只有经过身份验证的调用者才能访问特定的 DRM 功能。</li>
+    </ul>
+  </li>
+  <li><strong>垂直同步（VSYNC</strong>）：
+    <ul>
+      <li>在图形渲染中，垂直同步是一种技术，用于确保图像在显示器上的刷新与显示器的垂直空白期（vertical blanking interval）同步。</li>
+      <li>vblank(<strong>垂直空白期</strong>)是显示器在绘制一帧图像后，准备绘制下一帧之间的时间间隔。</li>
+    </ul>
+  </li>
+  <li><strong>drmWaitVBlank 函数</strong>：
+    <ul>
+      <li>这个函数用于等待垂直同步信号。</li>
+      <li>它接受一个 DRM 设备文件描述符（file descriptor）和一个表示显示输出的 CRTC（Cathode Ray Tube Controller）的 ID。
+当垂直同步信号到达时，函数会返回。</li>
+      <li>在游戏开发和图形渲染中，drmWaitVBlank 可以用于确保页面翻转（page flip）与垂直同步对齐，从而避免屏幕撕裂（tearing）。</li>
     </ul>
   </li>
 </ol>

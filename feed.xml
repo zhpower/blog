@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.2">Jekyll</generator><link href="http://localhost:4000/blog/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/blog/" rel="alternate" type="text/html" /><updated>2024-04-22T19:43:09+08:00</updated><id>http://localhost:4000/blog/feed.xml</id><title type="html">学习笔记</title><subtitle>Build Jekyll site with the GitBook style.
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.2">Jekyll</generator><link href="http://localhost:4000/blog/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/blog/" rel="alternate" type="text/html" /><updated>2024-04-23T17:28:09+08:00</updated><id>http://localhost:4000/blog/feed.xml</id><title type="html">学习笔记</title><subtitle>Build Jekyll site with the GitBook style.
 </subtitle><author><name>kevin_zh</name></author><entry><title type="html">misc</title><link href="http://localhost:4000/blog/jekyll/2022-06-22-misc.html" rel="alternate" type="text/html" title="misc" /><published>2022-06-22T00:00:00+08:00</published><updated>2022-06-22T00:00:00+08:00</updated><id>http://localhost:4000/blog/jekyll/misc</id><content type="html" xml:base="http://localhost:4000/blog/jekyll/2022-06-22-misc.html"><![CDATA[<h1 id="kref">kref</h1>
 
 <p>kref_init 是一个用于初始化内核对象引用计数器（krefs）的函数。它允许你为你的对象添加引用计数，确保在多个地方使用和传递对象时，代码的正确性。以下是关于 kref_init 的一些重要信息：</p>
@@ -537,78 +537,6 @@ cpu_addr是由dma_alloc_noncoherent返回的虚拟地址。
   </li>
 </ol>
 
-<h1 id="drm-blob">DRM Blob</h1>
-
-<p>当涉及到 DRM（Direct Rendering Manager）中的“blob”时，我们实际上在讨论一种特定类型的属性。让我详细解释一下：</p>
-
-<ol>
-  <li>什么是 Blob？</li>
-</ol>
-
-<ul>
-  <li>在 DRM 中，Blob 是一种特殊的属性，用于存储自定义数据块。它允许用户空间应用程序将自定义结构体数据传递给内核空间。</li>
-  <li>Blob 通常用于存储一些不适合使用标准属性的数据，例如模式信息、LUT（查找表）数据、校准数据等。</li>
-</ul>
-
-<ol>
-  <li>Blob 的结构和用法：</li>
-</ol>
-
-<ul>
-  <li>
-    <p>Blob 由两部分组成：</p>
-
-    <ul>
-      <li>
-        <p>Blob ID：每个 Blob 都有一个唯一的 ID，用于在内核中标识该 Blob。</p>
-      </li>
-      <li>
-        <p>Blob 数据：这是一个自定义长度的内存块，可以存储任何类型的数据。</p>
-      </li>
-    </ul>
-  </li>
-  <li>
-    <p>Blob 可以存储各种信息，例如显示模式（mode）的详细信息、颜色校准数据、Gamma 表等。</p>
-  </li>
-</ul>
-
-<ol>
-  <li>Blob 的示例用途：</li>
-</ol>
-
-<ul>
-  <li>
-    <p>模式信息（Mode Information）：Blob 可以存储显示模式的详细信息，例如分辨率、刷新率、像素格式等。</p>
-  </li>
-  <li>
-    <p>颜色校准数据：如果您需要在显示设备上进行颜色校准，可以使用 Blob 存储校准数据。</p>
-  </li>
-  <li>
-    <p>Gamma 表：Gamma 表用于调整显示设备的亮度和对比度。这些数据可以存储在 Blob 中。</p>
-  </li>
-</ul>
-
-<ol>
-  <li>如何操作 Blob？</li>
-</ol>
-
-<ul>
-  <li>
-    <p>用户空间应用程序可以通过 DRM 接口来创建、获取和设置 Blob。</p>
-  </li>
-  <li>
-    <p>创建 Blob：使用 drmModeCreatePropertyBlob 函数来创建一个 Blob，并将自定义数据传递给内核。</p>
-  </li>
-  <li>
-    <p>获取 Blob 数据：使用 drmModeGetPropertyBlob 函数来获取 Blob 中存储的数据。</p>
-  </li>
-  <li>
-    <p>设置 Blob 数据：使用 drmModeAtomicAddProperty 函数将 Blob ID 添加到 Atomic 请求中，从而修改 Blob 数据。</p>
-  </li>
-</ul>
-
-<p>总之，Blob 是一种用于存储自定义数据的特殊属性，允许用户空间应用程序与内核交换非标准化的信息。它在 DRM 中的应用范围很广，例如显示模式、颜色校准和 Gamma 表等。</p>
-
 <h1 id="completion">completion</h1>
 
 <p>init_completion() 是Linux内核中用于完成事件通知机制的一个函数，主要用于进程间或线程间的同步。这个函数初始化一个 completion 结构体，该结构体用于表示某个事件是否已经发生。在多线程或多进程编程中，有时需要一个线程或进程等待另一个线程或进程完成某个任务。</p>
@@ -719,6 +647,90 @@ cpu_addr是由dma_alloc_noncoherent返回的虚拟地址。
 <span class="n">module_init</span><span class="p">(</span><span class="n">my_init</span><span class="p">);</span>
 <span class="n">module_exit</span><span class="p">(</span><span class="n">my_exit</span><span class="p">);</span>
 </code></pre></div></div>
+
+<h1 id="kobject_uevent_env">kobject_uevent_env</h1>
+
+<p>它是 <strong>Linux 内核</strong> 中的一个函数，用于在 <strong>kobject</strong> 状态发生变化时发送 <strong>uevent</strong> 到用户空间。让我详细解释一下：</p>
+
+<ol>
+  <li><strong>kobject</strong>：
+    <ul>
+      <li><strong>kobject</strong> 是内核中的一个抽象对象，用于表示各种内核数据结构，例如设备、驱动程序、总线等。</li>
+      <li>每个 <strong>kobject</strong> 都有一个名称、引用计数和其他属性。</li>
+    </ul>
+  </li>
+  <li><strong>uevent</strong>：
+    <ul>
+      <li><strong>uevent</strong> 是用户空间事件的缩写，用于通知用户空间程序内核中的状态变化。</li>
+      <li>例如，当设备插入或移除时，内核会生成相应的 <strong>uevent</strong>。</li>
+    </ul>
+  </li>
+  <li><strong><code class="language-plaintext highlighter-rouge">kobject_uevent_env</code> 函数</strong>：
+    <ul>
+      <li>这个函数用于发送 <strong>uevent</strong> 到用户空间。</li>
+      <li>它接受一个指向 <strong>kobject</strong> 的指针和一个表示 <strong>uevent</strong> 的环境变量数组。</li>
+      <li>用户空间程序可以监听这些事件并做出相应的处理。</li>
+    </ul>
+  </li>
+  <li><strong>使用示例</strong>：
+    <ul>
+      <li>在设备驱动程序中，当设备状态发生变化时，例如设备插入或移除，可以使用 <code class="language-plaintext highlighter-rouge">kobject_uevent_env</code> 发送相应的 <strong>uevent</strong>。</li>
+      <li>用户空间程序收到这些事件后，可以根据需要执行操作。</li>
+    </ul>
+  </li>
+</ol>
+
+<p>以下是一个简单的示例代码，展示了如何在内核模块中使用 <code class="language-plaintext highlighter-rouge">kobject_uevent_env</code> 发送 <strong>uevent</strong>：</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;linux/module.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;linux/init.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;linux/kobject.h&gt;</span><span class="cp">
+</span>
+<span class="k">static</span> <span class="k">struct</span> <span class="n">kobject</span> <span class="o">*</span><span class="n">my_kobj</span><span class="p">;</span>
+
+<span class="k">static</span> <span class="kt">int</span> <span class="nf">my_uevent</span><span class="p">(</span><span class="k">struct</span> <span class="n">kset</span> <span class="o">*</span><span class="n">kset</span><span class="p">,</span> <span class="k">struct</span> <span class="n">kobject</span> <span class="o">*</span><span class="n">kobj</span><span class="p">,</span> <span class="k">struct</span> <span class="n">kobj_uevent_env</span> <span class="o">*</span><span class="n">env</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="c1">// Add custom environment variables to the uevent</span>
+    <span class="n">add_uevent_var</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="s">"MY_CUSTOM_VAR=hello_world"</span><span class="p">);</span>
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">static</span> <span class="k">struct</span> <span class="n">kset_uevent_ops</span> <span class="n">my_uevent_ops</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="p">.</span><span class="n">uevent</span> <span class="o">=</span> <span class="n">my_uevent</span><span class="p">,</span>
+<span class="p">};</span>
+
+<span class="k">static</span> <span class="kt">int</span> <span class="n">__init</span> <span class="nf">my_module_init</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">my_kobj</span> <span class="o">=</span> <span class="n">kobject_create_and_add</span><span class="p">(</span><span class="s">"my_kobject"</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">my_kobj</span><span class="p">)</span>
+        <span class="k">return</span> <span class="o">-</span><span class="n">ENOMEM</span><span class="p">;</span>
+
+    <span class="n">my_kobj</span><span class="o">-&gt;</span><span class="n">kset</span> <span class="o">=</span> <span class="n">kset_create_and_add</span><span class="p">(</span><span class="s">"my_kset"</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">my_kobj</span><span class="o">-&gt;</span><span class="n">kset</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">kobject_put</span><span class="p">(</span><span class="n">my_kobj</span><span class="p">);</span>
+        <span class="k">return</span> <span class="o">-</span><span class="n">ENOMEM</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">my_kobj</span><span class="o">-&gt;</span><span class="n">kset</span><span class="o">-&gt;</span><span class="n">uevent_ops</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">my_uevent_ops</span><span class="p">;</span>
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">static</span> <span class="kt">void</span> <span class="n">__exit</span> <span class="nf">my_module_exit</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">kset_unregister</span><span class="p">(</span><span class="n">my_kobj</span><span class="o">-&gt;</span><span class="n">kset</span><span class="p">);</span>
+    <span class="n">kobject_put</span><span class="p">(</span><span class="n">my_kobj</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="n">module_init</span><span class="p">(</span><span class="n">my_module_init</span><span class="p">);</span>
+<span class="n">module_exit</span><span class="p">(</span><span class="n">my_module_exit</span><span class="p">);</span>
+<span class="n">MODULE_LICENSE</span><span class="p">(</span><span class="s">"GPL"</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>在此示例中，我们创建了一个名为 <code class="language-plaintext highlighter-rouge">my_kobject</code> 的 <strong>kobject</strong>，并将其添加到一个名为 <code class="language-plaintext highlighter-rouge">my_kset</code> 的 <strong>kset</strong> 中。然后，我们设置了一个自定义的 <strong>uevent</strong>，将环境变量 <code class="language-plaintext highlighter-rouge">MY_CUSTOM_VAR</code> 添加到 <strong>uevent</strong> 中。</p>
+
+<p>请注意，实际应用中，您需要根据您的需求自定义更多的环境变量和处理逻辑。</p>
 
 <h1 id="benchmark">benchmark</h1>
 
@@ -2003,6 +2015,16 @@ end
       <li>请注意，这个接口的具体实现可能因不同的驱动而有所不同，因此您可以查阅特定驱动的文档或源代码以获取更详细的信息。</li>
     </ul>
   </li>
+  <li><strong>DRM_CLIENT_CAP_ASPECT_RATIO</strong>:
+    <ul>
+      <li>
+        <p>是一个客户端能力标志，用于指示用户空间应用程序是否支持图像的纵横比信息。如果应用程序支持此标志，内核将在模式中传递纵横比信息。这对于显示图像时保持正确的纵横比非常重要。</p>
+      </li>
+      <li>
+        <p>如果设置为 1，DRM 内核将向用户空间公开原子属性。这隐式启用了 DRM_CLIENT_CAP_UNIVERSAL_PLANES 和 DRM_CLIENT_CAP_ASPECT_RATIO。如果驱动程序不支持原子模式设置，启用此功能将失败并返回 -EOPNOTSUPP 错误。这个功能是在内核版本 4.0 中引入的1。</p>
+      </li>
+    </ul>
+  </li>
 </ol>
 
 <h1 id="drm_ioctl_wait_vblank">DRM_IOCTL_WAIT_VBLANK</h1>
@@ -2021,6 +2043,20 @@ end
       <li>DRM 核心处理大部分vblank管理逻辑，包括过滤掉虚假中断、保持无竞争的空白计数、处理计数器回绕和重置，以及保持使用计数。</li>
       <li>用户空间程序可以通过执行相应的 ioctl 函数来使用这个接口。</li>
       <li>这个机制确保只有经过身份验证的调用者才能访问特定的 DRM 功能。</li>
+    </ul>
+  </li>
+  <li><strong>垂直同步（VSYNC</strong>）：
+    <ul>
+      <li>在图形渲染中，垂直同步是一种技术，用于确保图像在显示器上的刷新与显示器的垂直空白期（vertical blanking interval）同步。</li>
+      <li>vblank(<strong>垂直空白期</strong>)是显示器在绘制一帧图像后，准备绘制下一帧之间的时间间隔。</li>
+    </ul>
+  </li>
+  <li><strong>drmWaitVBlank 函数</strong>：
+    <ul>
+      <li>这个函数用于等待垂直同步信号。</li>
+      <li>它接受一个 DRM 设备文件描述符（file descriptor）和一个表示显示输出的 CRTC（Cathode Ray Tube Controller）的 ID。
+当垂直同步信号到达时，函数会返回。</li>
+      <li>在游戏开发和图形渲染中，drmWaitVBlank 可以用于确保页面翻转（page flip）与垂直同步对齐，从而避免屏幕撕裂（tearing）。</li>
     </ul>
   </li>
 </ol>

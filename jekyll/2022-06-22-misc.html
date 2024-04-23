@@ -224,7 +224,7 @@
                             </a>
                             
                                 
-                                    <ul><li><a href="#kref" onclick="mobilePageScrollToAnchor(this)" >kref</a></li><li><a href="#idrid-range" onclick="mobilePageScrollToAnchor(this)" >IDR(ID Range)</a></li><li><a href="#非一致性内存-和一致性" onclick="mobilePageScrollToAnchor(this)" >非一致性内存 和一致性</a><ul><li><a href="#dma_alloc_noncoherent" onclick="mobilePageScrollToAnchor(this)" >dma_alloc_noncoherent</a></li><li><a href="#dma_alloc_wc" onclick="mobilePageScrollToAnchor(this)" >dma_alloc_wc</a></li></ul></li><li><a href="#定时器" onclick="mobilePageScrollToAnchor(this)" >定时器</a><ul><li><a href="#timer_setup" onclick="mobilePageScrollToAnchor(this)" >timer_setup</a></li><li><a href="#高精度定时器" onclick="mobilePageScrollToAnchor(this)" >高精度定时器</a></li></ul></li><li><a href="#内核线程" onclick="mobilePageScrollToAnchor(this)" >内核线程</a></li><li><a href="#工作队列" onclick="mobilePageScrollToAnchor(this)" >工作队列</a><ul><li><a href="#schedule_work" onclick="mobilePageScrollToAnchor(this)" >schedule_work</a></li><li><a href="#alloc_ordered_workqueue" onclick="mobilePageScrollToAnchor(this)" >alloc_ordered_workqueue</a></li><li><a href="#create_singlethread_workqueue" onclick="mobilePageScrollToAnchor(this)" >create_singlethread_workqueue</a></li></ul></li><li><a href="#drm-blob" onclick="mobilePageScrollToAnchor(this)" >DRM Blob</a></li><li><a href="#completion" onclick="mobilePageScrollToAnchor(this)" >completion</a></li><li><a href="#benchmark" onclick="mobilePageScrollToAnchor(this)" >benchmark</a></li></ul>
+                                    <ul><li><a href="#kref" onclick="mobilePageScrollToAnchor(this)" >kref</a></li><li><a href="#idrid-range" onclick="mobilePageScrollToAnchor(this)" >IDR(ID Range)</a></li><li><a href="#非一致性内存-和一致性" onclick="mobilePageScrollToAnchor(this)" >非一致性内存 和一致性</a><ul><li><a href="#dma_alloc_noncoherent" onclick="mobilePageScrollToAnchor(this)" >dma_alloc_noncoherent</a></li><li><a href="#dma_alloc_wc" onclick="mobilePageScrollToAnchor(this)" >dma_alloc_wc</a></li></ul></li><li><a href="#定时器" onclick="mobilePageScrollToAnchor(this)" >定时器</a><ul><li><a href="#timer_setup" onclick="mobilePageScrollToAnchor(this)" >timer_setup</a></li><li><a href="#高精度定时器" onclick="mobilePageScrollToAnchor(this)" >高精度定时器</a></li></ul></li><li><a href="#内核线程" onclick="mobilePageScrollToAnchor(this)" >内核线程</a></li><li><a href="#工作队列" onclick="mobilePageScrollToAnchor(this)" >工作队列</a><ul><li><a href="#schedule_work" onclick="mobilePageScrollToAnchor(this)" >schedule_work</a></li><li><a href="#alloc_ordered_workqueue" onclick="mobilePageScrollToAnchor(this)" >alloc_ordered_workqueue</a></li><li><a href="#create_singlethread_workqueue" onclick="mobilePageScrollToAnchor(this)" >create_singlethread_workqueue</a></li></ul></li><li><a href="#completion" onclick="mobilePageScrollToAnchor(this)" >completion</a></li><li><a href="#kobject_uevent_env" onclick="mobilePageScrollToAnchor(this)" >kobject_uevent_env</a></li><li><a href="#benchmark" onclick="mobilePageScrollToAnchor(this)" >benchmark</a></li></ul>
 
                                 
                             
@@ -799,78 +799,6 @@ cpu_addr是由dma_alloc_noncoherent返回的虚拟地址。
   </li>
 </ol>
 
-<h1 id="drm-blob">DRM Blob</h1>
-
-<p>当涉及到 DRM（Direct Rendering Manager）中的“blob”时，我们实际上在讨论一种特定类型的属性。让我详细解释一下：</p>
-
-<ol>
-  <li>什么是 Blob？</li>
-</ol>
-
-<ul>
-  <li>在 DRM 中，Blob 是一种特殊的属性，用于存储自定义数据块。它允许用户空间应用程序将自定义结构体数据传递给内核空间。</li>
-  <li>Blob 通常用于存储一些不适合使用标准属性的数据，例如模式信息、LUT（查找表）数据、校准数据等。</li>
-</ul>
-
-<ol>
-  <li>Blob 的结构和用法：</li>
-</ol>
-
-<ul>
-  <li>
-    <p>Blob 由两部分组成：</p>
-
-    <ul>
-      <li>
-        <p>Blob ID：每个 Blob 都有一个唯一的 ID，用于在内核中标识该 Blob。</p>
-      </li>
-      <li>
-        <p>Blob 数据：这是一个自定义长度的内存块，可以存储任何类型的数据。</p>
-      </li>
-    </ul>
-  </li>
-  <li>
-    <p>Blob 可以存储各种信息，例如显示模式（mode）的详细信息、颜色校准数据、Gamma 表等。</p>
-  </li>
-</ul>
-
-<ol>
-  <li>Blob 的示例用途：</li>
-</ol>
-
-<ul>
-  <li>
-    <p>模式信息（Mode Information）：Blob 可以存储显示模式的详细信息，例如分辨率、刷新率、像素格式等。</p>
-  </li>
-  <li>
-    <p>颜色校准数据：如果您需要在显示设备上进行颜色校准，可以使用 Blob 存储校准数据。</p>
-  </li>
-  <li>
-    <p>Gamma 表：Gamma 表用于调整显示设备的亮度和对比度。这些数据可以存储在 Blob 中。</p>
-  </li>
-</ul>
-
-<ol>
-  <li>如何操作 Blob？</li>
-</ol>
-
-<ul>
-  <li>
-    <p>用户空间应用程序可以通过 DRM 接口来创建、获取和设置 Blob。</p>
-  </li>
-  <li>
-    <p>创建 Blob：使用 drmModeCreatePropertyBlob 函数来创建一个 Blob，并将自定义数据传递给内核。</p>
-  </li>
-  <li>
-    <p>获取 Blob 数据：使用 drmModeGetPropertyBlob 函数来获取 Blob 中存储的数据。</p>
-  </li>
-  <li>
-    <p>设置 Blob 数据：使用 drmModeAtomicAddProperty 函数将 Blob ID 添加到 Atomic 请求中，从而修改 Blob 数据。</p>
-  </li>
-</ul>
-
-<p>总之，Blob 是一种用于存储自定义数据的特殊属性，允许用户空间应用程序与内核交换非标准化的信息。它在 DRM 中的应用范围很广，例如显示模式、颜色校准和 Gamma 表等。</p>
-
 <h1 id="completion">completion</h1>
 
 <p>init_completion() 是Linux内核中用于完成事件通知机制的一个函数，主要用于进程间或线程间的同步。这个函数初始化一个 completion 结构体，该结构体用于表示某个事件是否已经发生。在多线程或多进程编程中，有时需要一个线程或进程等待另一个线程或进程完成某个任务。</p>
@@ -981,6 +909,90 @@ cpu_addr是由dma_alloc_noncoherent返回的虚拟地址。
 <span class="n">module_init</span><span class="p">(</span><span class="n">my_init</span><span class="p">);</span>
 <span class="n">module_exit</span><span class="p">(</span><span class="n">my_exit</span><span class="p">);</span>
 </code></pre></div></div>
+
+<h1 id="kobject_uevent_env">kobject_uevent_env</h1>
+
+<p>它是 <strong>Linux 内核</strong> 中的一个函数，用于在 <strong>kobject</strong> 状态发生变化时发送 <strong>uevent</strong> 到用户空间。让我详细解释一下：</p>
+
+<ol>
+  <li><strong>kobject</strong>：
+    <ul>
+      <li><strong>kobject</strong> 是内核中的一个抽象对象，用于表示各种内核数据结构，例如设备、驱动程序、总线等。</li>
+      <li>每个 <strong>kobject</strong> 都有一个名称、引用计数和其他属性。</li>
+    </ul>
+  </li>
+  <li><strong>uevent</strong>：
+    <ul>
+      <li><strong>uevent</strong> 是用户空间事件的缩写，用于通知用户空间程序内核中的状态变化。</li>
+      <li>例如，当设备插入或移除时，内核会生成相应的 <strong>uevent</strong>。</li>
+    </ul>
+  </li>
+  <li><strong><code class="language-plaintext highlighter-rouge">kobject_uevent_env</code> 函数</strong>：
+    <ul>
+      <li>这个函数用于发送 <strong>uevent</strong> 到用户空间。</li>
+      <li>它接受一个指向 <strong>kobject</strong> 的指针和一个表示 <strong>uevent</strong> 的环境变量数组。</li>
+      <li>用户空间程序可以监听这些事件并做出相应的处理。</li>
+    </ul>
+  </li>
+  <li><strong>使用示例</strong>：
+    <ul>
+      <li>在设备驱动程序中，当设备状态发生变化时，例如设备插入或移除，可以使用 <code class="language-plaintext highlighter-rouge">kobject_uevent_env</code> 发送相应的 <strong>uevent</strong>。</li>
+      <li>用户空间程序收到这些事件后，可以根据需要执行操作。</li>
+    </ul>
+  </li>
+</ol>
+
+<p>以下是一个简单的示例代码，展示了如何在内核模块中使用 <code class="language-plaintext highlighter-rouge">kobject_uevent_env</code> 发送 <strong>uevent</strong>：</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;linux/module.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;linux/init.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;linux/kobject.h&gt;</span><span class="cp">
+</span>
+<span class="k">static</span> <span class="k">struct</span> <span class="n">kobject</span> <span class="o">*</span><span class="n">my_kobj</span><span class="p">;</span>
+
+<span class="k">static</span> <span class="kt">int</span> <span class="nf">my_uevent</span><span class="p">(</span><span class="k">struct</span> <span class="n">kset</span> <span class="o">*</span><span class="n">kset</span><span class="p">,</span> <span class="k">struct</span> <span class="n">kobject</span> <span class="o">*</span><span class="n">kobj</span><span class="p">,</span> <span class="k">struct</span> <span class="n">kobj_uevent_env</span> <span class="o">*</span><span class="n">env</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="c1">// Add custom environment variables to the uevent</span>
+    <span class="n">add_uevent_var</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="s">"MY_CUSTOM_VAR=hello_world"</span><span class="p">);</span>
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">static</span> <span class="k">struct</span> <span class="n">kset_uevent_ops</span> <span class="n">my_uevent_ops</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="p">.</span><span class="n">uevent</span> <span class="o">=</span> <span class="n">my_uevent</span><span class="p">,</span>
+<span class="p">};</span>
+
+<span class="k">static</span> <span class="kt">int</span> <span class="n">__init</span> <span class="nf">my_module_init</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">my_kobj</span> <span class="o">=</span> <span class="n">kobject_create_and_add</span><span class="p">(</span><span class="s">"my_kobject"</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">my_kobj</span><span class="p">)</span>
+        <span class="k">return</span> <span class="o">-</span><span class="n">ENOMEM</span><span class="p">;</span>
+
+    <span class="n">my_kobj</span><span class="o">-&gt;</span><span class="n">kset</span> <span class="o">=</span> <span class="n">kset_create_and_add</span><span class="p">(</span><span class="s">"my_kset"</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">my_kobj</span><span class="o">-&gt;</span><span class="n">kset</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">kobject_put</span><span class="p">(</span><span class="n">my_kobj</span><span class="p">);</span>
+        <span class="k">return</span> <span class="o">-</span><span class="n">ENOMEM</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">my_kobj</span><span class="o">-&gt;</span><span class="n">kset</span><span class="o">-&gt;</span><span class="n">uevent_ops</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">my_uevent_ops</span><span class="p">;</span>
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">static</span> <span class="kt">void</span> <span class="n">__exit</span> <span class="nf">my_module_exit</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">kset_unregister</span><span class="p">(</span><span class="n">my_kobj</span><span class="o">-&gt;</span><span class="n">kset</span><span class="p">);</span>
+    <span class="n">kobject_put</span><span class="p">(</span><span class="n">my_kobj</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="n">module_init</span><span class="p">(</span><span class="n">my_module_init</span><span class="p">);</span>
+<span class="n">module_exit</span><span class="p">(</span><span class="n">my_module_exit</span><span class="p">);</span>
+<span class="n">MODULE_LICENSE</span><span class="p">(</span><span class="s">"GPL"</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>在此示例中，我们创建了一个名为 <code class="language-plaintext highlighter-rouge">my_kobject</code> 的 <strong>kobject</strong>，并将其添加到一个名为 <code class="language-plaintext highlighter-rouge">my_kset</code> 的 <strong>kset</strong> 中。然后，我们设置了一个自定义的 <strong>uevent</strong>，将环境变量 <code class="language-plaintext highlighter-rouge">MY_CUSTOM_VAR</code> 添加到 <strong>uevent</strong> 中。</p>
+
+<p>请注意，实际应用中，您需要根据您的需求自定义更多的环境变量和处理逻辑。</p>
 
 <h1 id="benchmark">benchmark</h1>
 
