@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.2">Jekyll</generator><link href="http://localhost:4000/blog/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/blog/" rel="alternate" type="text/html" /><updated>2024-04-23T17:28:09+08:00</updated><id>http://localhost:4000/blog/feed.xml</id><title type="html">学习笔记</title><subtitle>Build Jekyll site with the GitBook style.
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.2">Jekyll</generator><link href="http://localhost:4000/blog/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/blog/" rel="alternate" type="text/html" /><updated>2024-04-24T17:41:50+08:00</updated><id>http://localhost:4000/blog/feed.xml</id><title type="html">学习笔记</title><subtitle>Build Jekyll site with the GitBook style.
 </subtitle><author><name>kevin_zh</name></author><entry><title type="html">misc</title><link href="http://localhost:4000/blog/jekyll/2022-06-22-misc.html" rel="alternate" type="text/html" title="misc" /><published>2022-06-22T00:00:00+08:00</published><updated>2022-06-22T00:00:00+08:00</updated><id>http://localhost:4000/blog/jekyll/misc</id><content type="html" xml:base="http://localhost:4000/blog/jekyll/2022-06-22-misc.html"><![CDATA[<h1 id="kref">kref</h1>
 
 <p>kref_init 是一个用于初始化内核对象引用计数器（krefs）的函数。它允许你为你的对象添加引用计数，确保在多个地方使用和传递对象时，代码的正确性。以下是关于 kref_init 的一些重要信息：</p>
@@ -1115,7 +1115,13 @@ ffmpeg.exe -i agf-dog-1280x960.jpg  -vf scale=1920:1080 agf-dog-1920x1080.jpg
 一些 OpenGL ES 实现会将帧缓冲图像缓存到一个小的快速内存池中。在渲染之前，这些实现必须将逻辑缓冲区（如颜色、深度、模板等）的现有内容加载到该内存中。渲染后，这些缓冲区中的一部分或全部也会被存储回外部内存，以便将来再次使用其内容。在许多应用程序中，逻辑缓冲区在渲染开始时被清除。如果是这样，加载或存储这些缓冲区的工作就是浪费的。
 即使没有这个扩展，如果渲染的一帧从全屏清除开始，OpenGL ES 实现也可以优化掉在渲染帧之前加载帧缓冲区内容的步骤。有了这个扩展，应用程序可以使用 DiscardFramebufferEXT 来表示帧缓冲区的内容将不再需要。在这种情况下，OpenGL ES 实现也可以优化掉在渲染帧后存储帧缓冲区内容的步骤。</p>
 
-<p>glDiscardFramebufferEXT的工作是告知驱动程序你不关心framebuffer的内容。什么驱动程序(或GPU)决定用它做什么 - 这不取决于你。驱动程序可以将所有内容重置为0，或者它可以保持原样，或者当您下次调用glClear时它将使用此信息并且将更有效地执行它(例如通过为内容分配新内存，而不是执行memset与0值)。不要担心它会做什么</p>]]></content><author><name>kevin</name></author><category term="Jekyll" /><summary type="html"><![CDATA[glInvalidateFramebuffer vs glClear]]></summary></entry><entry><title type="html">硬中断</title><link href="http://localhost:4000/blog/jekyll/2019-02-03-interrupte.html" rel="alternate" type="text/html" title="硬中断" /><published>2019-02-03T00:00:00+08:00</published><updated>2019-02-03T00:00:00+08:00</updated><id>http://localhost:4000/blog/jekyll/interrupte</id><content type="html" xml:base="http://localhost:4000/blog/jekyll/2019-02-03-interrupte.html"><![CDATA[<p>【转帖】</p>
+<p>glDiscardFramebufferEXT的工作是告知驱动程序你不关心framebuffer的内容。什么驱动程序(或GPU)决定用它做什么 - 这不取决于你。驱动程序可以将所有内容重置为0，或者它可以保持原样，或者当您下次调用glClear时它将使用此信息并且将更有效地执行它(例如通过为内容分配新内存，而不是执行memset与0值)。不要担心它会做什么</p>
+
+<h1 id="texture-obj与rbo的区别">Texture obj与RBO的区别</h1>
+
+<p>FBO(Frame Buffer Object)即帧缓冲区对象，是一个可添加缓冲区的容器，可以为其添加纹理或渲染缓冲区对象（RBO),它们的区别如下图</p>
+
+<p><img src="/blog/assets/OpenGL/renderbuffer.png" alt="renderbuffer" /></p>]]></content><author><name>kevin</name></author><category term="Jekyll" /><summary type="html"><![CDATA[glInvalidateFramebuffer vs glClear]]></summary></entry><entry><title type="html">硬中断</title><link href="http://localhost:4000/blog/jekyll/2019-02-03-interrupte.html" rel="alternate" type="text/html" title="硬中断" /><published>2019-02-03T00:00:00+08:00</published><updated>2019-02-03T00:00:00+08:00</updated><id>http://localhost:4000/blog/jekyll/interrupte</id><content type="html" xml:base="http://localhost:4000/blog/jekyll/2019-02-03-interrupte.html"><![CDATA[<p>【转帖】</p>
 
 <p>本来想写内核如何接收一个网络包这个过程，但发现把整个过程捋顺了，还是很难的。</p>
 
@@ -3393,7 +3399,7 @@ Client./weston-simple-damage
     </tr>
     <tr>
       <td>wl_seat</td>
-      <td>输入设备管理器。</td>
+      <td>输入设备管理器。 。 通过capabilities( )回调函数得到pointer、keyboard等</td>
     </tr>
     <tr>
       <td>wl_pointer</td>
@@ -3544,7 +3550,7 @@ weston-10.0.0./compositor/executable.c
 <h2 id="43-backend创建">4.3 backend创建</h2>
 
 <ul>
-  <li>Weston 使用后端的概念来抽象其运行环境的底层接口。后端负责处理输入和生成输出。</li>
+  <li>Weston 使用后端的概念来抽象其运行环境的底层接口。后端负责<strong>处理输入</strong>和<strong>生成输出</strong>。</li>
   <li>作为 libweston 的用户，Weston 可以在不同的后端上运行，包括嵌套在其他 Wayland 合成器中的方式（使用 wayland 后端），也可以在 X11 上运行，或者在独立的后端上运行，例如 DRM/KMS。</li>
   <li>大多数情况下，人们应该允许 Weston 自动选择后端，因为它会产生最佳结果。例如，在已经运行另一个图形环境的机器上运行 Weston 时，它会自动选择合适的后端，无论是另一个 Wayland 合成器还是 X11 服务器。</li>
   <li>只有在你知道 Weston 自动选择的后端不是最佳选择，或者你想使用不同于默认加载的后端时，才需要手动指定后端。在这种情况下，可以使用 -B [backend] 命令行选项来选择后端。</li>
@@ -3555,7 +3561,11 @@ weston-10.0.0./compositor/executable.c
       <li>x11：作为 X11 应用程序嵌套在 X11 显示服务器实例中。</li>
       <li>rdp：作为一个没有本地输入或输出的 RDP 服务器运行。</li>
       <li>headless：无输入或输出运行，适用于测试套件。</li>
-      <li>pipewire：无输入，输出到 PipeWire 节点。</li>
+      <li>
+        <p>pipewire：无输入，输出到 PipeWire 节点。</p>
+
+        <p><img src="/blog/assets/wayland/backend_tree.png" alt="backend_tree" width="300px" height="200px" /></p>
+      </li>
     </ul>
   </li>
 </ul>
@@ -3694,6 +3704,10 @@ weston-10.0.0./compositor/executable.c
 
 <h2 id="415-gl-renderer">4.15 gl-renderer</h2>
 
+<p>weston中的几个renderer</p>
+
+<p><img src="/blog/assets/wayland/render.png" alt="render" width="300px" height="100px" /></p>
+
 <p><img src="/blog/assets/wayland/drm_backend.png" alt="drm_backend" /></p>
 
 <h2 id="416-libinput">4.16 libinput</h2>
@@ -3705,7 +3719,7 @@ weston-10.0.0./compositor/executable.c
 <ol>
   <li>mtdev: Multi-touch 设备处理，比如它会将不带tracking ID的protocol A转化为 protocol B。</li>
   <li>libevdev: 与kernel中evdev 模块对接。</li>
-  <li>libudev:主要用于和 udevd的通信，从而获取设备的增加删除事件。也可从kernel获取。</li>
+  <li>libudev:主要用于和 udevd(userspace device)的通信，从而获取设备的增加删除事件。也可从kernel获取。</li>
 </ol>
 
 <p>Weston 中的输入管理模块与libinput对接，它实现了两大部分的功能:</p>
@@ -3722,6 +3736,45 @@ weston-10.0.0./compositor/executable.c
 <p>Weston中支持三种输入设备，分别是键盘，触摸和鼠标。一套输入设备属于一个seat(严格来说，seat中包括一套输入输出设备)。因此，weston_seat 中包含weston_keyboard,weston_pointer 和weston_touch三个结构。系统中可以有多个seat,它们的结构被串在weston_compositor 的 seat_list链表中。</p>
 
 <p>可以看到，对于焦点处理，每个设备有自己的focus,它指向焦点窗口，用于拖拽和输入等。成员focus_resource_list 中包含了焦点窗口所在client中输入设备 proxy对应的 resource 对象。在这个 list 中意味着可以接收到相应的事件。</p>
+
+<p><img src="/blog/assets/wayland/wayland_input.svg" alt="wayland_input" /></p>
+
+<p><img src="/blog/assets/wayland/input.png" alt="input" width="170px" height="70px" /></p>
+
+<h3 id="4161-udevd">4.16.1 udevd</h3>
+
+<p>udev 是 Linux 系统中的一个重要组件，用于动态设备管理。详细介绍一下：</p>
+
+<p>udev 的全称是 “userspace device”，它是一个用户空间的设备管理工具。</p>
+<ol>
+  <li>
+    <p>功能：
+ 接收来自内核的设备事件（uevents），例如设备的添加、移除或状态变化。
+ 根据配置的一组规则，对设备进行识别和处理。
+ 管理设备节点的权限和属性。
+ 创建符号链接以提供有意义的设备名称。</p>
+  </li>
+  <li>工作流程：
+    <ul>
+      <li>内核发出设备事件（uevent）。</li>
+      <li>udev 守护进程（通常是 systemd-udevd.service）接收事件。</li>
+      <li>udev 根据配置的规则匹配设备属性，识别设备。</li>
+      <li>匹配的规则可能会创建符号链接、修改设备节点的权限或运行指定的程序。</li>
+    </ul>
+  </li>
+  <li>规则文件：
+    <ul>
+      <li>udev 规则存储在不同目录下的文件中，例如 /usr/lib/udev/rules.d、/run/udev/rules.d 和 /etc/udev/rules.d。</li>
+      <li>规则文件以 .rules 扩展名结尾。</li>
+      <li>每行包含至少一个键值对，用于匹配和赋值。</li>
+      <li>规则按照词法顺序处理，可以覆盖系统提供的规则。</li>
+    </ul>
+  </li>
+  <li>库支持：
+ udev 处理的所有设备信息存储在 udev 数据库中，并通过 libudev 库提供对存储数据和事件源的访问。</li>
+</ol>
+
+<p>总之，udev 是一个关键的 Linux 设备管理工具，负责设备事件的处理、设备识别、权限管理和符号链接的创建</p>
 
 <h2 id="417-client创建窗口">4.17 Client创建窗口</h2>
 
@@ -3878,4 +3931,98 @@ weston-10.0.0./compositor/executable.c
 
 <h3 id="41911-explicit-synchronization">4.19.11 explicit-synchronization</h3>
 
-<p><img src="/blog/assets/wayland/explicit_sync.png" alt="explicit_sync" /></p>]]></content><author><name>Kevin zhang</name></author><category term="Jekyll" /><summary type="html"><![CDATA[1.编译]]></summary></entry></feed>
+<p><img src="/blog/assets/wayland/explicit_sync.png" alt="explicit_sync" /></p>
+
+<h2 id="420-shell">4.20 shell</h2>
+
+<p>weston提供有四种shell， <strong>desktop</strong>、 <strong>IVI</strong>、<strong>kiosk</strong> 和<strong>fullscreen-shell</strong></p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="o">./</span><span class="n">kiosk</span><span class="o">-</span><span class="n">shell</span><span class="o">/</span><span class="n">util</span><span class="o">.</span><span class="na">c</span>
+    <span class="o">./</span><span class="n">kiosk</span><span class="o">-</span><span class="n">shell</span><span class="o">/</span><span class="n">kiosk</span><span class="o">-</span><span class="n">shell</span><span class="o">.</span><span class="na">c</span>
+    <span class="o">./</span><span class="n">kiosk</span><span class="o">-</span><span class="n">shell</span><span class="o">/</span><span class="n">kiosk</span><span class="o">-</span><span class="n">shell</span><span class="o">-</span><span class="n">grab</span><span class="o">.</span><span class="na">c</span>
+    
+    <span class="o">./</span><span class="n">ivi</span><span class="o">-</span><span class="n">shell</span><span class="o">/</span><span class="n">hmi</span><span class="o">-</span><span class="n">controller</span><span class="o">.</span><span class="na">c</span>
+    <span class="o">./</span><span class="n">ivi</span><span class="o">-</span><span class="n">shell</span><span class="o">/</span><span class="n">ivi</span><span class="o">-</span><span class="n">shell</span><span class="o">.</span><span class="na">c</span>
+    <span class="o">./</span><span class="n">ivi</span><span class="o">-</span><span class="n">shell</span><span class="o">/</span><span class="n">ivi</span><span class="o">-</span><span class="n">layout</span><span class="o">-</span><span class="n">transition</span><span class="o">.</span><span class="na">c</span>
+    <span class="o">./</span><span class="n">ivi</span><span class="o">-</span><span class="n">shell</span><span class="o">/</span><span class="n">ivi</span><span class="o">-</span><span class="n">layout</span><span class="o">.</span><span class="na">c</span>
+    
+    <span class="o">./</span><span class="n">fullscreen</span><span class="o">-</span><span class="n">shell</span><span class="o">/</span><span class="n">fullscreen</span><span class="o">-</span><span class="n">shell</span><span class="o">.</span><span class="na">c</span>
+    
+    <span class="o">./</span><span class="n">desktop</span><span class="o">-</span><span class="n">shell</span><span class="o">/</span><span class="n">input</span><span class="o">-</span><span class="n">panel</span><span class="o">.</span><span class="na">c</span>
+    <span class="o">./</span><span class="n">desktop</span><span class="o">-</span><span class="n">shell</span><span class="o">/</span><span class="n">exposay</span><span class="o">.</span><span class="na">c</span>
+    <span class="o">./</span><span class="n">desktop</span><span class="o">-</span><span class="n">shell</span><span class="o">/</span><span class="n">shell</span><span class="o">.</span><span class="na">c</span>
+</code></pre></div></div>
+
+<h3 id="4201-kiosk-shell">4.20.1 kiosk-shell</h3>
+
+<p>在 Weston 中，kiosk-shell 是一种简单的窗口管理器（shell），专为<strong>单应用程序</strong>或<strong>单应用程序模式</strong>（kiosk 模式）设计。让我详细介绍一下：</p>
+
+<ol>
+  <li>
+    <p><strong>kiosk-shell 的功能</strong>：</p>
+
+    <ul>
+      <li>kiosk-shell 使所有顶层应用程序窗口全屏显示。</li>
+      <li>它支持定义将哪些应用程序放置在特定输出上。 这通过在 weston.ini 中相应输出部分的 app-ids= 字段中实现。</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>使用示例</strong>：</p>
+
+    <p>在 weston.ini 中，您可以指定哪些应用程序应该在特定输出上运行。
+ 例如：</p>
+    <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="o">[</span>output]
+ <span class="nv">name</span><span class="o">=</span>screen0
+ app-ids<span class="o">=</span>org.domain.app1,com.domain.app2
+</code></pre></div>    </div>
+    <p>要使用 kiosk-shell 运行 Weston，请在 weston.ini 中设置 shell=kiosk-shell.so，或使用命令行选项 –shell=kiosk-shell.so。</p>
+  </li>
+  <li>
+    <p><strong>适用场景</strong>：</p>
+
+    <p>kiosk-shell 适用于嵌入式设备、数字标牌、自助服务终端、展示台等场景，其中<strong>只有一个应用程序需要全屏显示</strong>。</p>
+  </li>
+</ol>
+
+<h3 id="4202-ivi-shell">4.20.2 ivi-shell</h3>
+
+<p>IVI : <strong>In-Vehicle Information</strong></p>
+
+<p>在 Weston 项目中，IVI-shell 是一个高度可定制的外壳（shell），专注于那些需要<strong>对外壳窗口布局进行自定义控制</strong>的用例，而无需用户进行交互式布局配置。IVI-shell的示例用例包括汽车信息娱乐系统（IVI）应用程序或工业人机界面。通常情况下，当用户界面需要在一个或多个屏幕上<strong>精确定位多个应用程序表面</strong>时，IVI-shell 是一个理想的选择。</p>
+
+<p>以下是关于 IVI-shell的一些重要信息：</p>
+
+<ol>
+  <li>
+    <p><strong>IVI-shell客户端协议</strong>：</p>
+
+    <p>Wayland 客户端可以实现 ivi_application Wayland 协议，通过该协议，它们可以指定一个 ivi_id，以便 IVI控制器可以识别应用程序。这使得控制器可以为众所周知的应用程序实现特殊行为。此外，IVI-shell也可以处理使用xdg-shell协议的客户端，但在这些情况下，IVI-shell需要其他方式来识别客户端应用程序。</p>
+  </li>
+  <li><strong>IVI-shell的组成部分</strong>：
+    <ul>
+      <li>ivi-shell.so：负责处理应用程序ID，并提供抽象来通过ivi_layout_interface配置窗口布局。这个接口在IVI-shell组合器实现中讨论。</li>
+      <li>自定义 IVI 控制器：使用 <strong>ivi_layout_interface</strong> 来实现窗口管理器，负责配置窗口布局，即应用程序在屏幕上的位置。由于这种分离，必须在您的weston.ini中加载这两个模块才能使用IVI-shell。</li>
+    </ul>
+  </li>
+  <li><strong>IVI-shell的控制</strong>：
+    <ul>
+      <li>IVI-shell提供了 <strong>ivi_layout_interface</strong> API，控制器必须使用它来控制IVI-shell的窗口布局。有关此 API 的定义，请参阅 <strong>ivi-shell/ivi-layout-export.h</strong>。</li>
+      <li>对于初始配置，控制器必须至少创建一个 <strong>ivi_layout_layer</strong> 并将其添加到一个 <strong>weston_output</strong>。图层允许将多个应用程序表面分组并一起控制，是组织和管理表面的主要机制。</li>
+      <li>控制器还必须使用触发器来获取对客户端表面的控制权。客户端表面显示为 <strong>ivi_layout_surface</strong>。这些表面具有 ID，允许控制器识别表面并相应地重新配置窗口布局。</li>
+    </ul>
+  </li>
+</ol>
+
+<p>总之，IVI-shell是一个强大的工具，用于在汽车信息娱乐系统、工业界面等场景中<strong>精确控制应用程序的窗口布局</strong>。</p>
+
+<h2 id="421-wcap">4.21 wcap</h2>
+
+<p>在 Weston项目中，<code class="language-plaintext highlighter-rouge">wcap</code> 目录是用于处理 Weston 的<strong>屏幕录制功能</strong>的。具体来说，wcap 是一种特定于 Weston的<strong>无损</strong>视频格式，它仅<strong>记录帧之间的差异</strong>。这意味着它只捕获屏幕上发生变化的部分，而不是完整的每一帧。这对于屏幕录制非常有用，因为它可以减少文件大小并提高效率。</p>
+
+<p>如果您在 Weston 中进行屏幕录制，生成的录制文件将以 .wcap 格式保存在当前工作目录中。要播放这些录制文件，您需要将 .wcap文件转换为其他媒体播放器可以理解的格式。例如，您可以使用 wcap-decode工具将 .wcap 文件转换为单独的PNG图像文件，以便查看每一帧的屏幕内容。</p>
+
+<p>请注意，这里提到的 wcap 是一种专门用于 Weston 的格式，不同于其他常见的视频格式，如 MP4 或 AVI。</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">./</span><span class="n">wcap</span><span class="o">/</span><span class="n">main</span><span class="o">.</span><span class="na">c</span>
+<span class="o">./</span><span class="n">wcap</span><span class="o">/</span><span class="n">wcap</span><span class="o">-</span><span class="n">decode</span><span class="o">.</span><span class="na">c</span>
+</code></pre></div></div>]]></content><author><name>Kevin zhang</name></author><category term="Jekyll" /><summary type="html"><![CDATA[1.编译]]></summary></entry></feed>

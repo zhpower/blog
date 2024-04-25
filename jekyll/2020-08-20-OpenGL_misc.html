@@ -193,7 +193,7 @@
                             </a>
                             
                                 
-                                    <ul><li><a href="#glinvalidateframebuffer-vs-glclear" onclick="mobilePageScrollToAnchor(this)" >glInvalidateFramebuffer vs glClear</a></li><li><a href="#gldiscardframebufferext" onclick="mobilePageScrollToAnchor(this)" >glDiscardFramebufferEXT</a></li></ul>
+                                    <ul><li><a href="#glinvalidateframebuffer-vs-glclear" onclick="mobilePageScrollToAnchor(this)" >glInvalidateFramebuffer vs glClear</a></li><li><a href="#gldiscardframebufferext" onclick="mobilePageScrollToAnchor(this)" >glDiscardFramebufferEXT</a></li><li><a href="#texture-obj与rbo的区别" onclick="mobilePageScrollToAnchor(this)" >Texture obj与RBO的区别</a></li></ul>
 
                                 
                             
@@ -300,6 +300,12 @@
 即使没有这个扩展，如果渲染的一帧从全屏清除开始，OpenGL ES 实现也可以优化掉在渲染帧之前加载帧缓冲区内容的步骤。有了这个扩展，应用程序可以使用 DiscardFramebufferEXT 来表示帧缓冲区的内容将不再需要。在这种情况下，OpenGL ES 实现也可以优化掉在渲染帧后存储帧缓冲区内容的步骤。</p>
 
 <p>glDiscardFramebufferEXT的工作是告知驱动程序你不关心framebuffer的内容。什么驱动程序(或GPU)决定用它做什么 - 这不取决于你。驱动程序可以将所有内容重置为0，或者它可以保持原样，或者当您下次调用glClear时它将使用此信息并且将更有效地执行它(例如通过为内容分配新内存，而不是执行memset与0值)。不要担心它会做什么</p>
+
+<h1 id="texture-obj与rbo的区别">Texture obj与RBO的区别</h1>
+
+<p>FBO(Frame Buffer Object)即帧缓冲区对象，是一个可添加缓冲区的容器，可以为其添加纹理或渲染缓冲区对象（RBO),它们的区别如下图</p>
+
+<p><img src="/blog/assets/OpenGL/renderbuffer.png" alt="renderbuffer" /></p>
 </section>
             </div><div class="search-results">
     <div class="has-results">
