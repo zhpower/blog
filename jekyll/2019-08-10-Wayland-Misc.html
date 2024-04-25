@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html lang="en" >
     <head><meta charset="UTF-8">
-<meta content="text/html; charset=utf-8" http-equiv="Content-Type"><title>Jekyll Gitbook Theme · 学习笔记</title><meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type"><title>Wayland Misc · 学习笔记</title><meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta name="description" content="Build Jekyll site with the GitBook style.
 "><meta name="generator" content="Jekyll (using style of GitBook 3.2.3)"><meta name="author" content="kevin_zh"><link rel="stylesheet" href="/blog/assets/gitbook/style.css">
 <link rel="stylesheet" href="/blog/assets/gitbook/gitbook-plugin-back-to-top-button/plugin.css">
@@ -25,9 +25,11 @@
 
 
 
+            <link rel="prev" href="/blog/jekyll/2019-02-03-interrupte.html" />
+        
 
         
-            <link rel="next" href="/blog/jekyll/2013-03-02-cobalt.html" />
+            <link rel="next" href="/blog/jekyll/2020-08-20-OpenGL_misc.html" />
         
     </head>
     <body>
@@ -60,7 +62,7 @@
         </div>
         <ul class="summary">
             
-            <li class="chapter active" data-level="1.1" data-path="/blog">
+            <li class="chapter" data-level="1.1" data-path="/blog">
             
                 <a href="/blog/" onclick="pageScrollToTop(this)">
                     学习笔记
@@ -184,12 +186,15 @@
                         </li>
                     
                         
-                        <li class="chapter" data-level="1.1" data-path="/blog/jekyll/2019-08-10-Wayland-Misc.html">
+                        <li class="chapter active" data-level="1.2" data-path="/blog/jekyll/2019-08-10-Wayland-Misc.html">
                         
                             <a href="/blog/jekyll/2019-08-10-Wayland-Misc.html" onclick="pageScrollToTop(this)">
                                 Wayland Misc
                             </a>
                             
+                                
+                                    <ul><li><a href="#expat" onclick="mobilePageScrollToAnchor(this)" >Expat</a></li><li><a href="#libffi" onclick="mobilePageScrollToAnchor(this)" >libffi</a></li></ul>
+
                                 
                             
                         </li>
@@ -253,7 +258,7 @@
                     <h1>
                         <i class="fa fa-circle-o-notch fa-spin"></i>
                         
-                            <a href="." >Jekyll Gitbook Theme</a>
+                            <a href="." >Wayland Misc</a>
                         
                     </h1>
                 </div>
@@ -266,209 +271,136 @@
             <div class="search-noresults">
                 <section class="normal markdown-section">
                     
-                        <h1 id="">Jekyll Gitbook Theme</h1>
+                        <h1 id="/jekyll/Wayland-Misc">Wayland Misc</h1>
                     
 
-                    Make Jelly site have a GitBook look!
+                    <h1 id="expat">Expat</h1>
 
-## Demo
+<p><strong>Expat</strong> 是一个用 <strong>C</strong> 编写的流式 <strong>XML 解析库</strong>。它在处理文件大小超出内存限制且性能和灵活性至关重要的情况下表现出色。许多应用程序、库和硬件都使用了 <strong>Expat</strong>，并且还有一些绑定和第三方封装。</p>
 
-Live demo on Github Pages: [https://sighingnow.github.io/jekyll-gitbook](https://sighingnow.github.io/jekyll-gitbook)
+<p>以下是关于 <strong>Expat</strong> 的一些重要信息：</p>
 
-[![Jekyll Themes](https://img.shields.io/badge/featured%20on-JekyllThemes-red.svg)](https://jekyll-themes.com/jekyll-gitbook/)
+<ul>
+  <li><strong>什么是 Expat？</strong> Expat 是一个流式解析器，应用程序在开始解析之前向解析器注册处理程序，以处理 XML 文档中发现的相关结构（例如开始标签等）。</li>
+  <li><strong>主要特点</strong>：
+    <ul>
+      <li><strong>流式解析</strong>：Expat 是流式解析器，它在解析之前注册处理程序，然后在文档中发现相关结构时调用这些处理程序。</li>
+      <li><strong>适用于大文件</strong>：Expat 适用于那些文件太大而无法放入内存的情况。</li>
+      <li><strong>性能优越</strong>：Expat 在解析速度和灵活性方面表现出色。</li>
+      <li><strong>广泛使用</strong>：许多应用程序、库和硬件都使用了 Expat。</li>
+      <li><strong>绑定和封装</strong>：Expat 还有一些绑定和第三方封装，使其更易于在不同环境中使用。</li>
+    </ul>
+  </li>
+</ul>
 
-## Why Jekyll with GitBook
+<p>请查看 <a href="https://libexpat.github.io/doc/getting-started/">这篇介绍性文章</a></p>
 
-GitBook is an amazing frontend style to present and organize contents (such as book chapters
-and blogs) on Web. The typical to deploy GitBook at [Github Pages][1]
-is building HTML files locally and then push to Github repository, usually to the `gh-pages`
-branch. It's quite annoying to repeat such workload and make it hard for people do version
-control via git for when there are generated HTML files to be staged in and out.
+<ul>
+  <li>
+    <p><strong>示例</strong></p>
 
-This theme takes style definition out of generated GitBook site and provided the template
-for Jekyll to rendering markdown documents to HTML, thus the whole site can be deployed
-to [Github Pages][1] without generating and uploading HTML bundle every time when there are
-changes to the original repo.
+    <div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+</span>  <span class="cp">#include</span> <span class="cpf">&lt;stdlib.h&gt;</span><span class="cp">
+</span>  <span class="cp">#include</span> <span class="cpf">&lt;string.h&gt;</span><span class="cp">
+</span>  <span class="cp">#include</span> <span class="cpf">&lt;expat.h&gt;</span><span class="cp">
+</span>    
+  <span class="c1">// 回调函数：处理开始标签</span>
+  <span class="kt">void</span> <span class="nf">startElement</span><span class="p">(</span><span class="kt">void</span> <span class="o">*</span><span class="n">userData</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">name</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">**</span><span class="n">atts</span><span class="p">)</span> <span class="p">{</span>
+      <span class="n">printf</span><span class="p">(</span><span class="s">"Start element: %s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">name</span><span class="p">);</span>
+  <span class="p">}</span>
+    
+  <span class="c1">// 回调函数：处理结束标签</span>
+  <span class="kt">void</span> <span class="nf">endElement</span><span class="p">(</span><span class="kt">void</span> <span class="o">*</span><span class="n">userData</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">name</span><span class="p">)</span> <span class="p">{</span>
+      <span class="n">printf</span><span class="p">(</span><span class="s">"End element: %s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">name</span><span class="p">);</span>
+  <span class="p">}</span>
+    
+  <span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+      <span class="c1">// 创建解析器</span>
+      <span class="n">XML_Parser</span> <span class="n">parser</span> <span class="o">=</span> <span class="n">XML_ParserCreate</span><span class="p">(</span><span class="nb">NULL</span><span class="p">);</span>
+      <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">parser</span><span class="p">)</span> <span class="p">{</span>
+          <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">"Error creating XML parser.</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+          <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+      <span class="p">}</span>
+    
+      <span class="c1">// 设置回调函数</span>
+      <span class="n">XML_SetElementHandler</span><span class="p">(</span><span class="n">parser</span><span class="p">,</span> <span class="n">startElement</span><span class="p">,</span> <span class="n">endElement</span><span class="p">);</span>
+    
+      <span class="c1">// XML 数据（示例）</span>
+      <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">xmlData</span> <span class="o">=</span> <span class="s">"&lt;root&gt;&lt;item&gt;Apple&lt;/item&gt;&lt;item&gt;Banana&lt;/item&gt;&lt;/root&gt;"</span><span class="p">;</span>
+    
+      <span class="c1">// 解析 XML 数据</span>
+      <span class="k">if</span> <span class="p">(</span><span class="n">XML_Parse</span><span class="p">(</span><span class="n">parser</span><span class="p">,</span> <span class="n">xmlData</span><span class="p">,</span> <span class="n">strlen</span><span class="p">(</span><span class="n">xmlData</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="n">XML_STATUS_ERROR</span><span class="p">)</span> <span class="p">{</span>
+          <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">"Error parsing XML data.</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+          <span class="n">XML_ParserFree</span><span class="p">(</span><span class="n">parser</span><span class="p">);</span>
+          <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+      <span class="p">}</span>
+    
+      <span class="c1">// 释放解析器</span>
+      <span class="n">XML_ParserFree</span><span class="p">(</span><span class="n">parser</span><span class="p">);</span>
+    
+      <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="p">}</span>
 
-## How to Get Started
+</code></pre></div>    </div>
+  </li>
+</ul>
 
-This theme can be used just as other [Jekyll themes][1] and support [remote theme][12],
-see [the official guide][13] as well.
+<h1 id="libffi">libffi</h1>
 
-You can introduce this jekyll theme into your own site by either
+<p><strong>libffi</strong> 是一个用 <strong>C</strong> 编写的<strong>可移植的外部函数接口库</strong>。它为不同的调用约定提供了一个高级别的编程接口，允许程序员在运行时调用任何由调用接口描述指定的函数。<strong>FFI</strong> 代表<strong>外部函数接口</strong>，是允许在一种语言中编写的代码调用另一种语言中编写的代码的接口。<strong>libffi</strong> 实际上只提供了完整特性的外部函数接口的最底层、与机器相关的部分。在<strong>libffi</strong>之上必须存在一个处理两种语言之间传递的值的类型转换层。</p>
 
-- [Fork][3] this repository and add your markdown posts to the `_posts` folder.
-- Use as a remote theme in your [`_config.yml`][14](just like what we do for this
-  site itself),
+<p>以下是关于 <strong>libffi</strong> 的一些重要信息：</p>
 
-```yaml
-remote_theme: sighingnow/jekyll-gitbook
-```
+<ul>
+  <li>
+    <p><strong>什么是 libffi？</strong> 编译器为高级语言生成遵循某些约定的代码。其中之一是<strong>“调用约定”</strong>。<strong>“调用约定”</strong>实际上是编译器对函数参数在进入函数时的位置的一组假设。<strong>“调用约定”</strong>还指定了函数的返回值在哪里找到。有些程序在编译时可能不知道要传递给函数的参数。例如，解释器可能在运行时告知调用给定函数所使用的参数的数量和类型。<strong>libffi</strong> 可以在这些程序中使用，以提供从解释器程序到编译代码的桥梁。<strong>libffi</strong> 库为各种调用约定提供了一个可移植的高级别编程接口，允许程序员在运行时调用任何由调用接口描述指定的函数。<strong>FFI</strong> 代表<strong>外部函数接口</strong>。外部函数接口是允许在一种语言中编写的代码调用另一种语言中编写的代码的接口。<strong>libffi</strong> 实际上只提供了完整特性的外部函数接口的最底层、与机器相关的部分。在<strong>libffi</strong>之上必须存在一个处理两种语言之间传递的值的类型转换层。</p>
+  </li>
+  <li>
+    <p><strong>支持的平台</strong>：<strong>libffi</strong> 已经移植到许多不同的平台。发布时，已经测试了以下基本配置：</p>
+    <ul>
+      <li><strong>架构</strong>：AArch64（ARM64）、Alpha、ARC、ARM、AVR32、Blackfin 等。</li>
+      <li><strong>操作系统</strong>：Linux、iOS、Windows 等。</li>
+      <li><strong>编译器</strong>：Clang、GCC、MSVC 等。</li>
+    </ul>
+  </li>
+</ul>
 
-### Deploy Locally with Jekyll Serve
+<p>如想了解更多关于 <strong>libffi</strong> 的细节，可以查看 <a href="http://sourceware.org/libffi/">libffi 官方网页</a>。</p>
 
-This theme can be ran locally using Ruby and Gemfiles.
+<ul>
+  <li>
+    <p><strong>示例</strong> : 在这个示例中，我们使用了 libffi 来调用标准库函数 puts，并传递了不同的字符串作为参数。这个示例展示了如何使用 libffi 动态地调用外部函数。</p>
 
-[Testing your GitHub Pages site locally with Jekyll](https://docs.github.com/en/pages/setting-up-a-github-pages-site-with-jekyll/testing-your-github-pages-site-locally-with-jekyll) - GitHub
+    <div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+</span>  <span class="cp">#include</span> <span class="cpf">&lt;ffi.h&gt;</span><span class="cp">
+</span>    
+  <span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+      <span class="n">ffi_cif</span> <span class="n">cif</span><span class="p">;</span>
+      <span class="n">ffi_type</span> <span class="o">*</span><span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+      <span class="kt">void</span> <span class="o">*</span><span class="n">values</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+      <span class="kt">char</span> <span class="o">*</span><span class="n">s</span><span class="p">;</span>
+      <span class="n">ffi_arg</span> <span class="n">rc</span><span class="p">;</span>
+    
+      <span class="c1">// 初始化参数信息向量</span>
+      <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">ffi_type_pointer</span><span class="p">;</span>
+      <span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">s</span><span class="p">;</span>
+    
+      <span class="c1">// 初始化 cif</span>
+      <span class="k">if</span> <span class="p">(</span><span class="n">ffi_prep_cif</span><span class="p">(</span><span class="o">&amp;</span><span class="n">cif</span><span class="p">,</span> <span class="n">FFI_DEFAULT_ABI</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">ffi_type_sint</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span> <span class="o">==</span> <span class="n">FFI_OK</span><span class="p">)</span> <span class="p">{</span>
+          <span class="n">s</span> <span class="o">=</span> <span class="s">"Hello World!"</span><span class="p">;</span>
+          <span class="n">ffi_call</span><span class="p">(</span><span class="o">&amp;</span><span class="n">cif</span><span class="p">,</span> <span class="p">(</span><span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="p">)(</span><span class="kt">void</span><span class="p">))</span><span class="n">puts</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">rc</span><span class="p">,</span> <span class="n">values</span><span class="p">);</span>
+          <span class="c1">// rc 现在保存了对 puts 的调用结果</span>
+          <span class="c1">// 更改 s 的值后，可以再次调用 puts()</span>
+          <span class="n">s</span> <span class="o">=</span> <span class="s">"This is cool!"</span><span class="p">;</span>
+          <span class="n">ffi_call</span><span class="p">(</span><span class="o">&amp;</span><span class="n">cif</span><span class="p">,</span> <span class="p">(</span><span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="p">)(</span><span class="kt">void</span><span class="p">))</span><span class="n">puts</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">rc</span><span class="p">,</span> <span class="n">values</span><span class="p">);</span>
+      <span class="p">}</span>
+    
+      <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="p">}</span>
 
-## Full-text search
-
-The search functionality in jekyll-gitbook theme is powered by the [gitbook-plugin-search-pro][5] plugin and is enabled by default.
-
-[https://sighingnow.github.io/jekyll-gitbook/?q=generated](https://sighingnow.github.io/jekyll-gitbook/?q=generated)
-
-## Code highlight
-
-The code highlight style is configurable the following entry in `_config.yaml`:
-
-```yaml
-syntax_highlighter_style: colorful
-```
-
-The default code highlight style is `colorful`, the full supported styles can be found from [the rouge repository][6]. Customized
-style can be added to [./assets/gitbook/rouge/](./assets/gitbook/rouge/).
-
-## How to generate TOC
-
-The jekyll-gitbook theme leverages [jekyll-toc][4] to generate the *Contents* for the page.
-The TOC feature is not enabled by default. To use the TOC feature, modify the TOC
-configuration in `_config.yml`:
-
-```yaml
-toc:
-    enabled: true
-    h_min: 1
-    h_max: 3
-```
-
-## Google Analytics, etc.
-
-The jekyll-gitboook theme supports embedding the [Google Analytics][7], [CNZZ][8] and [Application Insights][9] website analytical tools with the following
-minimal configuration in `_config.yaml`:
-
-```yaml
-tracker:
-  google_analytics: "<YOUR GOOGLE ANALYTICS KEY, e.g, UA-xxxxxx-x>"
-```
-
-Similarly, CNZZ can be added with the following configuration in `_config.yaml`
-
-```yaml
-tracker:
-  cnzz: "<YOUR CNZZ ANALYTICS KEY, e.g., xxxxxxxx>"
-```
-
-Application Insights can be added with the following configuration in `_config.yaml`
-
-```yaml
-tracker:
-  application_insights: "<YOUR APPLICATION INSIGHTS CONNECTION STRING>"
-```
-
-## Disqus comments
-
-[Disqus](https://disqus.com/) comments can be enabled by adding the following configuration in `_config.yaml`:
-
-```yaml
-disqushandler: "<YOUR DISQUS SHORTNAME>"
-```
-
-## Extra StyleSheet or Javascript elements
-
-You can add extra CSS or JavaScript references using configuration collections:
-
-- extra_css: for additional style sheets. If the url does not start by http, the path must be relative to the root of the site, without a starting `/`.
-- extra_header_js: for additional scripts to be included in the `<head>` tag, after the `extra_css` has been added. If the url does not start by http, the path must be relative to the root of the site, without a starting `/`.
-- extra_footer_js: for additional scripts to be included at the end of the HTML document, just before the site tracking script. If the url does not start by http, the path must be relative to the root of the site, without a starting `/`.
-
-## Customizing font settings
-
-The fonts can be customized by modifying the `.book.font-family-0` and `.book.font-family-1` entry in [`./assets/gitbook/custom.css`][10],
-
-```css
-.book.font-family-0 {
-    font-family: Georgia, serif;
-}
-.book.font-family-1 {
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-}
-```
-
-## Tips, Warnings and Dangers blocks
-
-The jekyll-gitbook theme supports customized kramdown attributes (`{: .block-tip }`, `{: .block-warning }`,
-`{: .block-danger }`) like that displayed in [the discord.js website][11]. The marker can be used like
-
-```markdown
-> ##### TIP
->
-> This guide is last tested with @napi-rs/canvas^0.1.20, so make sure you have
-> this or a similar version after installation.
-{: .block-tip }
-```
-
-Rendered page can be previewed from
-
-[https://sighingnow.github.io/jekyll-gitbook/jekyll/2022-06-30-tips_warnings_dangers.html](https://sighingnow.github.io/jekyll-gitbook/jekyll/2022-06-30-tips_warnings_dangers.html)
-
-## Cover image inside pages
-
-The jekyll-gitbook theme supports adding a cover image to a specific page by adding
-a `cover` field to the page metadata:
-
-```diff
-  ---
-  title: Page with cover image
-  author: Tao He
-  date: 2022-05-24
-  category: Jekyll
-  layout: post
-+ cover: /assets/jekyll-gitbook/dinosaur.gif
-  ---
-```
-
-The effect can be previewed from
-
-[https://sighingnow.github.io/jekyll-gitbook/jekyll/2022-05-24-page_cover.html](https://sighingnow.github.io/jekyll-gitbook/jekyll/2022-05-24-page_cover.html)
-
-## Diagrams with mermaid.js
-
-This jekyll-theme supports [mermaid.js](https://mermaid.js.org/) to render diagrams
-in markdown.
-
-To enable the mermaid support, you need to set `mermaid: true` in the front matter
-of your post.
-
-```markdown
----
-mermaid: true
----
-```
-
-The example can be previewed from
-
-[https://sighingnow.github.io/jekyll-gitbook/jekyll/2023-08-31-mermaid.html](https://sighingnow.github.io/jekyll-gitbook/jekyll/2023-08-31-mermaid.html)
-
-## License
-
-This work is open sourced under the Apache License, Version 2.0.
-
-Copyright 2019 Tao He.
-
-[1]: https://pages.github.com
-[2]: https://pages.github.com/themes
-[3]: https://github.com/sighingnow/jekyll-gitbook/fork
-[4]: https://github.com/allejo/jekyll-toc
-[5]: https://github.com/gitbook-plugins/gitbook-plugin-search-pro
-[6]: https://github.com/rouge-ruby/rouge/tree/master/lib/rouge/themes
-[7]: https://analytics.google.com/analytics/web/
-[8]: https://www.cnzz.com/
-[9]: https://docs.microsoft.com/en-us/azure/azure-monitor/app/app-insights-overview
-[10]: https://github.com/sighingnow/jekyll-gitbook/blob/master/gitbook/custom.css
-[11]: https://discordjs.guide/popular-topics/canvas.html#setting-up-napi-rs-canvas
-[12]: https://rubygems.org/gems/jekyll-remote-theme
-[13]: https://docs.github.com/en/pages/setting-up-a-github-pages-site-with-jekyll/adding-a-theme-to-your-github-pages-site-using-jekyll
-[14]: https://github.com/sighingnow/jekyll-gitbook/blob/master/_config.yml
+</code></pre></div>    </div>
+  </li>
+</ul>
 </section>
             </div><div class="search-results">
     <div class="has-results">
@@ -501,6 +433,38 @@ window.MathJax = {
 
 <!-- introduce per-page mermaid support -->
 
+    <script>
+    function render_mermaid() {
+        mermaid.initialize({
+            startOnLoad: false,
+            theme: "default",
+        });
+        window.mermaid.init(undefined, document.querySelectorAll('.language-mermaid'));
+    }
+
+    function initialize_mermaid() {
+        if (document.readyState === "loading") {
+            // Loading hasn't finished yet
+            document.addEventListener("DOMContentLoaded", render_mermaid);
+        } else {
+            // `DOMContentLoaded` has already fired
+            render_mermaid();
+        }
+    }
+
+    if (window.mermaid_script && window.mermaid) {
+        initialize_mermaid();
+    } else {
+        window.mermaid_script = document.createElement("script");
+        mermaid_script.onload = initialize_mermaid;
+        document.head.appendChild(mermaid_script);
+        mermaid_script.defer = true;
+        mermaid_script.id = 'mermaid-script';
+        mermaid_script.src = '/blog/assets/gitbook/mermaid.min.js';
+    }
+</script>
+
+
 
 <!-- introduce mathjax support -->
 <script>
@@ -524,12 +488,14 @@ window.MathJax = {
     }
 </script>
 
-<a href="/blog/" class="navigation navigation-pre navigation-unique">
-                        <i class="fa"></i>
-                    </a>
+
+                        <a href="/blog/jekyll/2019-02-03-interrupte.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page: 硬中断">
+                            <i class="fa fa-angle-left"></i>
+                        </a>
+                    
 
                     
-                        <a href="/blog/jekyll/2013-03-02-cobalt.html" class="navigation navigation-next navigation-unique" aria-label="Next page: Cobalt">
+                        <a href="/blog/jekyll/2020-08-20-OpenGL_misc.html" class="navigation navigation-next navigation-unique" aria-label="Next page: OpenGL Misc">
                             <i class="fa fa-angle-right"></i>
                         </a>
                     
@@ -545,14 +511,12 @@ window.MathJax = {
         "level": "1.1",
         "depth": 1,
         
-
-        
         "next": {
-            "title": "Cobalt",
+            "title": "OpenGL Misc",
             "level": "1.2",
             "depth": 1,
-            "path": "_posts/2013-03-2-cobalt.md",
-            "ref": "_posts/2013-03-2-cobalt.md",
+            "path": "_posts/2020-08-20-OpenGL_misc.md",
+            "ref": "_posts/2020-08-20-OpenGL_misc.md",
             "articles": []
         },
         
@@ -644,8 +608,8 @@ window.MathJax = {
         "gitbook": "*"
     },
     "file": {
-        "path": "README.md.org",
-        "mtime": "",
+        "path": "_posts/2019-08-10-Wayland-Misc.md",
+        "mtime": "2019-08-10 00:00:00 +0800",
         "type": "markdown"
     },
     "gitbook": {
