@@ -204,7 +204,7 @@
                             </a>
                             
                                 
-                                    <ul><li><a href="#glinvalidateframebuffer-vs-glclear" onclick="mobilePageScrollToAnchor(this)" >glInvalidateFramebuffer vs glClear</a></li><li><a href="#gldiscardframebufferext" onclick="mobilePageScrollToAnchor(this)" >glDiscardFramebufferEXT</a></li><li><a href="#texture-obj与rbo的区别" onclick="mobilePageScrollToAnchor(this)" >Texture obj与RBO的区别</a></li></ul>
+                                    <ul><li><a href="#glinvalidateframebuffer-vs-glclear" onclick="mobilePageScrollToAnchor(this)" >glInvalidateFramebuffer vs glClear</a></li><li><a href="#gldiscardframebufferext" onclick="mobilePageScrollToAnchor(this)" >glDiscardFramebufferEXT</a></li><li><a href="#texture-obj与rbo的区别" onclick="mobilePageScrollToAnchor(this)" >Texture obj与RBO的区别</a></li><li><a href="#shader" onclick="mobilePageScrollToAnchor(this)" >shader</a><ul><li><a href="#初始化" onclick="mobilePageScrollToAnchor(this)" >初始化</a></li><li><a href="#变量" onclick="mobilePageScrollToAnchor(this)" >变量</a></li></ul></li></ul>
 
                                 
                             
@@ -317,6 +317,25 @@
 <p>FBO(Frame Buffer Object)即帧缓冲区对象，是一个可添加缓冲区的容器，可以为其添加纹理或渲染缓冲区对象（RBO),它们的区别如下图</p>
 
 <p><img src="/blog/assets/OpenGL/renderbuffer.png" alt="renderbuffer" /></p>
+
+<h1 id="shader">shader</h1>
+
+<h2 id="初始化">初始化</h2>
+<p><img src="/blog/assets/OpenGL/shader.png" alt="shader" /></p>
+
+<h2 id="变量">变量</h2>
+
+<p><strong>uniform变量</strong></p>
+
+<p>uniform变量是外部application程序传递给（vertex和fragment）shader的变量。因此它是application通过函数glUniform**（）函数赋值的。在（vertex和fragment）shader程序内部，uniform变量就像是C语言里面的常量（const ），它不能被shader程序修改。</p>
+
+<p><strong>attribute变量</strong></p>
+
+<p>attribute变量是只能在vertex shader中使用的变量。它不能在fragment shader中声明attribute变量，也不能被fragment shader中使用。一般用attribute变量来表示一些顶点的数据，如：顶点坐标，法线，纹理坐标，顶点颜色等。在application中，一般用函数glBindAttribLocation（）来绑定每个attribute变量的位置，然后用函数glVertexAttribPointer（）为每个attribute变量赋值。</p>
+
+<p><strong>varying变量</strong></p>
+
+<p>varying变量是vertex和fragment shader之间做数据传递用的。一般vertex shader修改varying变量的值，然后fragment shader使用该varying变量的值。因此varying变量在vertex和fragment shader二者之间的声明必须是一致的。application不能使用此变量。</p>
 </section>
             </div><div class="search-results">
     <div class="has-results">

@@ -384,6 +384,8 @@
       <li>./weston –tty=2</li>
       <li>Ctrl+Alt+Backspace –&gt; 退出Weston界面</li>
     </ol>
+
+    <p>如一般用户启动weston，这时要借助weston-launch 来完成。 相关code：libweston/weston-launch.c</p>
   </li>
   <li>run weston-client test
     <ol>
@@ -820,6 +822,8 @@ weston-10.0.0./compositor/executable.c
 
 <p><img src="/blog/assets/wayland/layer_view_surface.png" alt="layer_view_surface" /></p>
 
+<p><img src="/blog/assets/wayland/view_list.png" alt="view_list" /></p>
+
 <h2 id="47-create_surface">4.7 create_surface</h2>
 
 <p><img src="/blog/assets/wayland/client_server_create_object.png" alt="client_server_create_object" /></p>
@@ -867,7 +871,9 @@ weston-10.0.0./compositor/executable.c
 
 <h2 id="416-libinput">4.16 libinput</h2>
 
-<p><img src="/blog/assets/wayland/Libinput_for_Wayland_compositors.svg" alt="libinput" /></p>
+<p><img src="/blog/assets/wayland/Libinput_for_Wayland_compositors.svg" alt="libinput" width="400px" height="480px" /></p>
+
+<p>source code：<a href="https://gitlab.freedesktop.org/libinput/libinput">https://gitlab.freedesktop.org/libinput/libinput</a></p>
 
 <p>为了提高输入管理部分的模块性，Weston将对输入设备(键盘，鼠标，触摸屏等)的处理分离到一个单独的库，也就是libinput 中。具体地，它提供了<strong>设备检测</strong>，<strong>设备处理</strong>，<strong>输入事件处理</strong>等基本功能，类似于Android 中的EventHub。此外它还有<strong>pointer acceleration</strong>, <strong>touchpad support</strong> 及<strong>gesture recognition</strong>等功能。</p>
 
@@ -894,7 +900,13 @@ weston-10.0.0./compositor/executable.c
 
 <p>可以看到，对于焦点处理，每个设备有自己的focus,它指向焦点窗口，用于拖拽和输入等。成员focus_resource_list 中包含了焦点窗口所在client中输入设备 proxy对应的 resource 对象。在这个 list 中意味着可以接收到相应的事件。</p>
 
+<p><img src="/blog/assets/wayland/libinput.png" alt="libinput" /></p>
+
 <p><img src="/blog/assets/wayland/wayland_input.svg" alt="wayland_input" /></p>
+
+<p>对于焦点处理，每个设备有自己的 focus，它指向焦点窗口，用于拖拽和输入等。成员focus_resource_list 中包含了焦点窗口所在 client 中输入设备 proxy 对应的 resource 对象。在这个list中的resource就可以接收到相应的事件。 相关函数<span style="background-color: yellow">weston_keyboard_send_key()</span>, 参考 4.18.10 key的处理</p>
+
+<p><img src="/blog/assets/wayland/libinput_seat.png" alt="libinput_seat" /></p>
 
 <p><img src="/blog/assets/wayland/input.png" alt="input" width="170px" height="70px" /></p>
 
@@ -934,6 +946,8 @@ weston-10.0.0./compositor/executable.c
 <p>总之，udev 是一个关键的 Linux 设备管理工具，负责设备事件的处理、设备识别、权限管理和符号链接的创建</p>
 
 <h3 id="4162-grab-key">4.16.2 grab key</h3>
+
+<p>特殊情况下，shell对key的grab</p>
 
 <p><img src="/blog/assets/wayland/grab_key.svg" alt="grab_key" /></p>
 
@@ -1013,6 +1027,13 @@ weston-10.0.0./compositor/executable.c
 <ul>
   <li>wl_signal_add( , ) 添加一个listener到 listerner_list 链表</li>
   <li>wl_signal_emit( , ) 触发一个signal, 从listener_list中调用每个listener notify</li>
+  <li>listerner_list 其实就是一个callback链表
+    <div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="k">struct</span> <span class="n">wl_listener</span> <span class="p">{</span>
+      <span class="k">struct</span> <span class="n">wl_list</span> <span class="n">link</span><span class="p">;</span>
+      <span class="n">wl_notify_func_t</span> <span class="n">notify</span><span class="p">;</span>
+  <span class="p">};</span>
+</code></pre></div>    </div>
+  </li>
 </ul>
 
 <h3 id="4-123-libwayland-eglsoxxx">4 12.3 libwayland-egl.so.xxx</h3>
