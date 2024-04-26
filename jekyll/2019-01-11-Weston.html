@@ -171,7 +171,7 @@
                             </a>
                             
                                 
-                                    <ul><li><a href="#1-启动weston" onclick="mobilePageScrollToAnchor(this)" >1. 启动Weston</a><ul><li><a href="#11-实现内容" onclick="mobilePageScrollToAnchor(this)" >1.1 实现内容</a></li><li><a href="#12-伪代码" onclick="mobilePageScrollToAnchor(this)" >1.2 伪代码</a></li><li><a href="#13-backend-renderer-shell的作用" onclick="mobilePageScrollToAnchor(this)" >1.3 backend, renderer, shell的作用</a></li></ul></li><li><a href="#2-client-动作" onclick="mobilePageScrollToAnchor(this)" >2. Client 动作</a><ul><li><a href="#21-client的接入和global资源代理的创建" onclick="mobilePageScrollToAnchor(this)" >2.1 Client的接入和global资源代理的创建</a><ul><li><a href="#流程" onclick="mobilePageScrollToAnchor(this)" >流程</a></li><li><a href="#伪代码" onclick="mobilePageScrollToAnchor(this)" >伪代码</a></li></ul></li><li><a href="#22-内部weston---client-通讯机制" onclick="mobilePageScrollToAnchor(this)" >2.2 内部weston - client 通讯机制</a><ul><li><a href="#rpc-图示" onclick="mobilePageScrollToAnchor(this)" >RPC 图示</a></li><li><a href="#object-rpc-机制" onclick="mobilePageScrollToAnchor(this)" >object RPC 机制</a></li></ul></li><li><a href="#23-client-创建各类资源proxy" onclick="mobilePageScrollToAnchor(this)" >2.3 Client 创建各类资源proxy</a></li><li><a href="#24-client-渲染" onclick="mobilePageScrollToAnchor(this)" >2.4 Client 渲染</a></li><li><a href="#25-client-提交渲染好的surface" onclick="mobilePageScrollToAnchor(this)" >2.5. Client 提交渲染好的surface</a></li></ul></li><li><a href="#3-各个surface的合成与呈现呈现" onclick="mobilePageScrollToAnchor(this)" >3. 各个Surface的合成与呈现呈现·</a><ul><li><a href="#31-流程" onclick="mobilePageScrollToAnchor(this)" >3.1 流程</a></li></ul></li></ul>
+                                    <ul><li><a href="#1-启动weston" onclick="mobilePageScrollToAnchor(this)" >1. 启动Weston</a><ul><li><a href="#11-实现内容" onclick="mobilePageScrollToAnchor(this)" >1.1 实现内容</a></li><li><a href="#12-伪代码" onclick="mobilePageScrollToAnchor(this)" >1.2 伪代码</a></li><li><a href="#13-backend-renderer-shell的作用" onclick="mobilePageScrollToAnchor(this)" >1.3 backend, renderer, shell的作用</a></li></ul></li><li><a href="#2-client-动作" onclick="mobilePageScrollToAnchor(this)" >2. Client 动作</a><ul><li><a href="#21-client的接入和global资源代理的创建" onclick="mobilePageScrollToAnchor(this)" >2.1 Client的接入和global资源代理的创建</a><ul><li><a href="#流程" onclick="mobilePageScrollToAnchor(this)" >流程</a></li><li><a href="#伪代码" onclick="mobilePageScrollToAnchor(this)" >伪代码</a></li></ul></li><li><a href="#22-内部weston---client-通讯机制" onclick="mobilePageScrollToAnchor(this)" >2.2 内部weston - client 通讯机制</a><ul><li><a href="#ipc-图示" onclick="mobilePageScrollToAnchor(this)" >IPC 图示</a></li><li><a href="#object-ipc-机制" onclick="mobilePageScrollToAnchor(this)" >object IPC 机制</a></li></ul></li><li><a href="#23-client-创建各类资源proxy" onclick="mobilePageScrollToAnchor(this)" >2.3 Client 创建各类资源proxy</a></li><li><a href="#24-client-渲染" onclick="mobilePageScrollToAnchor(this)" >2.4 Client 渲染</a></li><li><a href="#25-client-提交渲染好的surface" onclick="mobilePageScrollToAnchor(this)" >2.5. Client 提交渲染好的surface</a></li></ul></li><li><a href="#3-各个surface的合成与呈现呈现" onclick="mobilePageScrollToAnchor(this)" >3. 各个Surface的合成与呈现呈现·</a><ul><li><a href="#31-流程" onclick="mobilePageScrollToAnchor(this)" >3.1 流程</a></li></ul></li></ul>
 
                                 
                             
@@ -428,16 +428,16 @@ renderer接口供backend内部使用，外部通过调用backend接口触发</p>
 
 <p>要让两个进程通过 socket 进行函数调用，首先需要将调用抽象成数据流的形式。这个数据流应该包含函数名、参数等信息。</p>
 
-<p>RPC 函数的接口定义是应该同时包含在 Client 和 Server 端的库中的，其中包含了接口对象所支持的 request 和 event 的函数签名。因此这部分不用传输，只要传输目标<strong>对象 id</strong>，<strong>方法 id</strong> 和<strong>参数列表</strong>这些信息就可以了。</p>
+<p>IPC 函数的接口定义是应该同时包含在 Client 和 Server 端的库中的，其中包含了接口对象所支持的 request 和 event 的函数签名。因此这部分不用传输，只要传输目标<strong>对象 id</strong>，<strong>方法 id</strong> 和<strong>参数列表</strong>这些信息就可以了。</p>
 
 <p>这些信息会通过 wl_closure_marshal()写入 wl_closure 结构，再由 serialize_closure()变成数据流。</p>
 
 <p>等到了目标进程后， 会从数据流通过 wl_connection_demarshal()转回 wl_closure。</p>
 
-<h3 id="rpc-图示">RPC 图示</h3>
+<h3 id="ipc-图示">IPC 图示</h3>
 <p><img src="/blog/assets/wayland/image-20230210145327279.png" alt="image-20230210145327279.png" /></p>
 
-<h3 id="object-rpc-机制">object RPC 机制</h3>
+<h3 id="object-ipc-机制">object IPC 机制</h3>
 
 <p>这个过程类似于 Android 中的 Parcel 机制。那么 问题来了，参数中的整形，字符串什么的都好搞，拷贝就行。但如果参数中包含对象，我们不能把整个对象 拷贝过去，也不能传引用过去。那么需要一种机制来作<strong>同一对象在 Server 和 Client 端的映射</strong>，这是通过 wl_map 实现的。</p>
 
@@ -481,7 +481,7 @@ renderer接口供backend内部使用，外部通过调用backend接口触发</p>
 <span class="c1">// wl_pointer 鼠标指针</span>
 <span class="c1">// 通过wl_pointer 创建一个listener可以接收鼠标的移动信息</span>
 <span class="n">wl_pointre</span> <span class="o">=</span> <span class="n">wl_seat_get_pointer</span><span class="p">(</span><span class="n">wl_weat</span><span class="p">)</span>
-<span class="n">wl_pointer_add_listener</span><span class="err">（</span><span class="n">wl_pointer</span><span class="p">,</span> <span class="n">pointer_listener</span><span class="p">)</span>
+<span class="n">wl_pointer_add_listener</span><span class="p">(</span><span class="n">wl_pointer</span><span class="p">,</span> <span class="n">pointer_listener</span><span class="p">)</span>
 
 <span class="p">...</span> <span class="p">...</span>
 
