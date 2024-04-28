@@ -94,7 +94,7 @@
                             </a>
                             
                                 
-                                    <ul><li><a href="#starboard" onclick="mobilePageScrollToAnchor(this)" >Starboard</a></li><li><a href="#360-video" onclick="mobilePageScrollToAnchor(this)" >360 Video</a></li><li><a href="#skia" onclick="mobilePageScrollToAnchor(this)" >Skia</a></li><li><a href="#egl-opengl" onclick="mobilePageScrollToAnchor(this)" >egl opengl</a></li></ul>
+                                    <ul><li><a href="#starboard" onclick="mobilePageScrollToAnchor(this)" >Starboard</a></li><li><a href="#360-video" onclick="mobilePageScrollToAnchor(this)" >360 Video</a></li><li><a href="#skia" onclick="mobilePageScrollToAnchor(this)" >Skia</a></li><li><a href="#egl-opengl" onclick="mobilePageScrollToAnchor(this)" >egl opengl</a></li><li><a href="#cobalt中wayland" onclick="mobilePageScrollToAnchor(this)" >cobalt中wayland</a></li></ul>
 
                                 
                             
@@ -319,6 +319,33 @@
 <p>cobalt 中egl opengl API的跟踪
 cobalt/renderer/egl_and_gles.h 
 cobalt/renderer/rasterizer/egl/graphics_state.cc</p>
+
+<h1 id="cobalt中wayland">cobalt中wayland</h1>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code>   <span class="n">SbWindowPrivate</span><span class="o">::</span><span class="n">SbWindowPrivate</span><span class="p">(</span><span class="n">wl_compositor</span><span class="o">*</span> <span class="n">compositor</span><span class="p">,</span>
+                                    <span class="n">wl_shell</span><span class="o">*</span> <span class="n">shell</span><span class="p">,</span>
+                                    <span class="k">const</span> <span class="n">SbWindowOptions</span><span class="o">*</span> <span class="n">options</span><span class="p">,</span>
+                                    <span class="kt">float</span> <span class="n">pixel_ratio</span><span class="p">)</span> <span class="p">{</span>
+     <span class="n">width</span> <span class="o">=</span> <span class="n">kWindowWidth</span><span class="p">;</span>
+     <span class="n">height</span> <span class="o">=</span> <span class="n">kWindowHeight</span><span class="p">;</span>
+     <span class="n">video_pixel_ratio</span> <span class="o">=</span> <span class="n">pixel_ratio</span><span class="p">;</span>
+     <span class="k">if</span> <span class="p">(</span><span class="n">options</span> <span class="o">&amp;&amp;</span> <span class="n">options</span><span class="o">-&gt;</span><span class="n">size</span><span class="p">.</span><span class="n">width</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">options</span><span class="o">-&gt;</span><span class="n">size</span><span class="p">.</span><span class="n">height</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+       <span class="n">width</span> <span class="o">=</span> <span class="n">options</span><span class="o">-&gt;</span><span class="n">size</span><span class="p">.</span><span class="n">width</span><span class="p">;</span>
+       <span class="n">height</span> <span class="o">=</span> <span class="n">options</span><span class="o">-&gt;</span><span class="n">size</span><span class="p">.</span><span class="n">height</span><span class="p">;</span>
+     <span class="p">}</span>
+     <span class="n">surface</span> <span class="o">=</span> <span class="n">wl_compositor_create_surface</span><span class="p">(</span><span class="n">compositor</span><span class="p">);</span>
+     <span class="n">shell_surface</span> <span class="o">=</span> <span class="n">wl_shell_get_shell_surface</span><span class="p">(</span><span class="n">shell</span><span class="p">,</span> <span class="n">surface</span><span class="p">);</span>
+     <span class="n">wl_shell_surface_add_listener</span><span class="p">(</span><span class="n">shell_surface</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">shell_surface_listener</span><span class="p">,</span> <span class="n">this</span><span class="p">);</span>
+     <span class="n">wl_shell_surface_set_title</span><span class="p">(</span><span class="n">shell_surface</span><span class="p">,</span> <span class="s">"cobalt"</span><span class="p">);</span>
+     <span class="k">struct</span> <span class="n">wl_region</span><span class="o">*</span> <span class="n">region</span><span class="p">;</span>
+     <span class="n">region</span> <span class="o">=</span> <span class="n">wl_compositor_create_region</span><span class="p">(</span><span class="n">compositor</span><span class="p">);</span>
+     <span class="n">wl_region_add</span><span class="p">(</span><span class="n">region</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">);</span>
+     <span class="n">wl_surface_set_opaque_region</span><span class="p">(</span><span class="n">surface</span><span class="p">,</span> <span class="n">region</span><span class="p">);</span>
+     <span class="n">wl_region_destroy</span><span class="p">(</span><span class="n">region</span><span class="p">);</span>
+     <span class="n">egl_window</span> <span class="o">=</span> <span class="n">wl_egl_window_create</span><span class="p">(</span><span class="n">surface</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">);</span>
+     <span class="n">WindowRaise</span><span class="p">();</span>
+   <span class="p">}</span>
+</code></pre></div></div>
 </section>
             </div><div class="search-results">
     <div class="has-results">
