@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.2">Jekyll</generator><link href="http://localhost:4000/blog/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/blog/" rel="alternate" type="text/html" /><updated>2024-04-28T19:35:57+08:00</updated><id>http://localhost:4000/blog/feed.xml</id><title type="html">学习笔记</title><subtitle>Build Jekyll site with the GitBook style.
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.2">Jekyll</generator><link href="http://localhost:4000/blog/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/blog/" rel="alternate" type="text/html" /><updated>2024-05-09T18:32:22+08:00</updated><id>http://localhost:4000/blog/feed.xml</id><title type="html">学习笔记</title><subtitle>Build Jekyll site with the GitBook style.
 </subtitle><author><name>kevin_zh</name></author><entry><title type="html">misc</title><link href="http://localhost:4000/blog/jekyll/2022-06-22-misc.html" rel="alternate" type="text/html" title="misc" /><published>2022-06-22T00:00:00+08:00</published><updated>2022-06-22T00:00:00+08:00</updated><id>http://localhost:4000/blog/jekyll/misc</id><content type="html" xml:base="http://localhost:4000/blog/jekyll/2022-06-22-misc.html"><![CDATA[<h1 id="kref">kref</h1>
 
 <p>kref_init 是一个用于初始化内核对象引用计数器（krefs）的函数。它允许你为你的对象添加引用计数，确保在多个地方使用和传递对象时，代码的正确性。以下是关于 kref_init 的一些重要信息：</p>
@@ -982,42 +982,42 @@ cpu_addr是由dma_alloc_noncoherent返回的虚拟地址。
 <p>如：long a=123；int b=-1；计算a&amp; b。</p>
 
 <p>如：long a=123；unsigned intb=1；计算a &amp; b。</p>]]></content><author><name>kevin_zh</name></author><category term="Jekyll" /><summary type="html"><![CDATA[1.位运算概述]]></summary></entry><entry><title type="html">ffmpeg命令</title><link href="http://localhost:4000/blog/jekyll/2021-04-27-ffmpeg.html" rel="alternate" type="text/html" title="ffmpeg命令" /><published>2021-04-27T00:00:00+08:00</published><updated>2021-04-27T00:00:00+08:00</updated><id>http://localhost:4000/blog/jekyll/ffmpeg</id><content type="html" xml:base="http://localhost:4000/blog/jekyll/2021-04-27-ffmpeg.html"><![CDATA[<h3 id="01-视频分割">01. 视频分割</h3>
-<pre><code class="language-cobol">ffmpeg -ss 00:00:00 -i input.mp4 -c copy -t 60 output.mp4
-</code></pre>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ffmpeg <span class="nt">-ss</span> 00:00:00 <span class="nt">-i</span> input.mp4 <span class="nt">-c</span> copy <span class="nt">-t</span> 60 output.mp4
+</code></pre></div></div>
 <p>-ss 表示视频分割的起始时间，-t 表示分割时长，同时也可以用 00:01:00表示</p>
 
 <p>==<em>注意</em>== ：-ss 要放在 -i 之前</p>
 
 <h3 id="02-视频区域裁剪">02. 视频区域裁剪：</h3>
-<pre><code class="language-cobol">ffmpeg -i 3.mkv -filter_complex crop=1024:50:0:550 -y 4.mkv  
-</code></pre>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ffmpeg <span class="nt">-i</span> 3.mkv <span class="nt">-filter_complex</span> <span class="nv">crop</span><span class="o">=</span>1024:50:0:550 <span class="nt">-y</span> 4.mkv  
+</code></pre></div></div>
 <h3 id="03-视频预览">03. 视频预览</h3>
 <p>ffplay 3.mkv -vf crop=1024:50:0:550</p>
 
 <h3 id="04-视频放大缩小">04. 视频放大,缩小</h3>
-<pre><code class="language-cobol">ffmpeg  -i 2.mp4 -vf "scale=1280:64" 4.mp4
-</code></pre>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ffmpeg  <span class="nt">-i</span> 2.mp4 <span class="nt">-vf</span> <span class="s2">"scale=1280:64"</span> 4.mp4
+</code></pre></div></div>
 <p>==scale== =w:h 表示放大后的大小</p>
 
 <h3 id="05-列出所有format">05. 列出所有format</h3>
 <p>// list all pix format</p>
-<pre><code class="language-cobol">ffmpeg -pix_fmts 
-</code></pre>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ffmpeg <span class="nt">-pix_fmts</span> 
+</code></pre></div></div>
 <h3 id="06-图片转换">06. 图片转换</h3>
-<pre><code class="language-cobol">ffmpeg -i temp.jpg -s 1024x680 -pix_fmt yuvj420p 9.yuv
-ffmpeg.exe -i agf-dog-1280x960.jpg  -vf scale=1920:1080 agf-dog-1920x1080.jpg
-</code></pre>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ffmpeg <span class="nt">-i</span> temp.jpg -s 1024x680 -pix_fmt yuvj420p 9.yuv
+ffmpeg.exe <span class="nt">-i</span> agf-dog-1280x960.jpg  <span class="nt">-vf</span> <span class="nv">scale</span><span class="o">=</span>1920:1080 agf-dog-1920x1080.jpg
+</code></pre></div></div>
 <h3 id="07-视频format转换">07. 视频format转换</h3>
 
 <p>YUV -&gt; RGB</p>
 
-<pre><code class="language-cobol">ffmpeg -s 360x270 -pix_fmt yuv420p -i  2_test_360x270_50.yuv -pix_fmt rgb24  aaaa.rgb  
-</code></pre>
-<pre><code class="language-cobol">ffmpeg -s 640x480 -pix_fmt nv12 -i 640x480_1.jpg -vf scale=640:480,setsar=1:1 640x480_1_nv12.yuv -hide_banner  
-</code></pre>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ffmpeg <span class="nt">-s</span> 360x270 <span class="nt">-pix_fmt</span> yuv420p <span class="nt">-i</span>  2_test_360x270_50.yuv <span class="nt">-pix_fmt</span> rgb24  aaaa.rgb  
+</code></pre></div></div>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ffmpeg <span class="nt">-s</span> 640x480 <span class="nt">-pix_fmt</span> nv12 <span class="nt">-i</span> 640x480_1.jpg <span class="nt">-vf</span> <span class="nv">scale</span><span class="o">=</span>640:480,setsar<span class="o">=</span>1:1 640x480_1_nv12.yuv <span class="nt">-hide_banner</span>  
+</code></pre></div></div>
 <h3 id="08-视频叠加">08. 视频叠加</h3>
-<pre><code class="language-cobol"> ffmpeg -i input1 -i input2 -filter_complex overlay=x:y output
-</code></pre>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code> ffmpeg <span class="nt">-i</span> input1 <span class="nt">-i</span> input2 <span class="nt">-filter_complex</span> <span class="nv">overlay</span><span class="o">=</span>x:y output
+</code></pre></div></div>
 <h3 id="09-视频旋转">09. 视频旋转</h3>
 
 <p>//mp4向左旋转90度
@@ -1028,58 +1028,64 @@ ffmpeg.exe -i agf-dog-1280x960.jpg  -vf scale=1920:1080 agf-dog-1920x1080.jpg
 
 <h3 id="10-视频镜像">10. 视频镜像</h3>
 <p>//mp4左右镜像翻转</p>
-<pre><code class="language-cobol"> ffmpeg -i input.mp4 -vf "hflip" outut.mp4
-</code></pre>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code> ffmpeg <span class="nt">-i</span> input.mp4 <span class="nt">-vf</span> <span class="s2">"hflip"</span> outut.mp4
+</code></pre></div></div>
 <p>//mp4上下镜像翻转</p>
-<pre><code class="language-cobol"> ffmpeg -i input.mp4 -vf "vflip" outut.mp4
-</code></pre>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code> ffmpeg <span class="nt">-i</span> input.mp4 <span class="nt">-vf</span> <span class="s2">"vflip"</span> outut.mp4
+</code></pre></div></div>
+<h3 id="11-mp4转raw-data">11. mp4转raw data</h3>
 
-<h3 id="10-图片旋转">10. 图片旋转</h3>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code> ffmpeg <span class="nt">-i</span> video.mp4 <span class="nt">-c</span>:v rawvideo <span class="nt">-pix_fmt</span> yuv420p out.yuv
+</code></pre></div></div>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ffmpeg <span class="nt">-i</span> input.mp4 <span class="nt">-vf</span> <span class="s2">"format=nv12"</span> <span class="nt">-c</span>:v rawvideo <span class="nt">-an</span> output.nv12
+</code></pre></div></div>
+
+<h3 id="12-图片旋转">12. 图片旋转</h3>
 <p>//图片向右旋转90度</p>
-<pre><code class="language-cobol"> ffmpeg -i input.png -vf rotate='90*PI/180' -y rotate60.png
-</code></pre>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code> ffmpeg <span class="nt">-i</span> input.png <span class="nt">-vf</span> <span class="nv">rotate</span><span class="o">=</span><span class="s1">'90*PI/180'</span> <span class="nt">-y</span> rotate60.png
+</code></pre></div></div>
 <p>//图片向右旋转90度</p>
-<pre><code class="language-cobol"> ffmpeg -i input.png -vf rotate='-90*PI/180' -y rotate_90.png
-</code></pre>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code> ffmpeg <span class="nt">-i</span> input.png <span class="nt">-vf</span> <span class="nv">rotate</span><span class="o">=</span><span class="s1">'-90*PI/180'</span> <span class="nt">-y</span> rotate_90.png
+</code></pre></div></div>
 <p>//图片像左旋转90度</p>
-<pre><code class="language-cobol"> ffmpeg -i input.png -vf transpose=2 -y transpose2.png
-</code></pre>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code> ffmpeg <span class="nt">-i</span> input.png <span class="nt">-vf</span> <span class="nv">transpose</span><span class="o">=</span>2 <span class="nt">-y</span> transpose2.png
+</code></pre></div></div>
 <p>//图片像右旋转90度</p>
-<pre><code class="language-cobol"> ffmpeg -i input.png -vf transpose=1 -y transpose2.png
-</code></pre>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code> ffmpeg <span class="nt">-i</span> input.png <span class="nt">-vf</span> <span class="nv">transpose</span><span class="o">=</span>1 <span class="nt">-y</span> transpose2.png
+</code></pre></div></div>
 <p>//逆时针(向左)旋转90°，然后垂直（上下）翻转</p>
-<pre><code class="language-cobol"> ffmpeg -i input.png -vf transpose=0 -y transpose0.png
-</code></pre>
-<h3 id="11--图片镜像">11.  图片镜像</h3>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code> ffmpeg <span class="nt">-i</span> input.png <span class="nt">-vf</span> <span class="nv">transpose</span><span class="o">=</span>0 <span class="nt">-y</span> transpose0.png
+</code></pre></div></div>
+<h3 id="13--图片镜像">13.  图片镜像</h3>
 <p>//图片左右镜像翻转</p>
-<pre><code class="language-cobol"> ffmpeg -i input.png -vf hflip -y hflip.png
-</code></pre>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code> ffmpeg <span class="nt">-i</span> input.png <span class="nt">-vf</span> hflip <span class="nt">-y</span> hflip.png
+</code></pre></div></div>
 <p>//图片上下镜像翻转</p>
-<pre><code class="language-cobol"> ffmpeg -i input.png -vf vflip -y vflip.png
-</code></pre>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code> ffmpeg <span class="nt">-i</span> input.png <span class="nt">-vf</span> vflip <span class="nt">-y</span> vflip.png
+</code></pre></div></div>
 <p>//yuv数据左右镜像翻转</p>
-<pre><code class="language-cobol"> ffmpeg -s 1920x1080 -pix_fmt nv12 -i nv12_1.yuv -vf hflip -y hflip_nv12.yuv
-</code></pre>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code> ffmpeg <span class="nt">-s</span> 1920x1080 <span class="nt">-pix_fmt</span> nv12 <span class="nt">-i</span> nv12_1.yuv <span class="nt">-vf</span> hflip <span class="nt">-y</span> hflip_nv12.yuv
+</code></pre></div></div>
 <p>//播放左右翻转后的yuv数据</p>
-<pre><code class="language-cobol"> ffplay -video_size 1920x1080 -pixel_format nv12 hflip_nv12.yuv
-</code></pre>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code> ffplay <span class="nt">-video_size</span> 1920x1080 <span class="nt">-pixel_format</span> nv12 hflip_nv12.yuv
+</code></pre></div></div>
 
-<h3 id="12-音频音量调节大小">12. 音频音量调节大小</h3>
+<h3 id="14-音频音量调节大小">14. 音频音量调节大小</h3>
 <p>//音量翻倍，写在滤镜里</p>
-<pre><code class="language-cobol"> ffmpeg -i input.wav -af volume=2 -y output.wav
-</code></pre>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code> ffmpeg <span class="nt">-i</span> input.wav <span class="nt">-af</span> <span class="nv">volume</span><span class="o">=</span>2 <span class="nt">-y</span> output.wav
+</code></pre></div></div>
 <p>//音量翻倍，不写在滤镜中</p>
-<pre><code class="language-cobol">ffmpeg -i input.wav -vol 2000 -y output.wav
-</code></pre>
-<h3 id="13-调节播放速度">13. 调节播放速度</h3>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ffmpeg <span class="nt">-i</span> input.wav <span class="nt">-vol</span> 2000 <span class="nt">-y</span> output.wav
+</code></pre></div></div>
+<h3 id="15-调节播放速度">15. 调节播放速度</h3>
 
-<pre><code class="language-cobol">ffmpeg -i test1.mp4 -vf  "setpts=0.25*PTS" test2.mp4
-</code></pre>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ffmpeg <span class="nt">-i</span> test1.mp4 <span class="nt">-vf</span>  <span class="s2">"setpts=0.25*PTS"</span> test2.mp4
+</code></pre></div></div>
 
 <p>四倍慢速：</p>
 
-<pre><code class="language-cobol">ffmpeg -i test1.mp4 -vf  "setpts=4*PTS" test2.mp4
-</code></pre>]]></content><author><name>Tao He</name></author><category term="Jekyll" /><summary type="html"><![CDATA[01. 视频分割 ffmpeg -ss 00:00:00 -i input.mp4 -c copy -t 60 output.mp4 -ss 表示视频分割的起始时间，-t 表示分割时长，同时也可以用 00:01:00表示]]></summary></entry><entry><title type="html">OpenGL Misc</title><link href="http://localhost:4000/blog/jekyll/2020-08-20-OpenGL_misc.html" rel="alternate" type="text/html" title="OpenGL Misc" /><published>2020-08-20T00:00:00+08:00</published><updated>2020-08-20T00:00:00+08:00</updated><id>http://localhost:4000/blog/jekyll/OpenGL_misc</id><content type="html" xml:base="http://localhost:4000/blog/jekyll/2020-08-20-OpenGL_misc.html"><![CDATA[<h1 id="glinvalidateframebuffer-vs-glclear">glInvalidateFramebuffer vs glClear</h1>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ffmpeg <span class="nt">-i</span> test1.mp4 <span class="nt">-vf</span>  <span class="s2">"setpts=4*PTS"</span> test2.mp4
+</code></pre></div></div>]]></content><author><name>Tao He</name></author><category term="Jekyll" /><summary type="html"><![CDATA[01. 视频分割 ffmpeg -ss 00:00:00 -i input.mp4 -c copy -t 60 output.mp4 -ss 表示视频分割的起始时间，-t 表示分割时长，同时也可以用 00:01:00表示]]></summary></entry><entry><title type="html">OpenGL Misc</title><link href="http://localhost:4000/blog/jekyll/2020-08-20-OpenGL_misc.html" rel="alternate" type="text/html" title="OpenGL Misc" /><published>2020-08-20T00:00:00+08:00</published><updated>2020-08-20T00:00:00+08:00</updated><id>http://localhost:4000/blog/jekyll/OpenGL_misc</id><content type="html" xml:base="http://localhost:4000/blog/jekyll/2020-08-20-OpenGL_misc.html"><![CDATA[<h1 id="glinvalidateframebuffer-vs-glclear">glInvalidateFramebuffer vs glClear</h1>
 
 <p>glInvalidateFramebuffer 和 glClear 是OpenGL中两个不同的函数，它们的作用和用法有所不同：</p>
 
