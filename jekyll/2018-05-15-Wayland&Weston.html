@@ -851,6 +851,8 @@ weston-10.0.0./compositor/executable.c
 
 <h3 id="4122-import-dmabuf">4.12.2 import dmabuf</h3>
 
+<p>Client 基本流程如下：</p>
+
 <ol>
   <li>
     <p>绑定 linux_dmabuf
@@ -863,6 +865,10 @@ zwp_linux_dmabuf_v1_create_params(<span style="color:red"> zwp_linux_dmabuf_v1</
   <li>
     <p>在param中设置dmbuf的各种信息(fd，width， height), YUV时，通过数组导入多个plane信息
 zwp_linux_buffer_params_v1_add(<span style="color:red">dmabuf_fd</span>)</p>
+  </li>
+  <li>
+    <p>对param对象添加listener
+zwp_linux_buffer_params_v1_add_listener()</p>
   </li>
   <li>
     <p>依据param在Server侧导入dmabuf对象
@@ -1137,6 +1143,49 @@ params_listener callback <span style="color:red">create_succeeded()</span></p>
 <h3 id="41911-explicit-synchronization">4.19.11 explicit-synchronization</h3>
 
 <p><img src="/blog/assets/wayland/explicit_sync.png" alt="explicit_sync" /></p>
+
+<p><img src="/blog/assets/wayland/linux_explicit_synchronization.svg" alt="linux_explicit_synchronization" /></p>
+<ol>
+  <li>
+    <p>绑定显示同步对象</p>
+
+    <p>wl_registry_bind(zwp_linux_explicit_synchronization_v1_interface)</p>
+  </li>
+  <li>
+    <p>针对surface创建sync对象</p>
+
+    <p>zwp_linux_explicit_synchronization_v1_get_synchronization(expliciti_sync,  surface)</p>
+  </li>
+  <li>Client 进行Opengl渲染，并通过sync 创建一个fence_fd
+    <ul>
+      <li>eglCreateSyncKHR() --&gt; sync</li>
+      <li>eglDupNativeFenceFDANDROID(sync) --&gt; fence_fd</li>
+      <li>eglDestroySyncKHR(sync)</li>
+    </ul>
+  </li>
+  <li>
+    <p>为surface_sync对象设置fence_fd， compositor将会等待它的完成</p>
+
+    <p>zwp_linux_surface_synchronization_v1_set_acquire_fence(fence_fd)</p>
+  </li>
+  <li>
+    <p>创建release对象，用于监听server callback</p>
+
+    <p>zwp_linux_surface_synchronization_v1_get_release(surface_sync)</p>
+  </li>
+  <li>
+    <p>提交surface，compositor开始合成并通过callback 返回要client等待的fence_fd</p>
+
+    <p>wl_surface_attach()                                                                                     <br />
+wl_surface_commit()</p>
+  </li>
+  <li>
+    <p>Client 等待上面callback 返回的fence_fd</p>
+
+    <p>eglCreateSyncKHR(..fence_fd..)  –&gt; sync                                                                                     <br />
+eglWaitSyncKHR(..sync..)</p>
+  </li>
+</ol>
 
 <h2 id="420-shell">4.20 shell</h2>
 
