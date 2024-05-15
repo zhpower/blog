@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.2">Jekyll</generator><link href="http://localhost:4000/blog/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/blog/" rel="alternate" type="text/html" /><updated>2024-05-09T18:32:22+08:00</updated><id>http://localhost:4000/blog/feed.xml</id><title type="html">学习笔记</title><subtitle>Build Jekyll site with the GitBook style.
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.2">Jekyll</generator><link href="http://localhost:4000/blog/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/blog/" rel="alternate" type="text/html" /><updated>2024-05-15T14:38:42+08:00</updated><id>http://localhost:4000/blog/feed.xml</id><title type="html">学习笔记</title><subtitle>Build Jekyll site with the GitBook style.
 </subtitle><author><name>kevin_zh</name></author><entry><title type="html">misc</title><link href="http://localhost:4000/blog/jekyll/2022-06-22-misc.html" rel="alternate" type="text/html" title="misc" /><published>2022-06-22T00:00:00+08:00</published><updated>2022-06-22T00:00:00+08:00</updated><id>http://localhost:4000/blog/jekyll/misc</id><content type="html" xml:base="http://localhost:4000/blog/jekyll/2022-06-22-misc.html"><![CDATA[<h1 id="kref">kref</h1>
 
 <p>kref_init 是一个用于初始化内核对象引用计数器（krefs）的函数。它允许你为你的对象添加引用计数，确保在多个地方使用和传递对象时，代码的正确性。以下是关于 kref_init 的一些重要信息：</p>
@@ -1146,7 +1146,189 @@ ffmpeg.exe <span class="nt">-i</span> agf-dog-1280x960.jpg  <span class="nt">-vf
 
 <p><strong>varying变量</strong></p>
 
-<p>varying变量是vertex和fragment shader之间做数据传递用的。一般vertex shader修改varying变量的值，然后fragment shader使用该varying变量的值。因此varying变量在vertex和fragment shader二者之间的声明必须是一致的。application不能使用此变量。</p>]]></content><author><name>kevin</name></author><category term="Jekyll" /><summary type="html"><![CDATA[glInvalidateFramebuffer vs glClear]]></summary></entry><entry><title type="html">Wayland Misc</title><link href="http://localhost:4000/blog/jekyll/2019-08-10-Wayland-Misc.html" rel="alternate" type="text/html" title="Wayland Misc" /><published>2019-08-10T00:00:00+08:00</published><updated>2019-08-10T00:00:00+08:00</updated><id>http://localhost:4000/blog/jekyll/Wayland-Misc</id><content type="html" xml:base="http://localhost:4000/blog/jekyll/2019-08-10-Wayland-Misc.html"><![CDATA[<h1 id="expat">Expat</h1>
+<p>varying变量是vertex和fragment shader之间做数据传递用的。一般vertex shader修改varying变量的值，然后fragment shader使用该varying变量的值。因此varying变量在vertex和fragment shader二者之间的声明必须是一致的。application不能使用此变量。</p>
+
+<h1 id="资源释放">资源释放</h1>
+
+<p>dmabuf资源释放主要考虑texture，eglImage 和dmabuf， FBO不需要考虑。</p>
+
+<ul>
+  <li>
+    <p>texture、 eglImage和 dmabuf是一体的，释放时需要调用glDeleteTextures， eglDestroyImageKHR， close(dmabuf)， 三个都完成后 dmabuf才真正释放。</p>
+  </li>
+  <li>
+    <p>如果texture附加到一个FBO上，glDeleteTextrues()后会使得该FBO的附加纹理为0.</p>
+  </li>
+  <li>
+    <p>如果前面已经attach 一个纹理到FBO， 在attach 新纹理到另一个FBO时，要先把前一个FBO的纹理设置为0, 否则释放不掉。</p>
+  </li>
+</ul>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="k">const</span> <span class="o">*</span><span class="n">argv</span><span class="p">[])</span>
+<span class="p">{</span>
+    <span class="n">init_dev</span><span class="p">();</span>
+
+    <span class="n">egl_Init</span><span class="p">();</span>
+
+    <span class="n">dmabuf_fd</span> <span class="o">=</span> <span class="n">allocate_dmabuf</span><span class="p">(</span><span class="mi">1920</span><span class="o">*</span><span class="mi">1080</span><span class="o">*</span><span class="mi">4</span><span class="p">);</span>
+    <span class="n">textureid</span> <span class="o">=</span> <span class="n">create_texture_for_dmabuf</span><span class="p">(</span><span class="n">dmabuf_fd</span><span class="p">,</span> <span class="mi">1920</span><span class="p">,</span> <span class="mi">1080</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">eglImg</span><span class="p">);</span>
+
+    <span class="n">glGenFramebuffers</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">FBO2</span><span class="p">);</span>
+    <span class="n">glBindFramebuffer</span><span class="p">(</span><span class="n">GL_FRAMEBUFFER</span><span class="p">,</span> <span class="n">FBO2</span><span class="p">);</span>
+    <span class="n">glBindTexture</span><span class="p">(</span><span class="n">GL_TEXTURE_EXTERNAL_OES</span><span class="p">,</span> <span class="n">textureid</span><span class="p">);</span>
+    <span class="n">glFramebufferTexture2D</span><span class="p">(</span><span class="n">GL_FRAMEBUFFER</span><span class="p">,</span> <span class="n">GL_COLOR_ATTACHMENT0</span><span class="p">,</span> <span class="n">GL_TEXTURE_EXTERNAL_OES</span><span class="p">,</span> <span class="n">textureid</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">glCheckFramebufferStatus</span><span class="p">(</span><span class="n">GL_FRAMEBUFFER</span><span class="p">)</span> <span class="o">!=</span> <span class="n">GL_FRAMEBUFFER_COMPLETE</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">assert</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="p">}</span>
+    
+    <span class="c1">// 得到当前附加纹理ID为 1</span>
+    <span class="n">glGetFramebufferAttachmentParameteriv</span><span class="p">(</span><span class="n">GL_FRAMEBUFFER</span><span class="p">,</span> <span class="n">GL_COLOR_ATTACHMENT0</span><span class="p">,</span> <span class="n">GL_FRAMEBUFFER_ATTACHMENT_OBJECT_NAME</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">text</span><span class="p">);</span>
+
+    <span class="n">free_dmabuf</span><span class="p">(</span><span class="n">dmabuf_fd</span><span class="p">);</span>
+    <span class="n">glDeleteTextures</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">textureid</span><span class="p">);</span>
+    <span class="n">eglDestroyImageKHR</span><span class="p">(</span><span class="n">g_EGLDisplay</span><span class="p">,</span> <span class="n">eglImg</span><span class="p">);</span>
+    <span class="c1">// 完成后 /sys/kernel/debug/dmabuf/bufferinfo 中dmabuf已经释放</span>
+
+    <span class="c1">// 得到当前附加纹理ID为 0</span>
+    <span class="n">glGetFramebufferAttachmentParameteriv</span><span class="p">(</span><span class="n">GL_FRAMEBUFFER</span><span class="p">,</span> <span class="n">GL_COLOR_ATTACHMENT0</span><span class="p">,</span> <span class="n">GL_FRAMEBUFFER_ATTACHMENT_OBJECT_NAME</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">text</span><span class="p">);</span>
+    
+    <span class="n">glDeleteFramebuffers</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">FBO2</span><span class="p">);</span>
+    
+    <span class="n">eglDestroyContext</span><span class="p">(</span><span class="n">g_EGLDisplay</span><span class="p">,</span> <span class="n">g_EGLContext</span><span class="p">);</span>
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</code></pre></div></div>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="k">const</span> <span class="o">*</span><span class="n">argv</span><span class="p">[])</span>
+<span class="p">{</span>
+    <span class="n">init_dev</span><span class="p">();</span>
+
+    <span class="n">egl_Init</span><span class="p">();</span>
+
+    <span class="n">dmabuf_fd1</span> <span class="o">=</span> <span class="n">allocate_dmabuf</span><span class="p">(</span><span class="mi">1920</span><span class="o">*</span><span class="mi">1080</span><span class="o">*</span><span class="mi">4</span><span class="p">);</span>
+    <span class="n">textureid1</span> <span class="o">=</span> <span class="n">create_texture_for_dmabuf</span><span class="p">(</span><span class="n">dmabuf_fd1</span><span class="p">,</span> <span class="mi">1920</span><span class="p">,</span> <span class="mi">1080</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">eglImg1</span><span class="p">);</span>
+
+    <span class="n">dmabuf_fd2</span> <span class="o">=</span> <span class="n">allocate_dmabuf</span><span class="p">(</span><span class="mi">1920</span><span class="o">*</span><span class="mi">1080</span><span class="o">*</span><span class="mi">4</span><span class="p">);</span>
+    <span class="n">textureid2</span> <span class="o">=</span> <span class="n">create_texture_for_dmabuf</span><span class="p">(</span><span class="n">dmabuf_fd2</span><span class="p">,</span> <span class="mi">1920</span><span class="p">,</span> <span class="mi">1080</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">eglImg2</span><span class="p">);</span>
+
+
+    <span class="n">glGenFramebuffers</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">FBO1</span><span class="p">);</span>
+    <span class="n">glBindFramebuffer</span><span class="p">(</span><span class="n">GL_FRAMEBUFFER</span><span class="p">,</span> <span class="n">FBO1</span><span class="p">);</span>
+    <span class="n">glBindTexture</span><span class="p">(</span><span class="n">GL_TEXTURE_EXTERNAL_OES</span><span class="p">,</span> <span class="n">textureid1</span><span class="p">);</span>
+    <span class="n">glFramebufferTexture2D</span><span class="p">(</span><span class="n">GL_FRAMEBUFFER</span><span class="p">,</span> <span class="n">GL_COLOR_ATTACHMENT0</span><span class="p">,</span> <span class="n">GL_TEXTURE_EXTERNAL_OES</span><span class="p">,</span> <span class="n">textureid1</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">glCheckFramebufferStatus</span><span class="p">(</span><span class="n">GL_FRAMEBUFFER</span><span class="p">)</span> <span class="o">!=</span> <span class="n">GL_FRAMEBUFFER_COMPLETE</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">assert</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="p">}</span>
+    
+    <span class="c1">// 注意要设置FBO 的纹理为0， 否则后面不能真正释放</span>
+    <span class="n">glFramebufferTexture2D</span><span class="p">(</span><span class="n">GL_FRAMEBUFFER</span><span class="p">,</span> <span class="n">GL_COLOR_ATTACHMENT0</span><span class="p">,</span> <span class="n">GL_TEXTURE_EXTERNAL_OES</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+
+
+    <span class="n">glGenFramebuffers</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">FBO2</span><span class="p">);</span>
+    <span class="n">glBindFramebuffer</span><span class="p">(</span><span class="n">GL_FRAMEBUFFER</span><span class="p">,</span> <span class="n">FBO2</span><span class="p">);</span>
+    <span class="n">glBindTexture</span><span class="p">(</span><span class="n">GL_TEXTURE_EXTERNAL_OES</span><span class="p">,</span> <span class="n">textureid2</span><span class="p">);</span>
+    <span class="n">glFramebufferTexture2D</span><span class="p">(</span><span class="n">GL_FRAMEBUFFER</span><span class="p">,</span> <span class="n">GL_COLOR_ATTACHMENT0</span><span class="p">,</span> <span class="n">GL_TEXTURE_EXTERNAL_OES</span><span class="p">,</span> <span class="n">textureid2</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">glCheckFramebufferStatus</span><span class="p">(</span><span class="n">GL_FRAMEBUFFER</span><span class="p">)</span> <span class="o">!=</span> <span class="n">GL_FRAMEBUFFER_COMPLETE</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">assert</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="n">free_dmabuf</span><span class="p">(</span><span class="n">dmabuf_fd1</span><span class="p">);</span>
+    <span class="n">glDeleteTextures</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">textureid1</span><span class="p">);</span>
+    <span class="n">eglDestroyImageKHR</span><span class="p">(</span><span class="n">g_EGLDisplay</span><span class="p">,</span> <span class="n">eglImg1</span><span class="p">);</span>
+    <span class="n">free_dmabuf</span><span class="p">(</span><span class="n">dmabuf_fd2</span><span class="p">);</span>
+    <span class="n">glDeleteTextures</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">textureid2</span><span class="p">);</span>
+    <span class="n">eglDestroyImageKHR</span><span class="p">(</span><span class="n">g_EGLDisplay</span><span class="p">,</span> <span class="n">eglImg2</span><span class="p">);</span>    
+    <span class="c1">// 完成后 /sys/kernel/debug/dmabuf/bufferinfo 中dmabuf已经释放</span>
+
+
+    <span class="n">glDeleteFramebuffers</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">FBO1</span><span class="p">);</span>
+    <span class="n">glDeleteFramebuffers</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">FBO2</span><span class="p">);</span>
+
+    <span class="n">eglDestroyContext</span><span class="p">(</span><span class="n">g_EGLDisplay</span><span class="p">,</span> <span class="n">g_EGLContext</span><span class="p">);</span>
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</code></pre></div></div>
+
+<h1 id="纹理过滤">纹理过滤</h1>
+
+<p>一个纹理通常是由很多的像素点组成的，那么通过纹理坐标如何得到对应点应该的颜色，这就是纹理采样方式或纹理过滤。</p>
+
+<p>下面是两种重要的纹理采样(纹理过滤)：</p>
+
+<ul>
+  <li><strong>GL_NEAREST</strong>:邻近过滤，这个是默认纹理过滤方式，OpenGL会选择中心点最接近纹理坐标的那个像素. 这种方式放大有颗粒感</li>
+</ul>
+
+<p><img src="/blog/assets/OpenGL/filter_nearest.png" alt="filter_nearest" /></p>
+
+<ul>
+  <li><strong>GL_LINEAR</strong>：线性过滤，它会基于纹理坐标附近的纹理像素，计算出一个插值，近似出这些纹理像素之间的颜色，一个纹理像素的中心距离纹理坐标越近，那么这个纹理像素的颜色对最终的样本颜色的贡献越大， 放大后较平滑。</li>
+</ul>
+
+<p><img src="/blog/assets/OpenGL/filter_linear.png" alt="filter_linear" /></p>
+
+<p><strong>二者放大后的效果比较</strong></p>
+
+<p><img src="/blog/assets/OpenGL/texture_filtering.png" alt="texture_filtering" /></p>
+
+<p>当纹理被放大或缩小贴到一个平面时，我们可以设置不同的纹理采样(纹理过滤)方式，达到不同的效果。它所涉及到的OpenGL 函数如下：</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="n">glTexParameteri</span><span class="o">(</span><span class="no">GL_TEXTURE_2D</span><span class="o">,</span> <span class="no">GL_TEXTURE_MIN_FILTER</span><span class="o">,</span> <span class="no">GL_NEAREST</span><span class="o">);</span> <span class="c1">// 缩小</span>
+    <span class="n">glTexParameteri</span><span class="o">(</span><span class="no">GL_TEXTURE_2D</span><span class="o">,</span> <span class="no">GL_TEXTURE_MAG_FILTER</span><span class="o">,</span> <span class="no">GL_LINEAR</span><span class="o">);</span>  <span class="c1">// 放大</span>
+</code></pre></div></div>
+
+<h1 id="纹理环绕">纹理环绕</h1>
+
+<p>纹理坐标的范围通常是从(0, 0)到(1, 1)，那如果我们把纹理坐标设置在范围之外会发生什么？OpenGL默认的行为是重复这个纹理图像。</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>环绕方式</th>
+      <th>描述</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>GL_REPEAT</td>
+      <td>对纹理的默认行为。重复纹理图像。</td>
+    </tr>
+    <tr>
+      <td>GL_MIRRORED_REPEAT</td>
+      <td>和GL_REPEAT一样，但每次重复图片是镜像放置的。</td>
+    </tr>
+    <tr>
+      <td>GL_CLAMP_TO_EDGE</td>
+      <td>纹理坐标会被约束在0到1之间，超出的部分会重复纹理坐标的边缘，产生一种边缘被拉伸的效果。</td>
+    </tr>
+    <tr>
+      <td>GL_CLAMP_TO_BORDER</td>
+      <td>超出的坐标为用户指定的边缘颜色</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><img src="/blog/assets/OpenGL/texture_wrapping.png" alt="texture_wrapping" /></p>
+
+<p>相关函数</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="n">glTexParameteri</span><span class="o">(</span><span class="no">GL_TEXTURE_2D</span><span class="o">,</span> <span class="no">GL_TEXTURE_WRAP_S</span><span class="o">,</span> <span class="no">GL_MIRRORED_REPEAT</span><span class="o">);</span>
+    <span class="n">glTexParameteri</span><span class="o">(</span><span class="no">GL_TEXTURE_2D</span><span class="o">,</span> <span class="no">GL_TEXTURE_WRAP_T</span><span class="o">,</span> <span class="no">GL_MIRRORED_REPEAT</span><span class="o">);</span>
+</code></pre></div></div>
+
+<p>如果我们选择GL_CLAMP_TO_BORDER选项，我们还需要指定一个边缘的颜色。这需要使用glTexParameter函数的fv后缀形式，用GL_TEXTURE_BORDER_COLOR作为它的选项，并且传递一个float数组作为边缘的颜色值：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kt">float</span> <span class="n">borderColor</span><span class="o">[]</span> <span class="o">=</span> <span class="o">{</span> <span class="mf">1.0f</span><span class="o">,</span> <span class="mf">1.0f</span><span class="o">,</span> <span class="mf">0.0f</span><span class="o">,</span> <span class="mf">1.0f</span> <span class="o">};</span>
+    <span class="n">glTexParameterfv</span><span class="o">(</span><span class="no">GL_TEXTURE_2D</span><span class="o">,</span> <span class="no">GL_TEXTURE_BORDER_COLOR</span><span class="o">,</span> <span class="n">borderColor</span><span class="o">);</span>
+</code></pre></div></div>
+
+<h1 id="freetype">freetype</h1>
+
+<p>下图是freetype调用的基本框架。</p>
+
+<p><img src="/blog/assets/OpenGL/freetype_func.png" alt="freetype_funcs" /></p>
+
+<p><img src="/blog/assets/OpenGL/freetype_glyph.png" alt="freetype_glyph" /></p>
+
+<p>参看上图，在绘制字符时以baseline为水平基准，则所有的字符就会对齐。</p>]]></content><author><name>kevin</name></author><category term="Jekyll" /><summary type="html"><![CDATA[glInvalidateFramebuffer vs glClear]]></summary></entry><entry><title type="html">Wayland Misc</title><link href="http://localhost:4000/blog/jekyll/2019-08-10-Wayland-Misc.html" rel="alternate" type="text/html" title="Wayland Misc" /><published>2019-08-10T00:00:00+08:00</published><updated>2019-08-10T00:00:00+08:00</updated><id>http://localhost:4000/blog/jekyll/Wayland-Misc</id><content type="html" xml:base="http://localhost:4000/blog/jekyll/2019-08-10-Wayland-Misc.html"><![CDATA[<h1 id="expat">Expat</h1>
 
 <p><strong>Expat</strong> 是一个用 <strong>C</strong> 编写的流式 <strong>XML 解析库</strong>。它在处理文件大小超出内存限制且性能和灵活性至关重要的情况下表现出色。许多应用程序、库和硬件都使用了 <strong>Expat</strong>，并且还有一些绑定和第三方封装。</p>
 

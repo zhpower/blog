@@ -851,6 +851,29 @@ weston-10.0.0./compositor/executable.c
 
 <h3 id="4122-import-dmabuf">4.12.2 import dmabuf</h3>
 
+<ol>
+  <li>
+    <p>绑定 linux_dmabuf
+wl_registry_bind(<span style="color:red">zwp_linux_dmabuf_v1_interface</span> )</p>
+  </li>
+  <li>
+    <p>创建一个param对象
+zwp_linux_dmabuf_v1_create_params(<span style="color:red"> zwp_linux_dmabuf_v1</span>)</p>
+  </li>
+  <li>
+    <p>在param中设置dmbuf的各种信息(fd，width， height), YUV时，通过数组导入多个plane信息
+zwp_linux_buffer_params_v1_add(<span style="color:red">dmabuf_fd</span>)</p>
+  </li>
+  <li>
+    <p>依据param在Server侧导入dmabuf对象
+zwp_linux_buffer_params_v1_create( )</p>
+  </li>
+  <li>
+    <p>通过callback接收导入结果
+params_listener callback <span style="color:red">create_succeeded()</span></p>
+  </li>
+</ol>
+
 <p><img src="/blog/assets/wayland/Import_Linux_dmabuf_to_compositor.svg" alt="Import_Linux_dmabuf_to_compositor" /></p>
 
 <h2 id="413-weston-event-loop">4.13 weston event loop</h2>
