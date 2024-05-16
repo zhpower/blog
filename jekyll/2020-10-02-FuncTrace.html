@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html lang="en" >
     <head><meta charset="UTF-8">
-<meta content="text/html; charset=utf-8" http-equiv="Content-Type"><title>学习笔记 · 学习笔记</title><meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type"><title>function trace · 学习笔记</title><meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta name="description" content="Build Jekyll site with the GitBook style.
 "><meta name="generator" content="Jekyll (using style of GitBook 3.2.3)"><meta name="author" content="kevin_zh"><link rel="stylesheet" href="/blog/assets/gitbook/style.css">
 <link rel="stylesheet" href="/blog/assets/gitbook/gitbook-plugin-back-to-top-button/plugin.css">
@@ -25,9 +25,11 @@
 
 
 
+            <link rel="prev" href="/blog/jekyll/2020-08-20-OpenGL_misc.html" />
+        
 
         
-            <link rel="next" href="/blog/jekyll/2013-03-02-cobalt.html" />
+            <link rel="next" href="/blog/jekyll/2021-04-27-ffmpeg.html" />
         
     </head>
     <body>
@@ -60,7 +62,7 @@
         </div>
         <ul class="summary">
             
-            <li class="chapter active" data-level="1.1" data-path="/blog">
+            <li class="chapter" data-level="1.1" data-path="/blog">
             
                 <a href="/blog/" onclick="pageScrollToTop(this)">
                     学习笔记
@@ -206,12 +208,15 @@
                         </li>
                     
                         
-                        <li class="chapter" data-level="1.1" data-path="/blog/jekyll/2020-10-02-FuncTrace.html">
+                        <li class="chapter active" data-level="1.2" data-path="/blog/jekyll/2020-10-02-FuncTrace.html">
                         
                             <a href="/blog/jekyll/2020-10-02-FuncTrace.html" onclick="pageScrollToTop(this)">
                                 function trace
                             </a>
                             
+                                
+                                    <ul><li><a href="#函数跟踪" onclick="mobilePageScrollToAnchor(this)" >函数跟踪</a></li></ul>
+
                                 
                             
                         </li>
@@ -264,7 +269,7 @@
                     <h1>
                         <i class="fa fa-circle-o-notch fa-spin"></i>
                         
-                            <a href="." >学习笔记</a>
+                            <a href="." >function trace</a>
                         
                     </h1>
                 </div>
@@ -277,14 +282,75 @@
             <div class="search-noresults">
                 <section class="normal markdown-section">
                     
-                        <h1 id="">学习笔记</h1>
+                        <h1 id="/jekyll/FuncTrace">function trace</h1>
                     
 
-                    <p>日常工作的学习笔记</p>
+                    <h1 id="函数跟踪">函数跟踪</h1>
 
-<p>基本上是工作中遇到问题后，查看各种资料，阅读代码，然后自己做的一些总结。</p>
+<p><code class="language-plaintext highlighter-rouge">__cyg_profile_func_enter</code> 和 <code class="language-plaintext highlighter-rouge">__cyg_profile_func_exit</code> 是用于函数调用追踪的特殊函数。当你使用 <span style="color:red">-finstrument-functions</span>编译选项时，编译器会在每个函数的开始和结束处插入这两个函数. 这样，你可以实现函数调用的检测和分析。</p>
 
-<p>Email:<a href="mailto:zh_power@hotmail.com">zh_power@hotmail.com</a></p>
+<p>这里是一个简单的例子，首先我们有一个用于跟踪函数的 <code class="language-plaintext highlighter-rouge">func_trace.c</code> 文件：</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+</span>
+<span class="k">static</span> <span class="kt">FILE</span> <span class="o">*</span><span class="n">fp_trace</span><span class="p">;</span>
+
+<span class="kt">void</span> <span class="nf">__attribute__</span><span class="p">((</span><span class="n">constructor</span><span class="p">))</span> <span class="n">traceBegin</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">fp_trace</span> <span class="o">=</span> <span class="n">fopen</span><span class="p">(</span><span class="s">"func_trace.out"</span><span class="p">,</span> <span class="s">"w"</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">__attribute__</span><span class="p">((</span><span class="n">destructor</span><span class="p">))</span> <span class="n">traceEnd</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">fp_trace</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">fclose</span><span class="p">(</span><span class="n">fp_trace</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">__cyg_profile_func_enter</span><span class="p">(</span><span class="kt">void</span> <span class="o">*</span><span class="n">func</span><span class="p">,</span> <span class="kt">void</span> <span class="o">*</span><span class="n">caller</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">fp_trace</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">fprintf</span><span class="p">(</span><span class="n">fp_trace</span><span class="p">,</span> <span class="s">"entry %p %p</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="n">caller</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">__cyg_profile_func_exit</span><span class="p">(</span><span class="kt">void</span> <span class="o">*</span><span class="n">func</span><span class="p">,</span> <span class="kt">void</span> <span class="o">*</span><span class="n">caller</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">fp_trace</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">fprintf</span><span class="p">(</span><span class="n">fp_trace</span><span class="p">,</span> <span class="s">"exit %p %p</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="n">caller</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>然后，我们编写一个简单的测试代码 <code class="language-plaintext highlighter-rouge">main.c</code>：</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+</span>
+<span class="kt">int</span> <span class="nf">foo</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="mi">2</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">bar</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">zoo</span><span class="p">();</span>
+    <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">zoo</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">foo</span><span class="p">();</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">**</span><span class="n">argv</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">bar</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>接下来，将 <code class="language-plaintext highlighter-rouge">main.c</code> 与 <code class="language-plaintext highlighter-rouge">func_trace.o</code> 一起编译，并加上 <code class="language-plaintext highlighter-rouge">-finstrument-functions</code> 选项：</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gcc main.c func_trace.o <span class="nt">-finstrument-functions</span>
+</code></pre></div></div>
+
+<p>运行 <code class="language-plaintext highlighter-rouge">./a.out</code>，就会产生 <code class="language-plaintext highlighter-rouge">func_trace.out</code> 文件，其中记录了函数调用的信息。你可以使用 <code class="language-plaintext highlighter-rouge">addr2line</code> 命令来查看函数名：</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>addr2line <span class="nt">-f</span> <span class="nt">-e</span> ./a.out <span class="nv">$ADDRESS</span>
+</code></pre></div></div>
+
+<p>这样，你就可以得到函数调用关系。如果想进一步处理这些跟踪数据，可以使用工具如 <code class="language-plaintext highlighter-rouge">graphviz</code> 来创建可视化的调用关系图。</p>
 </section>
             </div><div class="search-results">
     <div class="has-results">
@@ -317,6 +383,38 @@ window.MathJax = {
 
 <!-- introduce per-page mermaid support -->
 
+    <script>
+    function render_mermaid() {
+        mermaid.initialize({
+            startOnLoad: false,
+            theme: "default",
+        });
+        window.mermaid.init(undefined, document.querySelectorAll('.language-mermaid'));
+    }
+
+    function initialize_mermaid() {
+        if (document.readyState === "loading") {
+            // Loading hasn't finished yet
+            document.addEventListener("DOMContentLoaded", render_mermaid);
+        } else {
+            // `DOMContentLoaded` has already fired
+            render_mermaid();
+        }
+    }
+
+    if (window.mermaid_script && window.mermaid) {
+        initialize_mermaid();
+    } else {
+        window.mermaid_script = document.createElement("script");
+        mermaid_script.onload = initialize_mermaid;
+        document.head.appendChild(mermaid_script);
+        mermaid_script.defer = true;
+        mermaid_script.id = 'mermaid-script';
+        mermaid_script.src = '/blog/assets/gitbook/mermaid.min.js';
+    }
+</script>
+
+
 
 <!-- introduce mathjax support -->
 <script>
@@ -340,12 +438,14 @@ window.MathJax = {
     }
 </script>
 
-<a href="/blog/" class="navigation navigation-pre navigation-unique">
-                        <i class="fa"></i>
-                    </a>
+
+                        <a href="/blog/jekyll/2020-08-20-OpenGL_misc.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page: OpenGL Misc">
+                            <i class="fa fa-angle-left"></i>
+                        </a>
+                    
 
                     
-                        <a href="/blog/jekyll/2013-03-02-cobalt.html" class="navigation navigation-next navigation-unique" aria-label="Next page: Cobalt">
+                        <a href="/blog/jekyll/2021-04-27-ffmpeg.html" class="navigation navigation-next navigation-unique" aria-label="Next page: ffmpeg命令">
                             <i class="fa fa-angle-right"></i>
                         </a>
                     
@@ -361,14 +461,12 @@ window.MathJax = {
         "level": "1.1",
         "depth": 1,
         
-
-        
         "next": {
-            "title": "Cobalt",
+            "title": "ffmpeg命令",
             "level": "1.2",
             "depth": 1,
-            "path": "_posts/2013-03-2-cobalt.md",
-            "ref": "_posts/2013-03-2-cobalt.md",
+            "path": "_posts/2022-05-06-ffmpeg.md",
+            "ref": "_posts/2022-05-06-ffmpeg.md",
             "articles": []
         },
         
@@ -460,8 +558,8 @@ window.MathJax = {
         "gitbook": "*"
     },
     "file": {
-        "path": "README.md",
-        "mtime": "",
+        "path": "_posts/2020-10-02-FuncTrace.md",
+        "mtime": "2020-10-02 00:00:00 +0800",
         "type": "markdown"
     },
     "gitbook": {
