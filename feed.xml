@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.2">Jekyll</generator><link href="http://localhost:4000/blog/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/blog/" rel="alternate" type="text/html" /><updated>2024-05-16T20:12:39+08:00</updated><id>http://localhost:4000/blog/feed.xml</id><title type="html">学习笔记</title><subtitle>Build Jekyll site with the GitBook style.
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.2">Jekyll</generator><link href="http://localhost:4000/blog/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/blog/" rel="alternate" type="text/html" /><updated>2024-05-17T16:34:46+08:00</updated><id>http://localhost:4000/blog/feed.xml</id><title type="html">学习笔记</title><subtitle>Build Jekyll site with the GitBook style.
 </subtitle><author><name>kevin_zh</name></author><entry><title type="html">misc</title><link href="http://localhost:4000/blog/jekyll/2022-06-22-misc.html" rel="alternate" type="text/html" title="misc" /><published>2022-06-22T00:00:00+08:00</published><updated>2022-06-22T00:00:00+08:00</updated><id>http://localhost:4000/blog/jekyll/misc</id><content type="html" xml:base="http://localhost:4000/blog/jekyll/2022-06-22-misc.html"><![CDATA[<h1 id="kref">kref</h1>
 
 <p>kref_init 是一个用于初始化内核对象引用计数器（krefs）的函数。它允许你为你的对象添加引用计数，确保在多个地方使用和传递对象时，代码的正确性。以下是关于 kref_init 的一些重要信息：</p>
@@ -1150,7 +1150,15 @@ ffmpeg.exe <span class="nt">-i</span> agf-dog-1280x960.jpg  <span class="nt">-vf
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>addr2line <span class="nt">-f</span> <span class="nt">-e</span> ./a.out <span class="nv">$ADDRESS</span>
 </code></pre></div></div>
 
-<p>这样，你就可以得到函数调用关系。如果想进一步处理这些跟踪数据，可以使用工具如 <code class="language-plaintext highlighter-rouge">graphviz</code> 来创建可视化的调用关系图。</p>]]></content><author><name>kevin</name></author><category term="Jekyll" /><summary type="html"><![CDATA[函数跟踪]]></summary></entry><entry><title type="html">OpenGL Misc</title><link href="http://localhost:4000/blog/jekyll/2020-08-20-OpenGL_misc.html" rel="alternate" type="text/html" title="OpenGL Misc" /><published>2020-08-20T00:00:00+08:00</published><updated>2020-08-20T00:00:00+08:00</updated><id>http://localhost:4000/blog/jekyll/OpenGL_misc</id><content type="html" xml:base="http://localhost:4000/blog/jekyll/2020-08-20-OpenGL_misc.html"><![CDATA[<h1 id="glinvalidateframebuffer-vs-glclear">glInvalidateFramebuffer vs glClear</h1>
+<p>这样，你就可以得到函数调用关系。如果想进一步处理这些跟踪数据，可以使用工具如 <code class="language-plaintext highlighter-rouge">graphviz</code> 来创建可视化的调用关系图。</p>
+
+<h1 id="自动化单元测试">自动化单元测试</h1>
+
+<p><img src="/blog/assets/function_trace/print_parameter.png" alt="print_parameter" /></p>
+
+<p><img src="/blog/assets/function_trace/call_test_func.png" alt="call_test_func" /></p>
+
+<p><img src="/blog/assets/function_trace/xml.png" alt="xml" /></p>]]></content><author><name>kevin</name></author><category term="Jekyll" /><summary type="html"><![CDATA[函数跟踪]]></summary></entry><entry><title type="html">OpenGL Misc</title><link href="http://localhost:4000/blog/jekyll/2020-08-20-OpenGL_misc.html" rel="alternate" type="text/html" title="OpenGL Misc" /><published>2020-08-20T00:00:00+08:00</published><updated>2020-08-20T00:00:00+08:00</updated><id>http://localhost:4000/blog/jekyll/OpenGL_misc</id><content type="html" xml:base="http://localhost:4000/blog/jekyll/2020-08-20-OpenGL_misc.html"><![CDATA[<h1 id="glinvalidateframebuffer-vs-glclear">glInvalidateFramebuffer vs glClear</h1>
 
 <p>glInvalidateFramebuffer 和 glClear 是OpenGL中两个不同的函数，它们的作用和用法有所不同：</p>
 
