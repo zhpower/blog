@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html lang="en" >
     <head><meta charset="UTF-8">
-<meta content="text/html; charset=utf-8" http-equiv="Content-Type"><title>Cobalt · 学习笔记</title><meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type"><title>linux dev misc · 学习笔记</title><meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta name="description" content="Build Jekyll site with the GitBook style.
 "><meta name="generator" content="Jekyll (using style of GitBook 3.2.3)"><meta name="author" content="kevin_zh"><link rel="stylesheet" href="/blog/assets/gitbook/style.css">
 <link rel="stylesheet" href="/blog/assets/gitbook/gitbook-plugin-back-to-top-button/plugin.css">
@@ -25,11 +25,9 @@
 
 
 
-            <link rel="prev" href="/blog/" />
+            <link rel="prev" href="/blog/jekyll/2022-04-27-bit.html" />
         
 
-        
-            <link rel="next" href="/blog/drm/2018-02-01-DRM.html" />
         
     </head>
     <body>
@@ -87,15 +85,12 @@
 
                     
                         
-                        <li class="chapter active" data-level="1.2" data-path="/blog/jekyll/2013-03-02-cobalt.html">
+                        <li class="chapter" data-level="1.1" data-path="/blog/jekyll/2013-03-02-cobalt.html">
                         
                             <a href="/blog/jekyll/2013-03-02-cobalt.html" onclick="pageScrollToTop(this)">
                                 Cobalt
                             </a>
                             
-                                
-                                    <ul><li><a href="#starboard" onclick="mobilePageScrollToAnchor(this)" >Starboard</a></li><li><a href="#360-video" onclick="mobilePageScrollToAnchor(this)" >360 Video</a></li><li><a href="#skia" onclick="mobilePageScrollToAnchor(this)" >Skia</a></li><li><a href="#egl-opengl" onclick="mobilePageScrollToAnchor(this)" >egl opengl</a></li><li><a href="#cobalt中wayland" onclick="mobilePageScrollToAnchor(this)" >cobalt中wayland</a></li></ul>
-
                                 
                             
                         </li>
@@ -255,12 +250,15 @@
                         </li>
                     
                         
-                        <li class="chapter" data-level="1.1" data-path="/blog/jekyll/2022-05-02-App_misc.html">
+                        <li class="chapter active" data-level="1.2" data-path="/blog/jekyll/2022-05-02-App_misc.html">
                         
                             <a href="/blog/jekyll/2022-05-02-App_misc.html" onclick="pageScrollToTop(this)">
                                 linux dev misc
                             </a>
                             
+                                
+                                    <ul><li><a href="#pthread_mutex_tpthread_cond_t" onclick="mobilePageScrollToAnchor(this)" >pthread_mutex_t&amp;pthread_cond_t</a></li></ul>
+
                                 
                             
                         </li>
@@ -280,7 +278,7 @@
                     <h1>
                         <i class="fa fa-circle-o-notch fa-spin"></i>
                         
-                            <a href="." >Cobalt</a>
+                            <a href="." >linux dev misc</a>
                         
                     </h1>
                 </div>
@@ -293,81 +291,71 @@
             <div class="search-noresults">
                 <section class="normal markdown-section">
                     
-                        <h1 id="/jekyll/cobalt">Cobalt</h1>
+                        <h1 id="/jekyll/App_misc">linux dev misc</h1>
                     
 
-                    <h1 id="starboard">Starboard</h1>
+                    <h1 id="pthread_mutex_tpthread_cond_t">pthread_mutex_t&amp;pthread_cond_t</h1>
 
-<p>在 Cobalt 的上下文中，Starboard 是一个重要的概念。让我为你解释一下：</p>
+<p>函数定义：</p>
 
-<ol>
-  <li>Starboard 是什么？
-    <ul>
-      <li>Starboard 是 Cobalt 的一个关键组件，用于抽象操作系统功能和平台特性，使其能够在不同平台上运行。</li>
-      <li>它是一个用于移植的抽象层，包含了一系列用于处理不同操作系统和平台特性的实现片段。</li>
-      <li>Starboard 的目标是将 Cobalt 与底层操作系统和硬件隔离开来，使 Cobalt 能够在不同设备上无缝运行。</li>
-    </ul>
-  </li>
-  <li>如何使用 Starboard？
-    <ul>
-      <li>在 Cobalt 的源代码中，你会看到 Starboard 的相关目录和文件，这些文件包含了特定平台的实现细节。</li>
-      <li>Starboard 将平台特定的功能封装在这些文件中，以便 Cobalt 可以在不同平台上运行。</li>
-      <li>Starboard 的设计目标是只包含 Cobalt 实际使用的平台特定功能，而不包含不必要的部分。</li>
-    </ul>
-  </li>
-</ol>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">pthread_cond_wait</span><span class="o">(</span><span class="n">pthread_cond_t</span> <span class="o">*</span><span class="n">cond</span><span class="o">,</span> <span class="n">pthread_mutex_t</span> <span class="o">*</span><span class="n">mutex</span><span class="o">)</span>
 
-<p>总之，Starboard 是 Cobalt 的一个关键组件，用于处理操作系统和平台差异，使 Cobalt 能够在不同设备上运行。</p>
+<span class="kt">int</span> <span class="nf">pthread_cond_broadcast</span><span class="o">(</span><span class="n">pthread_cond_t</span> <span class="o">*</span><span class="n">cond</span><span class="o">)</span>
+</code></pre></div></div>
 
-<h1 id="360-video">360 Video</h1>
+<p>函数说明：</p>
 
-<p>在Youtube video 360中涉及到的几个函数及流程：</p>
+<p>pthread_cond_wait ：有两个输入参数，一个是pthread_cond_t，是函数将要等待的信号，另一个是 pthread_mutex_t，一个互斥锁。<span style="color:red">用于对信号量进行保护，防止多个线程同时对其进行操作</span>。在线程开始等待信号量前，必须由本线程对互斥锁进行锁定，然后pthread_cond_wait会更新条件等待队列，并且释放互斥量，允许其他线程进行访问；当cond 满足条件允许线程继续执行时，wait_cond也会先对mutex 进行锁定，对cond进行处理，然后再允许线程继续运行。所以pthread_cond_wait() 后的pthread_mutex_unlock()还是必要的。</p>
 
-<p><img src="/blog/assets/cobalt/video_360.svg" alt="video_360" /></p>
+<p><img src="/blog/assets/linux_dev_misc/mutex.png" alt="mutex_cond" /></p>
 
-<p>A Video Frame, 它将被渲染到一个球面上。</p>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;pthread.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;unistd.h&gt;</span><span class="cp">
+</span><span class="n">using</span> <span class="n">namespace</span> <span class="n">std</span><span class="p">;</span>
+<span class="k">static</span> <span class="n">pthread_mutex_t</span> <span class="n">mtx</span> <span class="o">=</span> <span class="n">PTHREAD_MUTEX_INITIALIZER</span><span class="p">;</span>
+<span class="k">static</span> <span class="n">pthread_cond_t</span> <span class="n">cond</span> <span class="o">=</span> <span class="n">PTHREAD_COND_INITIALIZER</span><span class="p">;</span>
+<span class="k">static</span> <span class="kt">void</span><span class="o">*</span> <span class="nf">func_1</span><span class="p">(</span><span class="kt">void</span><span class="o">*</span> <span class="n">arg</span><span class="p">){</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"func_1 start"</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">pthread_mutex_lock</span><span class="p">(</span><span class="o">&amp;</span><span class="n">mtx</span><span class="p">);</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"func_1 lock mtx"</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"func_1 wait cond"</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">pthread_cond_wait</span><span class="p">(</span><span class="o">&amp;</span><span class="n">cond</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">mtx</span><span class="p">);</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"func_1 unlock mtx"</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">pthread_mutex_unlock</span><span class="p">(</span><span class="o">&amp;</span><span class="n">mtx</span><span class="p">);</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"func_1 end"</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">sleep</span><span class="p">(</span><span class="mi">5</span><span class="p">);</span>
+    <span class="k">return</span> <span class="nb">NULL</span><span class="p">;</span>
+<span class="p">}</span>
 
-<p><img src="/blog/assets/cobalt/360-image-pier.avif" alt="360 image" /></p>
+<span class="k">static</span> <span class="kt">void</span><span class="o">*</span> <span class="nf">func_2</span><span class="p">(</span><span class="kt">void</span><span class="o">*</span> <span class="n">arg</span><span class="p">){</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"func_2 start"</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">pthread_mutex_lock</span><span class="p">(</span><span class="o">&amp;</span><span class="n">mtx</span><span class="p">);</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"func_2 lock mtx"</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"func_2 wait cond"</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">pthread_cond_wait</span><span class="p">(</span><span class="o">&amp;</span><span class="n">cond</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">mtx</span><span class="p">);</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"func_2 unlock mtx"</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">pthread_mutex_unlock</span><span class="p">(</span><span class="o">&amp;</span><span class="n">mtx</span><span class="p">);</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"func_2 end"</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">sleep</span><span class="p">(</span><span class="mi">5</span><span class="p">);</span>
+    <span class="k">return</span> <span class="nb">NULL</span><span class="p">;</span>
+<span class="p">}</span>
 
-<h1 id="skia">Skia</h1>
-
-<p>Skia 是一个开源的 2D 图形库，它提供了通用的 API，可以在各种硬件和软件平台上使用。它作为 Google Chrome 和 ChromeOS、Android、Flutter 等产品的图形引擎123。</p>
-
-<p>Skia 是用 C++ 编写的完整的 2D 图形库，用于绘制文本、几何图形和图像。
-它抽象了平台特定的图形 API（这些 API 在不同平台之间有所不同）。
-最初由 Skia Inc. 开发，后来于 2005 年被 Google 收购，并于 2008 年以 New BSD 自由软件许可证 的形式发布为开源软件3。</p>
-
-<h1 id="egl-opengl">egl opengl</h1>
-<p>cobalt 中egl opengl API的跟踪</p>
-
-<p>cobalt/renderer/egl_and_gles.h<br />
-cobalt/renderer/rasterizer/egl/graphics_state.cc</p>
-
-<h1 id="cobalt中wayland">cobalt中wayland</h1>
-
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code>   <span class="n">SbWindowPrivate</span><span class="o">::</span><span class="n">SbWindowPrivate</span><span class="p">(</span><span class="n">wl_compositor</span><span class="o">*</span> <span class="n">compositor</span><span class="p">,</span>
-                                    <span class="n">wl_shell</span><span class="o">*</span> <span class="n">shell</span><span class="p">,</span>
-                                    <span class="k">const</span> <span class="n">SbWindowOptions</span><span class="o">*</span> <span class="n">options</span><span class="p">,</span>
-                                    <span class="kt">float</span> <span class="n">pixel_ratio</span><span class="p">)</span> <span class="p">{</span>
-     <span class="n">width</span> <span class="o">=</span> <span class="n">kWindowWidth</span><span class="p">;</span>
-     <span class="n">height</span> <span class="o">=</span> <span class="n">kWindowHeight</span><span class="p">;</span>
-     <span class="n">video_pixel_ratio</span> <span class="o">=</span> <span class="n">pixel_ratio</span><span class="p">;</span>
-     <span class="k">if</span> <span class="p">(</span><span class="n">options</span> <span class="o">&amp;&amp;</span> <span class="n">options</span><span class="o">-&gt;</span><span class="n">size</span><span class="p">.</span><span class="n">width</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">options</span><span class="o">-&gt;</span><span class="n">size</span><span class="p">.</span><span class="n">height</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-       <span class="n">width</span> <span class="o">=</span> <span class="n">options</span><span class="o">-&gt;</span><span class="n">size</span><span class="p">.</span><span class="n">width</span><span class="p">;</span>
-       <span class="n">height</span> <span class="o">=</span> <span class="n">options</span><span class="o">-&gt;</span><span class="n">size</span><span class="p">.</span><span class="n">height</span><span class="p">;</span>
-     <span class="p">}</span>
-     <span class="n">surface</span> <span class="o">=</span> <span class="n">wl_compositor_create_surface</span><span class="p">(</span><span class="n">compositor</span><span class="p">);</span>
-     <span class="n">shell_surface</span> <span class="o">=</span> <span class="n">wl_shell_get_shell_surface</span><span class="p">(</span><span class="n">shell</span><span class="p">,</span> <span class="n">surface</span><span class="p">);</span>
-     <span class="n">wl_shell_surface_add_listener</span><span class="p">(</span><span class="n">shell_surface</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">shell_surface_listener</span><span class="p">,</span> <span class="n">this</span><span class="p">);</span>
-     <span class="n">wl_shell_surface_set_title</span><span class="p">(</span><span class="n">shell_surface</span><span class="p">,</span> <span class="s">"cobalt"</span><span class="p">);</span>
-     <span class="k">struct</span> <span class="n">wl_region</span><span class="o">*</span> <span class="n">region</span><span class="p">;</span>
-     <span class="n">region</span> <span class="o">=</span> <span class="n">wl_compositor_create_region</span><span class="p">(</span><span class="n">compositor</span><span class="p">);</span>
-     <span class="n">wl_region_add</span><span class="p">(</span><span class="n">region</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">);</span>
-     <span class="n">wl_surface_set_opaque_region</span><span class="p">(</span><span class="n">surface</span><span class="p">,</span> <span class="n">region</span><span class="p">);</span>
-     <span class="n">wl_region_destroy</span><span class="p">(</span><span class="n">region</span><span class="p">);</span>
-     <span class="n">egl_window</span> <span class="o">=</span> <span class="n">wl_egl_window_create</span><span class="p">(</span><span class="n">surface</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">);</span>
-     <span class="n">WindowRaise</span><span class="p">();</span>
-   <span class="p">}</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(){</span>
+    <span class="n">pthread_t</span> <span class="n">tid1</span><span class="p">,</span> <span class="n">tid2</span><span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"main create thread"</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">pthread_create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">tid1</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="n">func_1</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+    <span class="n">pthread_create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">tid2</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="n">func_2</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+    <span class="n">sleep</span><span class="p">(</span><span class="mi">3</span><span class="p">);</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"main boradcast signal"</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">pthread_cond_broadcast</span><span class="p">(</span><span class="o">&amp;</span><span class="n">cond</span><span class="p">);</span>
+    <span class="c1">// pthread_cond_signal(&amp;cond);</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"main join thread"</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">pthread_join</span><span class="p">(</span><span class="n">tid1</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+    <span class="n">pthread_join</span><span class="p">(</span><span class="n">tid2</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"main end"</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
 </code></pre></div></div>
 </section>
             </div><div class="search-results">
@@ -457,15 +445,11 @@ window.MathJax = {
 </script>
 
 
-                        <a href="/blog/" class="navigation navigation-prev navigation-unique" aria-label="Previous page: 学习笔记">
+                        <a href="/blog/jekyll/2022-04-27-bit.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page: 位运算">
                             <i class="fa fa-angle-left"></i>
                         </a>
                     
 
-                    
-                        <a href="/blog/drm/2018-02-01-DRM.html" class="navigation navigation-next navigation-unique" aria-label="Next page: DRM子系统">
-                            <i class="fa fa-angle-right"></i>
-                        </a>
                     
                 </div>
             </div>
@@ -478,15 +462,6 @@ window.MathJax = {
         "title": "Introduction",
         "level": "1.1",
         "depth": 1,
-        
-        "next": {
-            "title": "DRM子系统",
-            "level": "1.2",
-            "depth": 1,
-            "path": "_posts/2018-02-01-DRM.md",
-            "ref": "_posts/2018-02-01-DRM.md",
-            "articles": []
-        },
         
         "dir": "ltr"
     },    "config": {
@@ -576,8 +551,8 @@ window.MathJax = {
         "gitbook": "*"
     },
     "file": {
-        "path": "_posts/2013-03-2-cobalt.md",
-        "mtime": "2013-03-02 00:00:00 +0800",
+        "path": "_posts/2012-05-2-App_misc.md",
+        "mtime": "2022-05-02 00:00:00 +0800",
         "type": "markdown"
     },
     "gitbook": {
