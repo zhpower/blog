@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.2">Jekyll</generator><link href="http://localhost:4000/blog/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/blog/" rel="alternate" type="text/html" /><updated>2024-05-20T14:31:20+08:00</updated><id>http://localhost:4000/blog/feed.xml</id><title type="html">学习笔记</title><subtitle>Build Jekyll site with the GitBook style.
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.2">Jekyll</generator><link href="http://localhost:4000/blog/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/blog/" rel="alternate" type="text/html" /><updated>2024-05-20T16:35:13+08:00</updated><id>http://localhost:4000/blog/feed.xml</id><title type="html">学习笔记</title><subtitle>Build Jekyll site with the GitBook style.
 </subtitle><author><name>kevin_zh</name></author><entry><title type="html">linux dev misc</title><link href="http://localhost:4000/blog/jekyll/2022-05-02-App_misc.html" rel="alternate" type="text/html" title="linux dev misc" /><published>2022-05-02T00:00:00+08:00</published><updated>2022-05-02T00:00:00+08:00</updated><id>http://localhost:4000/blog/jekyll/App_misc</id><content type="html" xml:base="http://localhost:4000/blog/jekyll/2022-05-02-App_misc.html"><![CDATA[<h1 id="pthread_mutex_tpthread_cond_t">pthread_mutex_t&amp;pthread_cond_t</h1>
 
 <p>函数定义：</p>
@@ -61,7 +61,176 @@
     <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"main end"</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
     <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
 <span class="p">}</span>
-</code></pre></div></div>]]></content><author><name>Kevin</name></author><category term="Jekyll" /><summary type="html"><![CDATA[pthread_mutex_t&amp;pthread_cond_t]]></summary></entry><entry><title type="html">位运算</title><link href="http://localhost:4000/blog/jekyll/2022-04-27-bit.html" rel="alternate" type="text/html" title="位运算" /><published>2022-04-27T00:00:00+08:00</published><updated>2022-04-27T00:00:00+08:00</updated><id>http://localhost:4000/blog/jekyll/bit</id><content type="html" xml:base="http://localhost:4000/blog/jekyll/2022-04-27-bit.html"><![CDATA[<h1 id="1位运算概述">1.位运算概述</h1>
+</code></pre></div></div>
+
+<h1 id="char-a-vs-char-a">char *a vs char a[]</h1>
+
+<p>首先要搞清楚编译程序占用的内存的分区形式：</p>
+
+<p>一、预备知识—程序的内存分配</p>
+
+<p>一个由c/C++编译的程序占用的内存分为以下几个部分:</p>
+
+<ul>
+  <li>栈区（stack）—由编译器自动分配释放，存放函数的参数值，局部变量的值等。其操作方式类似于数据结构中的栈。</li>
+  <li>堆区（heap）—一般由程序员分配释放，若程序员不释放，程序结束时可能由OS回收。注意它与数据结构中的堆是两回事，分配方式倒是类似于链表，呵呵。</li>
+  <li>全局区（静态区）（static）—全局变量和静态变量的存储是放在一块的，初始化的全局变量和静态变量在一块区域，未初始化的全局变量和未初始化的静态变量在相邻的另一块区域。程序结束后由系统释放。</li>
+  <li>字符常量区—常量字符串就是放在这里的。程序结束后由系统释放。</li>
+  <li>程序代码区</li>
+</ul>
+
+<p>这是一个别人写的，非常详细</p>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="n">a</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>    <span class="c1">//全局初始化区</span>
+<span class="kt">char</span> <span class="n">p1</span><span class="p">;</span>    <span class="c1">//全局未初始化区</span>
+<span class="n">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">b</span><span class="p">;</span>            <span class="c1">//栈</span>
+    <span class="kt">char</span> <span class="n">s</span><span class="p">[]</span><span class="o">=</span><span class="s">"abc"</span><span class="p">;</span>   <span class="c1">//栈</span>
+    <span class="kt">char</span> <span class="n">p2</span><span class="p">;</span>          <span class="c1">//栈</span>
+    <span class="kt">char</span> <span class="n">p3</span><span class="o">=</span><span class="s">"123456"</span><span class="p">;</span> <span class="c1">//123456\0在常量区，p3在栈上。</span>
+    <span class="k">static</span> <span class="kt">int</span> <span class="n">c</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>  <span class="c1">//全局（静态）初始化区</span>
+    <span class="n">p1</span> <span class="o">=</span> <span class="p">(</span><span class="kt">char</span><span class="p">)</span><span class="n">malloc</span><span class="p">(</span><span class="mi">10</span><span class="p">);</span>
+    <span class="n">p2</span> <span class="o">=</span> <span class="p">(</span><span class="kt">char</span><span class="p">)</span><span class="n">malloc</span><span class="p">(</span><span class="mi">20</span><span class="p">);</span> <span class="c1">//分配得来得10和20字节的区域就在堆区。</span>
+    <span class="n">strcpy</span><span class="p">(</span><span class="n">p1</span><span class="p">,</span><span class="s">"123456"</span><span class="p">);</span> <span class="c1">//123456\0放在常量区，编译器可能会将它与p3指向的"123456"优化成一个地方。</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>首先，我们要知道</p>
+
+<ol>
+  <li>char *a中的a是个指向字符类型的指针，这是一个变量；</li>
+  <li>char a[]中的a也是一个指向字符类型的指针，但它是一个常量，<span style="color:red">常量是不能再给它赋值的</span>，就像比不能写 3=2 这样的代码来给3赋值, <span style="color:Red">但可以对她指向的内存内容进行修改</span>。</li>
+</ol>
+
+<p>通过阅读我们可以知道，char * a=“abc”和char a[]=”abc”在内存中存放是有差别的，</p>
+
+<ol>
+  <li>
+    <p>char *a=“abc”中的“abc”是存放于<strong>字符常量区的，指针a只是指向了这个地址</strong>；</p>
+  </li>
+  <li>
+    <p>char a[]=”abc”中的“abc”其实是<span style="color:red">放在栈中的</span>，它是字符常量区中“abc”的一份拷贝。</p>
+  </li>
+</ol>
+
+<p>看看下面这段代码你就明白了</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+</span><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="kt">char</span> <span class="o">*</span> <span class="n">a1</span>   <span class="o">=</span> <span class="s">"abc"</span><span class="p">;</span>
+    <span class="kt">char</span>   <span class="n">a2</span><span class="p">[]</span> <span class="o">=</span> <span class="s">"abc"</span><span class="p">;</span>
+    <span class="kt">char</span> <span class="o">*</span> <span class="n">a3</span>   <span class="o">=</span> <span class="s">"abc"</span><span class="p">;</span>
+    <span class="kt">char</span>   <span class="n">a4</span><span class="p">[]</span> <span class="o">=</span> <span class="s">"abc"</span><span class="p">;</span>
+    
+    <span class="n">printf</span><span class="p">(</span><span class="s">"char * a:%p</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">a1</span><span class="p">);</span><span class="c1">//打印a1的值 </span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"char a2[]:%p</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="n">a2</span><span class="p">);</span><span class="c1">//打印a2的值 </span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"char *a3:%p</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">a3</span><span class="p">);</span><span class="c1">//打印a2的值 </span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"char a4[]:%p</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="n">a4</span><span class="p">);</span><span class="c1">//打印a2的值 </span>
+    
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>我在这段代码里声明了两个字符指针变量、两个数组常量指针，代码执行结果如下：</p>
+
+<p>显而易见字符指针变量a 和a3的值是一样的，这说明它们指向同一块内存，这块内存就是上文所说的<strong>字符常量区</strong>；</p>
+
+<p>字符数组指针a2和a3的值不同且相差4字节，这说明它们指向的内存是不相同的，它们的“abc”其实是对字符常量区中“abc”的一份拷贝，并且数据是存放在栈中的，至于它们的地址相差四个字节，是因为字符数组中在结尾加了一个结束符——‘\0’（也称为NUL）。</p>
+
+<p>至于之前说的“不能直接将一个字符串常量赋值给字符数组”可以这样理解：的确是不能直接赋值，但可以通过复制以后再赋值呀，即把字符串拷贝到栈中，然后给数组指针赋值！代码的话就是：char a[]=“abc”。</p>
+
+<p>我们再来考虑一个问题：能不能修改char *a指向的字符常量区的值呢？
+代码如下：</p>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;string.h&gt;</span><span class="cp">
+</span><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="kt">char</span> <span class="o">*</span> <span class="n">a</span><span class="o">=</span><span class="s">"abc"</span><span class="p">;</span>
+    <span class="o">*</span><span class="n">a</span> <span class="o">=</span> <span class="sc">'b'</span><span class="p">;</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"%c</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="o">*</span><span class="n">a</span><span class="p">);</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span> 
+<span class="p">}</span>
+
+</code></pre></div></div>
+<p>我将指针a所指向的第一个字符——‘a’修改为字符‘b’。
+结果程序崩溃了</p>
+
+<p>这说明<strong>字符常量区的数据是不可以修改的</strong>！为什么呢？因为在你的程序中可能有很多个类似于char *a这样的指针变量在使用到了字符常量区的“abc”，如果你在这里通过指针修改了“abc”的值，那么程序中使用“abc”的其他地方就变得不确定了！</p>
+
+<p>其实如果你翻看了《c和指针》你还会发现，在K&amp;R C标准中，这里的修改操作是可以的，因为在该标准中字符串常量是分开存储的，而不是只存储在一个地方。</p>
+
+<p>怎么样，有没有感受到C语言指针的危险和魅力所在？</p>
+
+<p><span style="background: yellow;">char a[ ] 的应用场景:</span></p>
+
+<p>编译器首先判断数组的容量，然后<strong>分配一片内存来存储数组</strong>的每个元素。如果是字符串赋值方式，则容量是strlen(字符串)+1, 赋值时在尾部加 0</p>
+
+<p>char a[ ] <strong>必须</strong>在申明的同时给它赋值， 否则编译器无法知道应该分配多大的内存给该数组</p>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code>     <span class="c1">//如下操作会导致 编译错误，编译器不能知道d这个数组的大小</span>
+     <span class="kt">char</span> <span class="n">d</span><span class="p">[];</span>
+     <span class="kt">char</span> <span class="n">d</span><span class="p">[]</span> <span class="o">=</span> <span class="n">a</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>char a[ ]的两种赋值方式， char a[ ]的优点</p>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">char</span> <span class="n">a</span><span class="p">[]</span> <span class="o">=</span> <span class="s">"dfdsfsdfas"</span><span class="p">;</span>  <span class="c1">// char a[]的优点 直接把字符串复制给某个数组，长度+1</span>
+<span class="kt">char</span> <span class="n">a</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span><span class="sc">'a'</span><span class="p">,</span><span class="sc">'a'</span><span class="p">,</span><span class="sc">'b'</span><span class="p">,</span><span class="sc">'c'</span><span class="p">};</span>  <span class="c1">// 不会有结尾符\0</span>
+</code></pre></div></div>
+
+<p>sizeof(a) 返回的是 <strong>a数组容量</strong> * <strong>sizeof(a[0])</strong></p>
+
+<p><span style="background: yellow;">char *s = “dfdsf” 的应该场景:</span></p>
+
+<p>把s指向内存的字符串常量区，不能通过s[index] 来修改它, 修改则会crash
+sizeof(s) 返回的是 <strong>sizeof(char *)</strong></p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+</span><span class="cm">/*-----------------------------------------------------------------------------
+ * char b[], 遵循 “右左原则 ” 来查看变量的类型， 所以它是一个数组，字符数组
+ *           它有两种赋值方式
+ *            1. char b[] = {'1','2','3'};
+ *            2. char b[] = "123";  等价与  char b[4] = {'1','2','3', 0};
+ *------------------------------------------------------------------------------*/</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">argv</span><span class="p">[]){</span>
+    <span class="kt">char</span> <span class="o">*</span><span class="n">a</span>   <span class="o">=</span> <span class="s">"12345"</span><span class="p">;</span>    <span class="c1">// a 是指针， 指向了字符常量区中"12345"的地址</span>
+    <span class="kt">char</span>  <span class="n">b</span><span class="p">[]</span> <span class="o">=</span> <span class="s">"12345"</span><span class="p">;</span>    <span class="c1">// b 是首先是数组，存储的元素是{'1', '2','3','4', '5', 0}; </span>
+    <span class="kt">char</span> <span class="n">bb</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span><span class="sc">'1'</span><span class="p">,</span> <span class="sc">'2'</span><span class="p">,</span><span class="sc">'3'</span><span class="p">,</span><span class="sc">'4'</span><span class="p">,</span> <span class="sc">'5'</span><span class="p">};</span> <span class="c1">// bb 是没有结尾符的 </span>
+    <span class="kt">char</span> <span class="n">bbb</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="sc">'1'</span><span class="p">,</span> <span class="sc">'2'</span><span class="p">,</span><span class="sc">'3'</span><span class="p">,</span><span class="sc">'4'</span><span class="p">,</span> <span class="sc">'5'</span><span class="p">};</span>
+    <span class="kt">int</span>   <span class="n">c</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">};</span>
+
+    <span class="c1">// char a[ ] 需要在申明的同时给它赋值， 否则编译器无法知道应该分配多大的内存给该数组</span>
+    <span class="c1">// 编译错误，编译器不能知道d这个数组的大小</span>
+    <span class="c1">// char d[];</span>
+    <span class="c1">// char d[] = a;</span>
+
+    <span class="c1">// 编译错误 把指针赋值数组</span>
+    <span class="c1">// b = a;</span>
+
+    <span class="c1">//sizeof 返回变量占用的内存大小</span>
+    <span class="c1">// 数组的sizeof 计算是 sizeof(成员)×数目</span>
+
+    <span class="n">printf</span><span class="p">(</span><span class="s">"sizeof(a):%ld sizeof(b):%ld sizeof(bb):%ld sizeof(bbb):%ld sizeof(c):%ld</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> \
+            <span class="k">sizeof</span><span class="p">(</span><span class="n">a</span><span class="p">),</span>    <span class="k">sizeof</span><span class="p">(</span><span class="n">b</span><span class="p">),</span>    <span class="k">sizeof</span><span class="p">(</span><span class="n">bb</span><span class="p">),</span>    <span class="k">sizeof</span><span class="p">(</span><span class="n">bbb</span><span class="p">),</span>    <span class="k">sizeof</span><span class="p">(</span><span class="n">c</span><span class="p">));</span>
+
+    <span class="n">b</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="sc">'g'</span><span class="p">;</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"%s():%d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="n">__FUNCTION__</span><span class="p">,</span><span class="n">__LINE__</span><span class="p">);</span>
+
+
+    <span class="n">a</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="sc">'r'</span><span class="p">;</span> <span class="c1">// 修改字符常量区会导致 crash</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"%s():%d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="n">__FUNCTION__</span><span class="p">,</span><span class="n">__LINE__</span><span class="p">);</span>
+
+    <span class="n">a</span> <span class="o">=</span> <span class="s">"dfasdfa"</span><span class="p">;</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"%s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="n">a</span><span class="p">);</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>输出如下:</p>
+<pre><code class="language-C">sizeof(a):8 sizeof(b):6 sizeof(bb):5 sizeof(bbb):5 sizeof(c):20
+main():23
+Segmentation fault (core dumped)
+</code></pre>]]></content><author><name>Kevin</name></author><category term="Jekyll" /><summary type="html"><![CDATA[pthread_mutex_t&amp;pthread_cond_t]]></summary></entry><entry><title type="html">位运算</title><link href="http://localhost:4000/blog/jekyll/2022-04-27-bit.html" rel="alternate" type="text/html" title="位运算" /><published>2022-04-27T00:00:00+08:00</published><updated>2022-04-27T00:00:00+08:00</updated><id>http://localhost:4000/blog/jekyll/bit</id><content type="html" xml:base="http://localhost:4000/blog/jekyll/2022-04-27-bit.html"><![CDATA[<h1 id="1位运算概述">1.位运算概述</h1>
 
 <p>从现代计算机中所有的数据二进制的形式存储在设备中。即 0、1 两种状态，计算机对二进制数据进行的运算(+、-、*、\/)都是叫位运算，即将符号位共同参与运算的运算。</p>
 
