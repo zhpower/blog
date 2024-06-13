@@ -290,51 +290,51 @@
 </code></pre></div></div>
 <p>-ss 表示视频分割的起始时间，-t 表示分割时长，同时也可以用 00:01:00表示</p>
 
-<p>==<em>注意</em>== ：-ss 要放在 -i 之前</p>
+<p>注意-ss 要放在 -i 之前</p>
 
 <h3 id="02-视频区域裁剪">02. 视频区域裁剪：</h3>
 <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ffmpeg <span class="nt">-i</span> 3.mkv <span class="nt">-filter_complex</span> <span class="nv">crop</span><span class="o">=</span>1024:50:0:550 <span class="nt">-y</span> 4.mkv  
 </code></pre></div></div>
 <h3 id="03-视频预览">03. 视频预览</h3>
-<p>ffplay 3.mkv -vf crop=1024:50:0:550</p>
-
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ffplay 3.mkv <span class="nt">-vf</span> <span class="nv">crop</span><span class="o">=</span>1024:50:0:550  
+</code></pre></div></div>
 <h3 id="04-视频放大缩小">04. 视频放大,缩小</h3>
 <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ffmpeg  <span class="nt">-i</span> 2.mp4 <span class="nt">-vf</span> <span class="s2">"scale=1280:64"</span> 4.mp4
 </code></pre></div></div>
-<p>==scale== =w:h 表示放大后的大小</p>
+<p>scale =w:h 表示放大后的大小</p>
 
 <h3 id="05-列出所有format">05. 列出所有format</h3>
-<p>// list all pix format</p>
+<p>list all pix format</p>
 <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ffmpeg <span class="nt">-pix_fmts</span> 
 </code></pre></div></div>
 <h3 id="06-图片转换">06. 图片转换</h3>
-<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ffmpeg <span class="nt">-i</span> temp.jpg -s 1024x680 -pix_fmt yuvj420p 9.yuv
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ffmpeg <span class="nt">-itemp</span>.jpg-s1024x680-pix_fmtyuvj420p9.yuv
 ffmpeg.exe <span class="nt">-i</span> agf-dog-1280x960.jpg  <span class="nt">-vf</span> <span class="nv">scale</span><span class="o">=</span>1920:1080 agf-dog-1920x1080.jpg
 </code></pre></div></div>
 <h3 id="07-视频format转换">07. 视频format转换</h3>
 
 <p>YUV -&gt; RGB</p>
 
-<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ffmpeg <span class="nt">-s</span> 360x270 <span class="nt">-pix_fmt</span> yuv420p <span class="nt">-i</span>  2_test_360x270_50.yuv <span class="nt">-pix_fmt</span> rgb24  aaaa.rgb  
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ffmpeg <span class="nt">-s</span> 360x270 <span class="nt">-pix_fmt</span> yuv420p <span class="nt">-i</span> 2_test_360x270_50.yuv <span class="nt">-pix_fmt</span> rgb24 aaaa.rgb  
 </code></pre></div></div>
 <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ffmpeg <span class="nt">-s</span> 640x480 <span class="nt">-pix_fmt</span> nv12 <span class="nt">-i</span> 640x480_1.jpg <span class="nt">-vf</span> <span class="nv">scale</span><span class="o">=</span>640:480,setsar<span class="o">=</span>1:1 640x480_1_nv12.yuv <span class="nt">-hide_banner</span>  
 </code></pre></div></div>
 <h3 id="08-视频叠加">08. 视频叠加</h3>
-<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code> ffmpeg <span class="nt">-i</span> input1 <span class="nt">-i</span> input2 <span class="nt">-filter_complex</span> <span class="nv">overlay</span><span class="o">=</span>x:y output
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code> ffmpeg <span class="nt">-i</span> input1 <span class="nt">-i</span> input2 <span class="nt">-filter_complex</span> <span class="nv">overlay</span><span class="o">=</span>x:youtput
 </code></pre></div></div>
 <h3 id="09-视频旋转">09. 视频旋转</h3>
 
-<p>//mp4向左旋转90度
- ffmpeg -i input.mp4 -metadata:s:v rotate=”90” -codec copy outut.mp4</p>
-
-<p>//mp4向右旋转90度
- ffmpeg -i input.mp4 -metadata:s:v rotate=”-90” -codec copy outut.mp4</p>
-
+<p>mp4向左旋转90度</p>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code> ffmpeg <span class="nt">-i</span> input.mp4 <span class="nt">-metadata</span>:s:v <span class="nv">rotate</span><span class="o">=</span><span class="s2">"90"</span> <span class="nt">-codec</span> copy outut.mp4
+</code></pre></div></div>
+<p>mp4向右旋转90度</p>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code> ffmpeg <span class="nt">-i</span> input.mp4 <span class="nt">-metadata</span>:s:v <span class="nv">rotate</span><span class="o">=</span><span class="s2">"-90"</span> <span class="nt">-codec</span> copy outut.mp4
+</code></pre></div></div>
 <h3 id="10-视频镜像">10. 视频镜像</h3>
-<p>//mp4左右镜像翻转</p>
+<p>mp4左右镜像翻转</p>
 <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code> ffmpeg <span class="nt">-i</span> input.mp4 <span class="nt">-vf</span> <span class="s2">"hflip"</span> outut.mp4
 </code></pre></div></div>
-<p>//mp4上下镜像翻转</p>
+<p>mp4上下镜像翻转</p>
 <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code> ffmpeg <span class="nt">-i</span> input.mp4 <span class="nt">-vf</span> <span class="s2">"vflip"</span> outut.mp4
 </code></pre></div></div>
 <h3 id="11-mp4转raw-data">11. mp4转raw data</h3>
@@ -342,43 +342,44 @@ ffmpeg.exe <span class="nt">-i</span> agf-dog-1280x960.jpg  <span class="nt">-vf
 <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code> ffmpeg <span class="nt">-i</span> video.mp4 <span class="nt">-c</span>:v rawvideo <span class="nt">-pix_fmt</span> yuv420p out.yuv
 </code></pre></div></div>
 <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ffmpeg <span class="nt">-i</span> input.mp4 <span class="nt">-vf</span> <span class="s2">"format=nv12"</span> <span class="nt">-c</span>:v rawvideo <span class="nt">-an</span> output.nv12
+ffmpeg <span class="nt">-i</span> input.mp4 <span class="nt">-pix_fmt</span> nv21 <span class="nt">-f</span> rawvideo output.nv21
 </code></pre></div></div>
 
 <h3 id="12-图片旋转">12. 图片旋转</h3>
-<p>//图片向右旋转90度</p>
+<p>图片向右旋转90度</p>
 <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code> ffmpeg <span class="nt">-i</span> input.png <span class="nt">-vf</span> <span class="nv">rotate</span><span class="o">=</span><span class="s1">'90*PI/180'</span> <span class="nt">-y</span> rotate60.png
 </code></pre></div></div>
-<p>//图片向右旋转90度</p>
+<p>图片向右旋转90度</p>
 <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code> ffmpeg <span class="nt">-i</span> input.png <span class="nt">-vf</span> <span class="nv">rotate</span><span class="o">=</span><span class="s1">'-90*PI/180'</span> <span class="nt">-y</span> rotate_90.png
 </code></pre></div></div>
-<p>//图片像左旋转90度</p>
+<p>图片像左旋转90度</p>
 <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code> ffmpeg <span class="nt">-i</span> input.png <span class="nt">-vf</span> <span class="nv">transpose</span><span class="o">=</span>2 <span class="nt">-y</span> transpose2.png
 </code></pre></div></div>
-<p>//图片像右旋转90度</p>
+<p>图片像右旋转90度</p>
 <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code> ffmpeg <span class="nt">-i</span> input.png <span class="nt">-vf</span> <span class="nv">transpose</span><span class="o">=</span>1 <span class="nt">-y</span> transpose2.png
 </code></pre></div></div>
-<p>//逆时针(向左)旋转90°，然后垂直（上下）翻转</p>
+<p>逆时针(向左)旋转90°，然后垂直（上下）翻转</p>
 <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code> ffmpeg <span class="nt">-i</span> input.png <span class="nt">-vf</span> <span class="nv">transpose</span><span class="o">=</span>0 <span class="nt">-y</span> transpose0.png
 </code></pre></div></div>
 <h3 id="13--图片镜像">13.  图片镜像</h3>
-<p>//图片左右镜像翻转</p>
+<p>图片左右镜像翻转</p>
 <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code> ffmpeg <span class="nt">-i</span> input.png <span class="nt">-vf</span> hflip <span class="nt">-y</span> hflip.png
 </code></pre></div></div>
-<p>//图片上下镜像翻转</p>
+<p>图片上下镜像翻转</p>
 <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code> ffmpeg <span class="nt">-i</span> input.png <span class="nt">-vf</span> vflip <span class="nt">-y</span> vflip.png
 </code></pre></div></div>
-<p>//yuv数据左右镜像翻转</p>
+<p>yuv数据左右镜像翻转</p>
 <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code> ffmpeg <span class="nt">-s</span> 1920x1080 <span class="nt">-pix_fmt</span> nv12 <span class="nt">-i</span> nv12_1.yuv <span class="nt">-vf</span> hflip <span class="nt">-y</span> hflip_nv12.yuv
 </code></pre></div></div>
-<p>//播放左右翻转后的yuv数据</p>
+<p>播放左右翻转后的yuv数据</p>
 <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code> ffplay <span class="nt">-video_size</span> 1920x1080 <span class="nt">-pixel_format</span> nv12 hflip_nv12.yuv
 </code></pre></div></div>
 
 <h3 id="14-音频音量调节大小">14. 音频音量调节大小</h3>
-<p>//音量翻倍，写在滤镜里</p>
+<p>音量翻倍，写在滤镜里</p>
 <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code> ffmpeg <span class="nt">-i</span> input.wav <span class="nt">-af</span> <span class="nv">volume</span><span class="o">=</span>2 <span class="nt">-y</span> output.wav
 </code></pre></div></div>
-<p>//音量翻倍，不写在滤镜中</p>
+<p>音量翻倍，不写在滤镜中</p>
 <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ffmpeg <span class="nt">-i</span> input.wav <span class="nt">-vol</span> 2000 <span class="nt">-y</span> output.wav
 </code></pre></div></div>
 <h3 id="15-调节播放速度">15. 调节播放速度</h3>
