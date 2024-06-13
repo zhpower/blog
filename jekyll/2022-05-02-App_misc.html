@@ -173,17 +173,6 @@
                         </li>
                     
                         
-                        <li class="chapter" data-level="1.1" data-path="/blog/jekyll/2019-02-03-interrupte.html">
-                        
-                            <a href="/blog/jekyll/2019-02-03-interrupte.html" onclick="pageScrollToTop(this)">
-                                硬中断
-                            </a>
-                            
-                                
-                            
-                        </li>
-                    
-                        
                         <li class="chapter" data-level="1.1" data-path="/blog/jekyll/2019-08-10-Wayland-Misc.html">
                         
                             <a href="/blog/jekyll/2019-08-10-Wayland-Misc.html" onclick="pageScrollToTop(this)">
@@ -198,7 +187,7 @@
                         <li class="chapter" data-level="1.1" data-path="/blog/jekyll/2020-06-22-misc.html">
                         
                             <a href="/blog/jekyll/2020-06-22-misc.html" onclick="pageScrollToTop(this)">
-                                kernel misc
+                                Kernel Misc
                             </a>
                             
                                 
@@ -220,7 +209,7 @@
                         <li class="chapter" data-level="1.1" data-path="/blog/jekyll/2020-10-02-FuncTrace.html">
                         
                             <a href="/blog/jekyll/2020-10-02-FuncTrace.html" onclick="pageScrollToTop(this)">
-                                function trace
+                                Function Trace
                             </a>
                             
                                 
@@ -257,7 +246,7 @@
                             </a>
                             
                                 
-                                    <ul><li><a href="#pthread_mutex_tpthread_cond_t" onclick="mobilePageScrollToAnchor(this)" >pthread_mutex_t&amp;pthread_cond_t</a></li><li><a href="#char-a-vs-char-a" onclick="mobilePageScrollToAnchor(this)" >char *a vs char a[]</a></li></ul>
+                                    <ul><li><a href="#pthread_mutex_tpthread_cond_t" onclick="mobilePageScrollToAnchor(this)" >pthread_mutex_t&amp;pthread_cond_t</a></li><li><a href="#char-a-vs-char-a" onclick="mobilePageScrollToAnchor(this)" >char *a vs char a[]</a></li><li><a href="#mmap" onclick="mobilePageScrollToAnchor(this)" >mmap()</a></li><li><a href="#fork-的进程空间" onclick="mobilePageScrollToAnchor(this)" >fork() 的进程空间</a></li></ul>
 
                                 
                             
@@ -526,6 +515,47 @@ sizeof(s) 返回的是 <strong>sizeof(char *)</strong></p>
 main():23
 Segmentation fault (core dumped)
 </code></pre>
+
+<h1 id="mmap">mmap()</h1>
+
+<p>以下是mmap()函数实现的基本过程：</p>
+
+<ol>
+  <li>kernel在当前进程的虚拟地址空间中分配满足条件的虚拟地址块</li>
+  <li>分配vm_area_struct结构来管理该虚拟地址块，并插入到进程的虚拟地址区域链表中</li>
+  <li>通过文件描述符，找到对应设备驱动注册的file_operations,并调用它的mmap函数。</li>
+  <li>在该文件描述符的mmap中，通过调用remap_pfn_range函数来建立页表，并记录文件地址和虚拟地址的映射关系。 此时只是虚拟地址，并没有关联到内存。</li>
+  <li>进程在读写该地址时，触发缺页，从而分配内存，载入文件数据，建立虚拟地址与内存的映射。</li>
+</ol>
+
+<h1 id="fork-的进程空间">fork() 的进程空间</h1>
+<p>当父进程使用 <code class="language-plaintext highlighter-rouge">malloc</code> 分配内存后，这块内存可以被它 <code class="language-plaintext highlighter-rouge">fork</code> 的子进程访问。让我详细解释一下。</p>
+
+<ol>
+  <li><strong>内存分配</strong>：
+    <ul>
+      <li>父进程使用 <code class="language-plaintext highlighter-rouge">malloc</code> 分配的内存位于堆（heap）中。这块内存用于存储动态分配的数据，例如字符串、数组等。</li>
+    </ul>
+  </li>
+  <li><strong><code class="language-plaintext highlighter-rouge">fork</code> 过程</strong>：
+    <ul>
+      <li>当父进程调用 <code class="language-plaintext highlighter-rouge">fork</code> 创建子进程时，操作系统会复制父进程的地址空间。</li>
+      <li>这包括代码段、数据段、堆和栈。但是，实际的复制并不会立即发生。</li>
+    </ul>
+  </li>
+  <li><strong>Copy-on-Write（写时复制）</strong>：
+    <ul>
+      <li>写时复制是一种优化策略，用于避免不必要的内存复制。</li>
+      <li>在 <code class="language-plaintext highlighter-rouge">fork</code> 之后，父子进程共享相同的物理内存页，但这些页被标记为只读。</li>
+      <li>如果父进程或子进程尝试修改这些共享的内存页，操作系统会创建一个副本，使得父子进程之间不会相互影响。</li>
+      <li>因此，父进程和子进程仍然可以访问 <code class="language-plaintext highlighter-rouge">fork</code> 之前分配的所有数据，包括使用 <code class="language-plaintext highlighter-rouge">malloc</code> 分配的堆内存。</li>
+    </ul>
+  </li>
+</ol>
+
+<p>总之，父进程使用 <code class="language-plaintext highlighter-rouge">malloc</code> 分配的内存可以被它 <code class="language-plaintext highlighter-rouge">fork</code> 的子进程访问，但在修改时会进行复制，以保持数据的独立性¹²。</p>
+
+<p>如果您还有其他问题，欢迎继续提问！ 😊</p>
 </section>
             </div><div class="search-results">
     <div class="has-results">

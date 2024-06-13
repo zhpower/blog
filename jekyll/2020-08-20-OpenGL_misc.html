@@ -175,17 +175,6 @@
                         </li>
                     
                         
-                        <li class="chapter" data-level="1.1" data-path="/blog/jekyll/2019-02-03-interrupte.html">
-                        
-                            <a href="/blog/jekyll/2019-02-03-interrupte.html" onclick="pageScrollToTop(this)">
-                                硬中断
-                            </a>
-                            
-                                
-                            
-                        </li>
-                    
-                        
                         <li class="chapter" data-level="1.1" data-path="/blog/jekyll/2019-08-10-Wayland-Misc.html">
                         
                             <a href="/blog/jekyll/2019-08-10-Wayland-Misc.html" onclick="pageScrollToTop(this)">
@@ -200,7 +189,7 @@
                         <li class="chapter" data-level="1.1" data-path="/blog/jekyll/2020-06-22-misc.html">
                         
                             <a href="/blog/jekyll/2020-06-22-misc.html" onclick="pageScrollToTop(this)">
-                                kernel misc
+                                Kernel Misc
                             </a>
                             
                                 
@@ -215,7 +204,7 @@
                             </a>
                             
                                 
-                                    <ul><li><a href="#glinvalidateframebuffer-vs-glclear" onclick="mobilePageScrollToAnchor(this)" >glInvalidateFramebuffer vs glClear</a></li><li><a href="#gldiscardframebufferext" onclick="mobilePageScrollToAnchor(this)" >glDiscardFramebufferEXT</a></li><li><a href="#texture-obj与rbo的区别" onclick="mobilePageScrollToAnchor(this)" >Texture obj与RBO的区别</a></li><li><a href="#shader" onclick="mobilePageScrollToAnchor(this)" >shader</a><ul><li><a href="#初始化" onclick="mobilePageScrollToAnchor(this)" >初始化</a></li><li><a href="#变量" onclick="mobilePageScrollToAnchor(this)" >变量</a></li></ul></li><li><a href="#资源释放" onclick="mobilePageScrollToAnchor(this)" >资源释放</a></li><li><a href="#纹理过滤" onclick="mobilePageScrollToAnchor(this)" >纹理过滤</a></li><li><a href="#纹理环绕" onclick="mobilePageScrollToAnchor(this)" >纹理环绕</a></li><li><a href="#freetype" onclick="mobilePageScrollToAnchor(this)" >freetype</a></li></ul>
+                                    <ul><li><a href="#glinvalidateframebuffer-vs-glclear" onclick="mobilePageScrollToAnchor(this)" >glInvalidateFramebuffer vs glClear</a></li><li><a href="#gldiscardframebufferext" onclick="mobilePageScrollToAnchor(this)" >glDiscardFramebufferEXT</a></li><li><a href="#texture-obj与rbo的区别" onclick="mobilePageScrollToAnchor(this)" >Texture obj与RBO的区别</a></li><li><a href="#shader" onclick="mobilePageScrollToAnchor(this)" >shader</a><ul><li><a href="#初始化" onclick="mobilePageScrollToAnchor(this)" >初始化</a></li><li><a href="#变量" onclick="mobilePageScrollToAnchor(this)" >变量</a></li></ul></li><li><a href="#资源释放" onclick="mobilePageScrollToAnchor(this)" >资源释放</a></li><li><a href="#纹理过滤" onclick="mobilePageScrollToAnchor(this)" >纹理过滤</a></li><li><a href="#纹理环绕" onclick="mobilePageScrollToAnchor(this)" >纹理环绕</a></li><li><a href="#glmapbufferrange" onclick="mobilePageScrollToAnchor(this)" >glMapBufferRange</a></li><li><a href="#freetype" onclick="mobilePageScrollToAnchor(this)" >freetype</a></li></ul>
 
                                 
                             
@@ -225,7 +214,7 @@
                         <li class="chapter" data-level="1.1" data-path="/blog/jekyll/2020-10-02-FuncTrace.html">
                         
                             <a href="/blog/jekyll/2020-10-02-FuncTrace.html" onclick="pageScrollToTop(this)">
-                                function trace
+                                Function Trace
                             </a>
                             
                                 
@@ -375,10 +364,8 @@
   </li>
 </ul>
 
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="k">const</span> <span class="o">*</span><span class="n">argv</span><span class="p">[])</span>
-<span class="p">{</span>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="k">const</span> <span class="o">*</span><span class="n">argv</span><span class="p">[]){</span>
     <span class="n">init_dev</span><span class="p">();</span>
-
     <span class="n">egl_Init</span><span class="p">();</span>
 
     <span class="n">dmabuf_fd</span> <span class="o">=</span> <span class="n">allocate_dmabuf</span><span class="p">(</span><span class="mi">1920</span><span class="o">*</span><span class="mi">1080</span><span class="o">*</span><span class="mi">4</span><span class="p">);</span>
@@ -402,18 +389,14 @@
 
     <span class="c1">// 得到当前附加纹理ID为 0</span>
     <span class="n">glGetFramebufferAttachmentParameteriv</span><span class="p">(</span><span class="n">GL_FRAMEBUFFER</span><span class="p">,</span> <span class="n">GL_COLOR_ATTACHMENT0</span><span class="p">,</span> <span class="n">GL_FRAMEBUFFER_ATTACHMENT_OBJECT_NAME</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">text</span><span class="p">);</span>
-    
     <span class="n">glDeleteFramebuffers</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">FBO2</span><span class="p">);</span>
-    
     <span class="n">eglDestroyContext</span><span class="p">(</span><span class="n">g_EGLDisplay</span><span class="p">,</span> <span class="n">g_EGLContext</span><span class="p">);</span>
 
     <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
 </code></pre></div></div>
 
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="k">const</span> <span class="o">*</span><span class="n">argv</span><span class="p">[])</span>
-<span class="p">{</span>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="k">const</span> <span class="o">*</span><span class="n">argv</span><span class="p">[]){</span>
     <span class="n">init_dev</span><span class="p">();</span>
-
     <span class="n">egl_Init</span><span class="p">();</span>
 
     <span class="n">dmabuf_fd1</span> <span class="o">=</span> <span class="n">allocate_dmabuf</span><span class="p">(</span><span class="mi">1920</span><span class="o">*</span><span class="mi">1080</span><span class="o">*</span><span class="mi">4</span><span class="p">);</span>
@@ -422,7 +405,6 @@
     <span class="n">dmabuf_fd2</span> <span class="o">=</span> <span class="n">allocate_dmabuf</span><span class="p">(</span><span class="mi">1920</span><span class="o">*</span><span class="mi">1080</span><span class="o">*</span><span class="mi">4</span><span class="p">);</span>
     <span class="n">textureid2</span> <span class="o">=</span> <span class="n">create_texture_for_dmabuf</span><span class="p">(</span><span class="n">dmabuf_fd2</span><span class="p">,</span> <span class="mi">1920</span><span class="p">,</span> <span class="mi">1080</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">eglImg2</span><span class="p">);</span>
 
-
     <span class="n">glGenFramebuffers</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">FBO1</span><span class="p">);</span>
     <span class="n">glBindFramebuffer</span><span class="p">(</span><span class="n">GL_FRAMEBUFFER</span><span class="p">,</span> <span class="n">FBO1</span><span class="p">);</span>
     <span class="n">glBindTexture</span><span class="p">(</span><span class="n">GL_TEXTURE_EXTERNAL_OES</span><span class="p">,</span> <span class="n">textureid1</span><span class="p">);</span>
@@ -430,10 +412,8 @@
     <span class="k">if</span> <span class="p">(</span><span class="n">glCheckFramebufferStatus</span><span class="p">(</span><span class="n">GL_FRAMEBUFFER</span><span class="p">)</span> <span class="o">!=</span> <span class="n">GL_FRAMEBUFFER_COMPLETE</span><span class="p">)</span> <span class="p">{</span>
         <span class="n">assert</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
     <span class="p">}</span>
-    
     <span class="c1">// 注意要设置FBO 的纹理为0， 否则后面不能真正释放</span>
     <span class="n">glFramebufferTexture2D</span><span class="p">(</span><span class="n">GL_FRAMEBUFFER</span><span class="p">,</span> <span class="n">GL_COLOR_ATTACHMENT0</span><span class="p">,</span> <span class="n">GL_TEXTURE_EXTERNAL_OES</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
-
 
     <span class="n">glGenFramebuffers</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">FBO2</span><span class="p">);</span>
     <span class="n">glBindFramebuffer</span><span class="p">(</span><span class="n">GL_FRAMEBUFFER</span><span class="p">,</span> <span class="n">FBO2</span><span class="p">);</span>
@@ -450,7 +430,6 @@
     <span class="n">glDeleteTextures</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">textureid2</span><span class="p">);</span>
     <span class="n">eglDestroyImageKHR</span><span class="p">(</span><span class="n">g_EGLDisplay</span><span class="p">,</span> <span class="n">eglImg2</span><span class="p">);</span>    
     <span class="c1">// 完成后 /sys/kernel/debug/dmabuf/bufferinfo 中dmabuf已经释放</span>
-
 
     <span class="n">glDeleteFramebuffers</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">FBO1</span><span class="p">);</span>
     <span class="n">glDeleteFramebuffers</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">FBO2</span><span class="p">);</span>
@@ -531,6 +510,115 @@
     <span class="n">glTexParameterfv</span><span class="o">(</span><span class="no">GL_TEXTURE_2D</span><span class="o">,</span> <span class="no">GL_TEXTURE_BORDER_COLOR</span><span class="o">,</span> <span class="n">borderColor</span><span class="o">);</span>
 </code></pre></div></div>
 
+<h1 id="glmapbufferrange">glMapBufferRange</h1>
+
+<p><code class="language-plaintext highlighter-rouge">glMapBufferRange</code> 是一个 OpenGL 函数，用于将指定缓冲对象的一部分数据<span style="color:red">映射到客户端的地址空间中</span>,可以减少一次CPU 内存数据的读写。 以下是关于 <code class="language-plaintext highlighter-rouge">glMapBufferRange</code> 的详细说明：</p>
+
+<ul>
+  <li><strong>作用</strong>：
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">glMapBufferRange</code> 允许你直接访问缓冲对象的数据，以便在客户端代码中进行读取或写入操作。</li>
+      <li>通过映射缓冲区的一部分，你可以有效地操作其中的数据。</li>
+    </ul>
+  </li>
+  <li><strong>参数</strong>：
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">target</code>：目标缓冲对象类型，通常为 <code class="language-plaintext highlighter-rouge">GL_ARRAY_BUFFER</code> 或 <code class="language-plaintext highlighter-rouge">GL_ELEMENT_ARRAY_BUFFER</code>。</li>
+      <li><code class="language-plaintext highlighter-rouge">offset</code>：要映射的数据在缓冲对象中的偏移量。</li>
+      <li><code class="language-plaintext highlighter-rouge">length</code>：要映射的数据的长度。</li>
+      <li><code class="language-plaintext highlighter-rouge">access</code>：访问权限，可以是 <code class="language-plaintext highlighter-rouge">GL_READ_ONLY</code>、<code class="language-plaintext highlighter-rouge">GL_WRITE_ONLY</code> 或 <code class="language-plaintext highlighter-rouge">GL_READ_WRITE</code>。</li>
+      <li><code class="language-plaintext highlighter-rouge">返回值</code>：映射后的指针，用于访问缓冲区数据。</li>
+    </ul>
+  </li>
+  <li><strong>使用场景</strong>：
+    <ul>
+      <li>在顶点缓冲对象（VBO）中，你可以使用 <code class="language-plaintext highlighter-rouge">glMapBufferRange</code> 来更新顶点数据。</li>
+      <li>在像素缓冲对象（PBO）中，你可以使用它来处理像素数据。</li>
+    </ul>
+  </li>
+</ul>
+
+<p>总之，<code class="language-plaintext highlighter-rouge">glMapBufferRange</code> 允许你映射缓冲对象的一部分数据，以便在客户端代码中直接访问和操作。</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;GL/glew.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;GLFW/glfw3.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
+</span><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="c1">// Initialize GLFW and create a window</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">glfwInit</span><span class="p">())</span> <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">cerr</span> <span class="o">&lt;&lt;</span> <span class="s">"Failed to initialize GLFW"</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">GLFWwindow</span><span class="o">*</span> <span class="n">window</span> <span class="o">=</span> <span class="n">glfwCreateWindow</span><span class="p">(</span><span class="mi">800</span><span class="p">,</span> <span class="mi">600</span><span class="p">,</span> <span class="s">"OpenGL Sample"</span><span class="p">,</span> <span class="n">nullptr</span><span class="p">,</span> <span class="n">nullptr</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">window</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">cerr</span> <span class="o">&lt;&lt;</span> <span class="s">"Failed to create GLFW window"</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+        <span class="n">glfwTerminate</span><span class="p">();</span>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">glfwMakeContextCurrent</span><span class="p">(</span><span class="n">window</span><span class="p">);</span>
+    <span class="c1">// Initialize GLEW</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">glewInit</span><span class="p">()</span> <span class="o">!=</span> <span class="n">GLEW_OK</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">cerr</span> <span class="o">&lt;&lt;</span> <span class="s">"Failed to initialize GLEW"</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="c1">// Create a buffer object (VBO)</span>
+    <span class="n">GLuint</span> <span class="n">vbo</span><span class="p">;</span>
+    <span class="n">glGenBuffers</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">vbo</span><span class="p">);</span>
+    <span class="n">glBindBuffer</span><span class="p">(</span><span class="n">GL_ARRAY_BUFFER</span><span class="p">,</span> <span class="n">vbo</span><span class="p">);</span>
+    <span class="c1">// Allocate storage for the buffer</span>
+    <span class="n">glBufferData</span><span class="p">(</span><span class="n">GL_ARRAY_BUFFER</span><span class="p">,</span> <span class="mi">1024</span><span class="p">,</span> <span class="n">nullptr</span><span class="p">,</span> <span class="n">GL_DYNAMIC_DRAW</span><span class="p">);</span>
+    <span class="c1">// Map a portion of the buffer</span>
+    <span class="n">GLintptr</span> <span class="n">offset</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">GLsizeiptr</span> <span class="n">size</span> <span class="o">=</span> <span class="mi">512</span><span class="p">;</span>
+    <span class="n">GLvoid</span><span class="o">*</span> <span class="n">mappedData</span> <span class="o">=</span> <span class="n">glMapBufferRange</span><span class="p">(</span><span class="n">GL_ARRAY_BUFFER</span><span class="p">,</span> <span class="n">offset</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">GL_MAP_WRITE_BIT</span> <span class="o">|</span> <span class="n">GL_MAP_INVALIDATE_BUFFER_BIT</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">mappedData</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// Modify the data in the mapped region</span>
+        <span class="c1">// ...</span>
+        <span class="c1">// Unmap the buffer</span>
+        <span class="n">glUnmapBuffer</span><span class="p">(</span><span class="n">GL_ARRAY_BUFFER</span><span class="p">);</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">cerr</span> <span class="o">&lt;&lt;</span> <span class="s">"Failed to map buffer"</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="c1">// Main loop</span>
+    <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">glfwWindowShouldClose</span><span class="p">(</span><span class="n">window</span><span class="p">))</span> <span class="p">{</span>
+        <span class="c1">// Render your scene using the modified buffer data</span>
+        <span class="c1">// ...</span>
+        <span class="n">glfwSwapBuffers</span><span class="p">(</span><span class="n">window</span><span class="p">);</span>
+        <span class="n">glfwPollEvents</span><span class="p">();</span>
+    <span class="p">}</span>
+    <span class="c1">// Cleanup</span>
+    <span class="n">glDeleteBuffers</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">vbo</span><span class="p">);</span>
+    <span class="n">glfwDestroyWindow</span><span class="p">(</span><span class="n">window</span><span class="p">);</span>
+    <span class="n">glfwTerminate</span><span class="p">();</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">static</span> <span class="kt">void</span> <span class="nf">DumpTexture</span><span class="p">(</span><span class="n">GLuint</span> <span class="n">TextureId</span><span class="p">,</span> <span class="n">GLuint</span> <span class="n">x0</span><span class="p">,</span> <span class="n">GLuint</span> <span class="n">y0</span><span class="p">,</span> <span class="n">GLuint</span> <span class="n">x1</span><span class="p">,</span> <span class="n">GLuint</span> <span class="n">y1</span><span class="p">){</span>
+    <span class="kt">int</span> <span class="n">fbo0</span><span class="p">;</span>
+    <span class="n">glGetIntegerv</span><span class="p">(</span> <span class="n">GL_FRAMEBUFFER_BINDING</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">fbo0</span><span class="p">);</span>
+    <span class="n">GLuint</span> <span class="n">fbo</span><span class="p">;</span>
+    <span class="n">glGenFramebuffers</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">fbo</span><span class="p">);</span>
+    <span class="n">glBindFramebuffer</span><span class="p">(</span><span class="n">GL_FRAMEBUFFER</span><span class="p">,</span> <span class="n">fbo</span><span class="p">);</span>
+    <span class="n">glFramebufferTexture2D</span><span class="p">(</span><span class="n">GL_FRAMEBUFFER</span><span class="p">,</span> <span class="n">GL_COLOR_ATTACHMENT0</span><span class="p">,</span> <span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="n">TextureId</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>    
+    <span class="k">if</span> <span class="p">(</span><span class="n">glCheckFramebufferStatus</span><span class="p">(</span><span class="n">GL_FRAMEBUFFER</span><span class="p">)</span> <span class="o">!=</span> <span class="n">GL_FRAMEBUFFER_COMPLETE</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">"glCheckFramebufferStatus() failed</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">GLuint</span> <span class="n">size</span> <span class="o">=</span> <span class="p">(</span><span class="n">x1</span><span class="o">-</span><span class="n">x0</span><span class="p">)</span><span class="o">*</span> <span class="p">(</span><span class="n">y1</span><span class="o">-</span><span class="n">y0</span><span class="p">)</span><span class="o">*</span><span class="mi">4</span><span class="p">;</span>
+    <span class="n">GLuint</span> <span class="n">pbo_down</span><span class="p">;</span>
+    <span class="n">glGenBuffers</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">pbo_down</span><span class="p">);</span>
+    <span class="n">glBindBuffer</span><span class="p">(</span><span class="n">GL_PIXEL_PACK_BUFFER</span><span class="p">,</span> <span class="n">pbo_down</span><span class="p">);</span>
+    <span class="n">glBufferData</span><span class="p">(</span><span class="n">GL_PIXEL_PACK_BUFFER</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="n">GL_STREAM_READ</span><span class="p">);</span>
+    <span class="n">glReadPixels</span><span class="p">(</span><span class="n">x0</span><span class="p">,</span><span class="n">y0</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">GL_RGBA</span><span class="p">,</span> <span class="n">GL_UNSIGNED_BYTE</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+    <span class="n">GLubyte</span> <span class="o">*</span><span class="n">src</span> <span class="o">=</span> <span class="p">(</span><span class="n">GLubyte</span><span class="o">*</span><span class="p">)</span><span class="n">glMapBufferRange</span><span class="p">(</span><span class="n">GL_PIXEL_PACK_BUFFER</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span>  <span class="n">GL_MAP_READ_BIT</span><span class="p">);</span>
+    <span class="n">GLubyte</span>  <span class="o">*</span><span class="n">buffer</span> <span class="o">=</span> <span class="n">malloc</span><span class="p">(</span><span class="n">size</span><span class="p">);</span>
+    <span class="n">memcpy</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span> <span class="n">src</span><span class="p">,</span> <span class="n">size</span><span class="p">);</span>
+    <span class="n">glUnmapBuffer</span><span class="p">(</span><span class="n">GL_PIXEL_PACK_BUFFER</span><span class="p">);</span>
+    <span class="n">glBindBuffer</span><span class="p">(</span><span class="n">GL_PIXEL_PACK_BUFFER</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+    <span class="n">stbi_write_png</span><span class="p">(</span><span class="s">"/tmp/texture_img.png"</span><span class="p">,</span> <span class="p">(</span><span class="kt">int</span><span class="p">)(</span><span class="n">x1</span><span class="o">-</span><span class="n">x0</span><span class="p">),</span> <span class="p">(</span><span class="kt">int</span><span class="p">)(</span><span class="n">y1</span><span class="o">-</span><span class="n">y0</span><span class="p">),</span> <span class="mi">4</span><span class="p">,</span> <span class="n">buffer</span><span class="p">,</span> <span class="p">(</span><span class="kt">int</span><span class="p">)((</span><span class="n">x1</span><span class="o">-</span><span class="n">x0</span><span class="p">)</span><span class="o">*</span><span class="mi">4</span><span class="p">));</span>
+    <span class="n">glBindFramebuffer</span><span class="p">(</span><span class="n">GL_FRAMEBUFFER</span><span class="p">,</span> <span class="n">fbo0</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
 <h1 id="freetype">freetype</h1>
 
 <p>下图是freetype调用的基本框架。</p>
@@ -540,6 +628,7 @@
 <p><img src="/blog/assets/OpenGL/freetype_glyph.png" alt="freetype_glyph" /></p>
 
 <p>参看上图，在绘制字符时以baseline为水平基准，则所有的字符就会对齐。</p>
+
 </section>
             </div><div class="search-results">
     <div class="has-results">
@@ -628,13 +717,13 @@ window.MathJax = {
 </script>
 
 
-                        <a href="/blog/jekyll/2020-06-22-misc.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page: kernel misc">
+                        <a href="/blog/jekyll/2020-06-22-misc.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page: Kernel Misc">
                             <i class="fa fa-angle-left"></i>
                         </a>
                     
 
                     
-                        <a href="/blog/jekyll/2020-10-02-FuncTrace.html" class="navigation navigation-next navigation-unique" aria-label="Next page: function trace">
+                        <a href="/blog/jekyll/2020-10-02-FuncTrace.html" class="navigation navigation-next navigation-unique" aria-label="Next page: Function Trace">
                             <i class="fa fa-angle-right"></i>
                         </a>
                     
@@ -651,7 +740,7 @@ window.MathJax = {
         "depth": 1,
         
         "next": {
-            "title": "function trace",
+            "title": "Function Trace",
             "level": "1.2",
             "depth": 1,
             "path": "_posts/2020-10-02-FuncTrace.md",

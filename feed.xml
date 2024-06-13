@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.2">Jekyll</generator><link href="http://localhost:4000/blog/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/blog/" rel="alternate" type="text/html" /><updated>2024-05-20T16:35:13+08:00</updated><id>http://localhost:4000/blog/feed.xml</id><title type="html">学习笔记</title><subtitle>Build Jekyll site with the GitBook style.
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.2">Jekyll</generator><link href="http://localhost:4000/blog/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/blog/" rel="alternate" type="text/html" /><updated>2024-05-28T20:04:06+08:00</updated><id>http://localhost:4000/blog/feed.xml</id><title type="html">学习笔记</title><subtitle>Build Jekyll site with the GitBook style.
 </subtitle><author><name>kevin_zh</name></author><entry><title type="html">linux dev misc</title><link href="http://localhost:4000/blog/jekyll/2022-05-02-App_misc.html" rel="alternate" type="text/html" title="linux dev misc" /><published>2022-05-02T00:00:00+08:00</published><updated>2022-05-02T00:00:00+08:00</updated><id>http://localhost:4000/blog/jekyll/App_misc</id><content type="html" xml:base="http://localhost:4000/blog/jekyll/2022-05-02-App_misc.html"><![CDATA[<h1 id="pthread_mutex_tpthread_cond_t">pthread_mutex_t&amp;pthread_cond_t</h1>
 
 <p>函数定义：</p>
@@ -230,7 +230,48 @@ sizeof(s) 返回的是 <strong>sizeof(char *)</strong></p>
 <pre><code class="language-C">sizeof(a):8 sizeof(b):6 sizeof(bb):5 sizeof(bbb):5 sizeof(c):20
 main():23
 Segmentation fault (core dumped)
-</code></pre>]]></content><author><name>Kevin</name></author><category term="Jekyll" /><summary type="html"><![CDATA[pthread_mutex_t&amp;pthread_cond_t]]></summary></entry><entry><title type="html">位运算</title><link href="http://localhost:4000/blog/jekyll/2022-04-27-bit.html" rel="alternate" type="text/html" title="位运算" /><published>2022-04-27T00:00:00+08:00</published><updated>2022-04-27T00:00:00+08:00</updated><id>http://localhost:4000/blog/jekyll/bit</id><content type="html" xml:base="http://localhost:4000/blog/jekyll/2022-04-27-bit.html"><![CDATA[<h1 id="1位运算概述">1.位运算概述</h1>
+</code></pre>
+
+<h1 id="mmap">mmap()</h1>
+
+<p>以下是mmap()函数实现的基本过程：</p>
+
+<ol>
+  <li>kernel在当前进程的虚拟地址空间中分配满足条件的虚拟地址块</li>
+  <li>分配vm_area_struct结构来管理该虚拟地址块，并插入到进程的虚拟地址区域链表中</li>
+  <li>通过文件描述符，找到对应设备驱动注册的file_operations,并调用它的mmap函数。</li>
+  <li>在该文件描述符的mmap中，通过调用remap_pfn_range函数来建立页表，并记录文件地址和虚拟地址的映射关系。 此时只是虚拟地址，并没有关联到内存。</li>
+  <li>进程在读写该地址时，触发缺页，从而分配内存，载入文件数据，建立虚拟地址与内存的映射。</li>
+</ol>
+
+<h1 id="fork-的进程空间">fork() 的进程空间</h1>
+<p>当父进程使用 <code class="language-plaintext highlighter-rouge">malloc</code> 分配内存后，这块内存可以被它 <code class="language-plaintext highlighter-rouge">fork</code> 的子进程访问。让我详细解释一下。</p>
+
+<ol>
+  <li><strong>内存分配</strong>：
+    <ul>
+      <li>父进程使用 <code class="language-plaintext highlighter-rouge">malloc</code> 分配的内存位于堆（heap）中。这块内存用于存储动态分配的数据，例如字符串、数组等。</li>
+    </ul>
+  </li>
+  <li><strong><code class="language-plaintext highlighter-rouge">fork</code> 过程</strong>：
+    <ul>
+      <li>当父进程调用 <code class="language-plaintext highlighter-rouge">fork</code> 创建子进程时，操作系统会复制父进程的地址空间。</li>
+      <li>这包括代码段、数据段、堆和栈。但是，实际的复制并不会立即发生。</li>
+    </ul>
+  </li>
+  <li><strong>Copy-on-Write（写时复制）</strong>：
+    <ul>
+      <li>写时复制是一种优化策略，用于避免不必要的内存复制。</li>
+      <li>在 <code class="language-plaintext highlighter-rouge">fork</code> 之后，父子进程共享相同的物理内存页，但这些页被标记为只读。</li>
+      <li>如果父进程或子进程尝试修改这些共享的内存页，操作系统会创建一个副本，使得父子进程之间不会相互影响。</li>
+      <li>因此，父进程和子进程仍然可以访问 <code class="language-plaintext highlighter-rouge">fork</code> 之前分配的所有数据，包括使用 <code class="language-plaintext highlighter-rouge">malloc</code> 分配的堆内存。</li>
+    </ul>
+  </li>
+</ol>
+
+<p>总之，父进程使用 <code class="language-plaintext highlighter-rouge">malloc</code> 分配的内存可以被它 <code class="language-plaintext highlighter-rouge">fork</code> 的子进程访问，但在修改时会进行复制，以保持数据的独立性¹²。</p>
+
+<p>如果您还有其他问题，欢迎继续提问！ 😊</p>]]></content><author><name>Kevin</name></author><category term="Jekyll" /><summary type="html"><![CDATA[pthread_mutex_t&amp;pthread_cond_t]]></summary></entry><entry><title type="html">位运算</title><link href="http://localhost:4000/blog/jekyll/2022-04-27-bit.html" rel="alternate" type="text/html" title="位运算" /><published>2022-04-27T00:00:00+08:00</published><updated>2022-04-27T00:00:00+08:00</updated><id>http://localhost:4000/blog/jekyll/bit</id><content type="html" xml:base="http://localhost:4000/blog/jekyll/2022-04-27-bit.html"><![CDATA[<h1 id="1位运算概述">1.位运算概述</h1>
 
 <p>从现代计算机中所有的数据二进制的形式存储在设备中。即 0、1 两种状态，计算机对二进制数据进行的运算(+、-、*、\/)都是叫位运算，即将符号位共同参与运算的运算。</p>
 
@@ -543,7 +584,7 @@ ffmpeg.exe <span class="nt">-i</span> agf-dog-1280x960.jpg  <span class="nt">-vf
 <p>四倍慢速：</p>
 
 <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ffmpeg <span class="nt">-i</span> test1.mp4 <span class="nt">-vf</span>  <span class="s2">"setpts=4*PTS"</span> test2.mp4
-</code></pre></div></div>]]></content><author><name>Tao He</name></author><category term="Jekyll" /><summary type="html"><![CDATA[01. 视频分割 ffmpeg -ss 00:00:00 -i input.mp4 -c copy -t 60 output.mp4 -ss 表示视频分割的起始时间，-t 表示分割时长，同时也可以用 00:01:00表示]]></summary></entry><entry><title type="html">function trace</title><link href="http://localhost:4000/blog/jekyll/2020-10-02-FuncTrace.html" rel="alternate" type="text/html" title="function trace" /><published>2020-10-02T00:00:00+08:00</published><updated>2020-10-02T00:00:00+08:00</updated><id>http://localhost:4000/blog/jekyll/FuncTrace</id><content type="html" xml:base="http://localhost:4000/blog/jekyll/2020-10-02-FuncTrace.html"><![CDATA[<h1 id="函数跟踪">函数跟踪</h1>
+</code></pre></div></div>]]></content><author><name>Tao He</name></author><category term="Jekyll" /><summary type="html"><![CDATA[01. 视频分割 ffmpeg -ss 00:00:00 -i input.mp4 -c copy -t 60 output.mp4 -ss 表示视频分割的起始时间，-t 表示分割时长，同时也可以用 00:01:00表示]]></summary></entry><entry><title type="html">Function Trace</title><link href="http://localhost:4000/blog/jekyll/2020-10-02-FuncTrace.html" rel="alternate" type="text/html" title="Function Trace" /><published>2020-10-02T00:00:00+08:00</published><updated>2020-10-02T00:00:00+08:00</updated><id>http://localhost:4000/blog/jekyll/FuncTrace</id><content type="html" xml:base="http://localhost:4000/blog/jekyll/2020-10-02-FuncTrace.html"><![CDATA[<h1 id="函数跟踪">函数跟踪</h1>
 
 <p><code class="language-plaintext highlighter-rouge">__cyg_profile_func_enter</code> 和 <code class="language-plaintext highlighter-rouge">__cyg_profile_func_exit</code> 是用于函数调用追踪的特殊函数。当你使用 <span style="color:red">-finstrument-functions</span>编译选项时，编译器会在每个函数的开始和结束处插入这两个函数. 这样，你可以实现函数调用的检测和分析。</p>
 
@@ -695,10 +736,8 @@ ffmpeg.exe <span class="nt">-i</span> agf-dog-1280x960.jpg  <span class="nt">-vf
   </li>
 </ul>
 
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="k">const</span> <span class="o">*</span><span class="n">argv</span><span class="p">[])</span>
-<span class="p">{</span>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="k">const</span> <span class="o">*</span><span class="n">argv</span><span class="p">[]){</span>
     <span class="n">init_dev</span><span class="p">();</span>
-
     <span class="n">egl_Init</span><span class="p">();</span>
 
     <span class="n">dmabuf_fd</span> <span class="o">=</span> <span class="n">allocate_dmabuf</span><span class="p">(</span><span class="mi">1920</span><span class="o">*</span><span class="mi">1080</span><span class="o">*</span><span class="mi">4</span><span class="p">);</span>
@@ -722,18 +761,14 @@ ffmpeg.exe <span class="nt">-i</span> agf-dog-1280x960.jpg  <span class="nt">-vf
 
     <span class="c1">// 得到当前附加纹理ID为 0</span>
     <span class="n">glGetFramebufferAttachmentParameteriv</span><span class="p">(</span><span class="n">GL_FRAMEBUFFER</span><span class="p">,</span> <span class="n">GL_COLOR_ATTACHMENT0</span><span class="p">,</span> <span class="n">GL_FRAMEBUFFER_ATTACHMENT_OBJECT_NAME</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">text</span><span class="p">);</span>
-    
     <span class="n">glDeleteFramebuffers</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">FBO2</span><span class="p">);</span>
-    
     <span class="n">eglDestroyContext</span><span class="p">(</span><span class="n">g_EGLDisplay</span><span class="p">,</span> <span class="n">g_EGLContext</span><span class="p">);</span>
 
     <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
 </code></pre></div></div>
 
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="k">const</span> <span class="o">*</span><span class="n">argv</span><span class="p">[])</span>
-<span class="p">{</span>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="k">const</span> <span class="o">*</span><span class="n">argv</span><span class="p">[]){</span>
     <span class="n">init_dev</span><span class="p">();</span>
-
     <span class="n">egl_Init</span><span class="p">();</span>
 
     <span class="n">dmabuf_fd1</span> <span class="o">=</span> <span class="n">allocate_dmabuf</span><span class="p">(</span><span class="mi">1920</span><span class="o">*</span><span class="mi">1080</span><span class="o">*</span><span class="mi">4</span><span class="p">);</span>
@@ -742,7 +777,6 @@ ffmpeg.exe <span class="nt">-i</span> agf-dog-1280x960.jpg  <span class="nt">-vf
     <span class="n">dmabuf_fd2</span> <span class="o">=</span> <span class="n">allocate_dmabuf</span><span class="p">(</span><span class="mi">1920</span><span class="o">*</span><span class="mi">1080</span><span class="o">*</span><span class="mi">4</span><span class="p">);</span>
     <span class="n">textureid2</span> <span class="o">=</span> <span class="n">create_texture_for_dmabuf</span><span class="p">(</span><span class="n">dmabuf_fd2</span><span class="p">,</span> <span class="mi">1920</span><span class="p">,</span> <span class="mi">1080</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">eglImg2</span><span class="p">);</span>
 
-
     <span class="n">glGenFramebuffers</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">FBO1</span><span class="p">);</span>
     <span class="n">glBindFramebuffer</span><span class="p">(</span><span class="n">GL_FRAMEBUFFER</span><span class="p">,</span> <span class="n">FBO1</span><span class="p">);</span>
     <span class="n">glBindTexture</span><span class="p">(</span><span class="n">GL_TEXTURE_EXTERNAL_OES</span><span class="p">,</span> <span class="n">textureid1</span><span class="p">);</span>
@@ -750,10 +784,8 @@ ffmpeg.exe <span class="nt">-i</span> agf-dog-1280x960.jpg  <span class="nt">-vf
     <span class="k">if</span> <span class="p">(</span><span class="n">glCheckFramebufferStatus</span><span class="p">(</span><span class="n">GL_FRAMEBUFFER</span><span class="p">)</span> <span class="o">!=</span> <span class="n">GL_FRAMEBUFFER_COMPLETE</span><span class="p">)</span> <span class="p">{</span>
         <span class="n">assert</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
     <span class="p">}</span>
-    
     <span class="c1">// 注意要设置FBO 的纹理为0， 否则后面不能真正释放</span>
     <span class="n">glFramebufferTexture2D</span><span class="p">(</span><span class="n">GL_FRAMEBUFFER</span><span class="p">,</span> <span class="n">GL_COLOR_ATTACHMENT0</span><span class="p">,</span> <span class="n">GL_TEXTURE_EXTERNAL_OES</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
-
 
     <span class="n">glGenFramebuffers</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">FBO2</span><span class="p">);</span>
     <span class="n">glBindFramebuffer</span><span class="p">(</span><span class="n">GL_FRAMEBUFFER</span><span class="p">,</span> <span class="n">FBO2</span><span class="p">);</span>
@@ -770,7 +802,6 @@ ffmpeg.exe <span class="nt">-i</span> agf-dog-1280x960.jpg  <span class="nt">-vf
     <span class="n">glDeleteTextures</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">textureid2</span><span class="p">);</span>
     <span class="n">eglDestroyImageKHR</span><span class="p">(</span><span class="n">g_EGLDisplay</span><span class="p">,</span> <span class="n">eglImg2</span><span class="p">);</span>    
     <span class="c1">// 完成后 /sys/kernel/debug/dmabuf/bufferinfo 中dmabuf已经释放</span>
-
 
     <span class="n">glDeleteFramebuffers</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">FBO1</span><span class="p">);</span>
     <span class="n">glDeleteFramebuffers</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">FBO2</span><span class="p">);</span>
@@ -851,6 +882,115 @@ ffmpeg.exe <span class="nt">-i</span> agf-dog-1280x960.jpg  <span class="nt">-vf
     <span class="n">glTexParameterfv</span><span class="o">(</span><span class="no">GL_TEXTURE_2D</span><span class="o">,</span> <span class="no">GL_TEXTURE_BORDER_COLOR</span><span class="o">,</span> <span class="n">borderColor</span><span class="o">);</span>
 </code></pre></div></div>
 
+<h1 id="glmapbufferrange">glMapBufferRange</h1>
+
+<p><code class="language-plaintext highlighter-rouge">glMapBufferRange</code> 是一个 OpenGL 函数，用于将指定缓冲对象的一部分数据<span style="color:red">映射到客户端的地址空间中</span>,可以减少一次CPU 内存数据的读写。 以下是关于 <code class="language-plaintext highlighter-rouge">glMapBufferRange</code> 的详细说明：</p>
+
+<ul>
+  <li><strong>作用</strong>：
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">glMapBufferRange</code> 允许你直接访问缓冲对象的数据，以便在客户端代码中进行读取或写入操作。</li>
+      <li>通过映射缓冲区的一部分，你可以有效地操作其中的数据。</li>
+    </ul>
+  </li>
+  <li><strong>参数</strong>：
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">target</code>：目标缓冲对象类型，通常为 <code class="language-plaintext highlighter-rouge">GL_ARRAY_BUFFER</code> 或 <code class="language-plaintext highlighter-rouge">GL_ELEMENT_ARRAY_BUFFER</code>。</li>
+      <li><code class="language-plaintext highlighter-rouge">offset</code>：要映射的数据在缓冲对象中的偏移量。</li>
+      <li><code class="language-plaintext highlighter-rouge">length</code>：要映射的数据的长度。</li>
+      <li><code class="language-plaintext highlighter-rouge">access</code>：访问权限，可以是 <code class="language-plaintext highlighter-rouge">GL_READ_ONLY</code>、<code class="language-plaintext highlighter-rouge">GL_WRITE_ONLY</code> 或 <code class="language-plaintext highlighter-rouge">GL_READ_WRITE</code>。</li>
+      <li><code class="language-plaintext highlighter-rouge">返回值</code>：映射后的指针，用于访问缓冲区数据。</li>
+    </ul>
+  </li>
+  <li><strong>使用场景</strong>：
+    <ul>
+      <li>在顶点缓冲对象（VBO）中，你可以使用 <code class="language-plaintext highlighter-rouge">glMapBufferRange</code> 来更新顶点数据。</li>
+      <li>在像素缓冲对象（PBO）中，你可以使用它来处理像素数据。</li>
+    </ul>
+  </li>
+</ul>
+
+<p>总之，<code class="language-plaintext highlighter-rouge">glMapBufferRange</code> 允许你映射缓冲对象的一部分数据，以便在客户端代码中直接访问和操作。</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;GL/glew.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;GLFW/glfw3.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
+</span><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="c1">// Initialize GLFW and create a window</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">glfwInit</span><span class="p">())</span> <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">cerr</span> <span class="o">&lt;&lt;</span> <span class="s">"Failed to initialize GLFW"</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">GLFWwindow</span><span class="o">*</span> <span class="n">window</span> <span class="o">=</span> <span class="n">glfwCreateWindow</span><span class="p">(</span><span class="mi">800</span><span class="p">,</span> <span class="mi">600</span><span class="p">,</span> <span class="s">"OpenGL Sample"</span><span class="p">,</span> <span class="n">nullptr</span><span class="p">,</span> <span class="n">nullptr</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">window</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">cerr</span> <span class="o">&lt;&lt;</span> <span class="s">"Failed to create GLFW window"</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+        <span class="n">glfwTerminate</span><span class="p">();</span>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">glfwMakeContextCurrent</span><span class="p">(</span><span class="n">window</span><span class="p">);</span>
+    <span class="c1">// Initialize GLEW</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">glewInit</span><span class="p">()</span> <span class="o">!=</span> <span class="n">GLEW_OK</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">cerr</span> <span class="o">&lt;&lt;</span> <span class="s">"Failed to initialize GLEW"</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="c1">// Create a buffer object (VBO)</span>
+    <span class="n">GLuint</span> <span class="n">vbo</span><span class="p">;</span>
+    <span class="n">glGenBuffers</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">vbo</span><span class="p">);</span>
+    <span class="n">glBindBuffer</span><span class="p">(</span><span class="n">GL_ARRAY_BUFFER</span><span class="p">,</span> <span class="n">vbo</span><span class="p">);</span>
+    <span class="c1">// Allocate storage for the buffer</span>
+    <span class="n">glBufferData</span><span class="p">(</span><span class="n">GL_ARRAY_BUFFER</span><span class="p">,</span> <span class="mi">1024</span><span class="p">,</span> <span class="n">nullptr</span><span class="p">,</span> <span class="n">GL_DYNAMIC_DRAW</span><span class="p">);</span>
+    <span class="c1">// Map a portion of the buffer</span>
+    <span class="n">GLintptr</span> <span class="n">offset</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">GLsizeiptr</span> <span class="n">size</span> <span class="o">=</span> <span class="mi">512</span><span class="p">;</span>
+    <span class="n">GLvoid</span><span class="o">*</span> <span class="n">mappedData</span> <span class="o">=</span> <span class="n">glMapBufferRange</span><span class="p">(</span><span class="n">GL_ARRAY_BUFFER</span><span class="p">,</span> <span class="n">offset</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">GL_MAP_WRITE_BIT</span> <span class="o">|</span> <span class="n">GL_MAP_INVALIDATE_BUFFER_BIT</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">mappedData</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// Modify the data in the mapped region</span>
+        <span class="c1">// ...</span>
+        <span class="c1">// Unmap the buffer</span>
+        <span class="n">glUnmapBuffer</span><span class="p">(</span><span class="n">GL_ARRAY_BUFFER</span><span class="p">);</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">cerr</span> <span class="o">&lt;&lt;</span> <span class="s">"Failed to map buffer"</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="c1">// Main loop</span>
+    <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">glfwWindowShouldClose</span><span class="p">(</span><span class="n">window</span><span class="p">))</span> <span class="p">{</span>
+        <span class="c1">// Render your scene using the modified buffer data</span>
+        <span class="c1">// ...</span>
+        <span class="n">glfwSwapBuffers</span><span class="p">(</span><span class="n">window</span><span class="p">);</span>
+        <span class="n">glfwPollEvents</span><span class="p">();</span>
+    <span class="p">}</span>
+    <span class="c1">// Cleanup</span>
+    <span class="n">glDeleteBuffers</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">vbo</span><span class="p">);</span>
+    <span class="n">glfwDestroyWindow</span><span class="p">(</span><span class="n">window</span><span class="p">);</span>
+    <span class="n">glfwTerminate</span><span class="p">();</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">static</span> <span class="kt">void</span> <span class="nf">DumpTexture</span><span class="p">(</span><span class="n">GLuint</span> <span class="n">TextureId</span><span class="p">,</span> <span class="n">GLuint</span> <span class="n">x0</span><span class="p">,</span> <span class="n">GLuint</span> <span class="n">y0</span><span class="p">,</span> <span class="n">GLuint</span> <span class="n">x1</span><span class="p">,</span> <span class="n">GLuint</span> <span class="n">y1</span><span class="p">){</span>
+    <span class="kt">int</span> <span class="n">fbo0</span><span class="p">;</span>
+    <span class="n">glGetIntegerv</span><span class="p">(</span> <span class="n">GL_FRAMEBUFFER_BINDING</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">fbo0</span><span class="p">);</span>
+    <span class="n">GLuint</span> <span class="n">fbo</span><span class="p">;</span>
+    <span class="n">glGenFramebuffers</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">fbo</span><span class="p">);</span>
+    <span class="n">glBindFramebuffer</span><span class="p">(</span><span class="n">GL_FRAMEBUFFER</span><span class="p">,</span> <span class="n">fbo</span><span class="p">);</span>
+    <span class="n">glFramebufferTexture2D</span><span class="p">(</span><span class="n">GL_FRAMEBUFFER</span><span class="p">,</span> <span class="n">GL_COLOR_ATTACHMENT0</span><span class="p">,</span> <span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="n">TextureId</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>    
+    <span class="k">if</span> <span class="p">(</span><span class="n">glCheckFramebufferStatus</span><span class="p">(</span><span class="n">GL_FRAMEBUFFER</span><span class="p">)</span> <span class="o">!=</span> <span class="n">GL_FRAMEBUFFER_COMPLETE</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">"glCheckFramebufferStatus() failed</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">GLuint</span> <span class="n">size</span> <span class="o">=</span> <span class="p">(</span><span class="n">x1</span><span class="o">-</span><span class="n">x0</span><span class="p">)</span><span class="o">*</span> <span class="p">(</span><span class="n">y1</span><span class="o">-</span><span class="n">y0</span><span class="p">)</span><span class="o">*</span><span class="mi">4</span><span class="p">;</span>
+    <span class="n">GLuint</span> <span class="n">pbo_down</span><span class="p">;</span>
+    <span class="n">glGenBuffers</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">pbo_down</span><span class="p">);</span>
+    <span class="n">glBindBuffer</span><span class="p">(</span><span class="n">GL_PIXEL_PACK_BUFFER</span><span class="p">,</span> <span class="n">pbo_down</span><span class="p">);</span>
+    <span class="n">glBufferData</span><span class="p">(</span><span class="n">GL_PIXEL_PACK_BUFFER</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="n">GL_STREAM_READ</span><span class="p">);</span>
+    <span class="n">glReadPixels</span><span class="p">(</span><span class="n">x0</span><span class="p">,</span><span class="n">y0</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">GL_RGBA</span><span class="p">,</span> <span class="n">GL_UNSIGNED_BYTE</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+    <span class="n">GLubyte</span> <span class="o">*</span><span class="n">src</span> <span class="o">=</span> <span class="p">(</span><span class="n">GLubyte</span><span class="o">*</span><span class="p">)</span><span class="n">glMapBufferRange</span><span class="p">(</span><span class="n">GL_PIXEL_PACK_BUFFER</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span>  <span class="n">GL_MAP_READ_BIT</span><span class="p">);</span>
+    <span class="n">GLubyte</span>  <span class="o">*</span><span class="n">buffer</span> <span class="o">=</span> <span class="n">malloc</span><span class="p">(</span><span class="n">size</span><span class="p">);</span>
+    <span class="n">memcpy</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span> <span class="n">src</span><span class="p">,</span> <span class="n">size</span><span class="p">);</span>
+    <span class="n">glUnmapBuffer</span><span class="p">(</span><span class="n">GL_PIXEL_PACK_BUFFER</span><span class="p">);</span>
+    <span class="n">glBindBuffer</span><span class="p">(</span><span class="n">GL_PIXEL_PACK_BUFFER</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+    <span class="n">stbi_write_png</span><span class="p">(</span><span class="s">"/tmp/texture_img.png"</span><span class="p">,</span> <span class="p">(</span><span class="kt">int</span><span class="p">)(</span><span class="n">x1</span><span class="o">-</span><span class="n">x0</span><span class="p">),</span> <span class="p">(</span><span class="kt">int</span><span class="p">)(</span><span class="n">y1</span><span class="o">-</span><span class="n">y0</span><span class="p">),</span> <span class="mi">4</span><span class="p">,</span> <span class="n">buffer</span><span class="p">,</span> <span class="p">(</span><span class="kt">int</span><span class="p">)((</span><span class="n">x1</span><span class="o">-</span><span class="n">x0</span><span class="p">)</span><span class="o">*</span><span class="mi">4</span><span class="p">));</span>
+    <span class="n">glBindFramebuffer</span><span class="p">(</span><span class="n">GL_FRAMEBUFFER</span><span class="p">,</span> <span class="n">fbo0</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
 <h1 id="freetype">freetype</h1>
 
 <p>下图是freetype调用的基本框架。</p>
@@ -859,7 +999,7 @@ ffmpeg.exe <span class="nt">-i</span> agf-dog-1280x960.jpg  <span class="nt">-vf
 
 <p><img src="/blog/assets/OpenGL/freetype_glyph.png" alt="freetype_glyph" /></p>
 
-<p>参看上图，在绘制字符时以baseline为水平基准，则所有的字符就会对齐。</p>]]></content><author><name>kevin</name></author><category term="Jekyll" /><summary type="html"><![CDATA[glInvalidateFramebuffer vs glClear]]></summary></entry><entry><title type="html">kernel misc</title><link href="http://localhost:4000/blog/jekyll/2020-06-22-misc.html" rel="alternate" type="text/html" title="kernel misc" /><published>2020-06-22T00:00:00+08:00</published><updated>2020-06-22T00:00:00+08:00</updated><id>http://localhost:4000/blog/jekyll/misc</id><content type="html" xml:base="http://localhost:4000/blog/jekyll/2020-06-22-misc.html"><![CDATA[<h1 id="kref">kref</h1>
+<p>参看上图，在绘制字符时以baseline为水平基准，则所有的字符就会对齐。</p>]]></content><author><name>kevin</name></author><category term="Jekyll" /><summary type="html"><![CDATA[glInvalidateFramebuffer vs glClear]]></summary></entry><entry><title type="html">Kernel Misc</title><link href="http://localhost:4000/blog/jekyll/2020-06-22-misc.html" rel="alternate" type="text/html" title="Kernel Misc" /><published>2020-06-22T00:00:00+08:00</published><updated>2020-06-22T00:00:00+08:00</updated><id>http://localhost:4000/blog/jekyll/misc</id><content type="html" xml:base="http://localhost:4000/blog/jekyll/2020-06-22-misc.html"><![CDATA[<h1 id="kref">kref</h1>
 
 <p>kref_init 是一个用于初始化内核对象引用计数器（krefs）的函数。它允许你为你的对象添加引用计数，确保在多个地方使用和传递对象时，代码的正确性。以下是关于 kref_init 的一些重要信息：</p>
 
@@ -1758,380 +1898,7 @@ cpu_addr是由dma_alloc_noncoherent返回的虚拟地址。
 
 </code></pre></div>    </div>
   </li>
-</ul>]]></content><author><name>kevin</name></author><category term="Jekyll" /><summary type="html"><![CDATA[Expat]]></summary></entry><entry><title type="html">硬中断</title><link href="http://localhost:4000/blog/jekyll/2019-02-03-interrupte.html" rel="alternate" type="text/html" title="硬中断" /><published>2019-02-03T00:00:00+08:00</published><updated>2019-02-03T00:00:00+08:00</updated><id>http://localhost:4000/blog/jekyll/interrupte</id><content type="html" xml:base="http://localhost:4000/blog/jekyll/2019-02-03-interrupte.html"><![CDATA[<p>【转帖】</p>
-
-<p>本来想写内核如何接收一个网络包这个过程，但发现把整个过程捋顺了，还是很难的。</p>
-
-<p>推导整个过程的起点是<strong>中断</strong>，包括<strong>硬中断</strong>和<strong>软中断</strong>。</p>
-
-<p>而这个过程要是讲清楚吧，感觉在整个网络包接收原理的大流程中有点喧宾夺主。但要是一笔带过吧，那对于这块有困惑的人就很难受，一切的起点没整明白在心里总是个疙瘩。所以，单拎出来一个主题中断，给大家把这个问题搞明白了。</p>
-
-<p>另外，<strong>整个操作系统就是一个中断驱动的死循环</strong>，操作系统原理如果用一行代码解释，下面这样再合适不过了。</p>
-
-<pre><code class="language-C">while(true) {
-	doNothing();
-}
-</code></pre>
-
-<p><strong>其他所有事情都是由操作系统提前注册的中断机制和其对应的中断处理函数完成</strong>，我们点击一下鼠标，敲击一下键盘，执行一个程序，都是用中断的方式来通知操作系统帮我们处理这些事件，当没有任何需要操作系统处理的事件时，它就乖乖停在死循环里不出来。</p>
-
-<p>所以，中断，非常重要，它也是理解整个操作系统的根基，掌握它，不亏！</p>
-
-<p>那我们开始吧。</p>
-
-<p><strong>五花八门的中断分类</strong></p>
-
-<p>关于中断的分类，教科书上和网上有很多”标准”答案了，如果你用搜索引擎去寻找答案，可能会找出很多不一样的分类结果。</p>
-
-<p>所以我打算直接在 Intel 手册上找个最官方的标准答案。</p>
-
-<p>在 <em>Intel 手册 Volume 1 Chapter 6.4 Interrupts and Exception</em> 给出。</p>
-
-<p><img src="https://mmbiz.qpic.cn/mmbiz_png/GLeh42uInXRaebHKiaWevE73umedjHIDmQ3eQXdDdbee9wMwIwic5eNK9N2Erm01239eKbz1hl6ZWLSo3BRf6UBg/640?wx_fmt=png&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="图片" /></p>
-
-<p>翻译过来就是，<strong>中断可以分为中断和异常，异常又可以分为故障、陷阱、中止</strong>。</p>
-
-<p>第一句话有点奇怪，啥叫中断分为中断和异常呢？你看好多文章的时候也是这么写的，不知道你有没有曾疑惑过。</p>
-
-<p>但其实原文的意思准确说是，<strong>CPU 提供了两种中断程序执行的机制，中断和异常</strong>。第一个中断是个动词，第二个中断才是真正的机制种类。</p>
-
-<p>好吧，我感觉原文也挺奇怪的，但人家就这么叫，没辙。</p>
-
-<p>接下来我只需要翻译一下就好了，再夹杂点自己的解读。</p>
-
-<p>An interrupt is an asynchronous event that is typically triggered by an I/O device.</p>
-
-<p>先说第一个机制中断（interrupt），<strong>中断是一个异步事件，通常由 IO 设备触发</strong>。比如点击一下鼠标、敲击一下键盘等。</p>
-
-<p>An exception is a synchronous event that is generated when the processor detects one or more predefined conditions while executing an instruction.</p>
-
-<p>再说第二个机制异常（exception），<strong>异常是一个同步事件，是 CPU 在执行指令时检测到的反常条件</strong>。比如除法异常、错误指令异常，缺页异常等。</p>
-
-<p>这两个机制，殊途同归，<strong>都是让 CPU 收到一个中断号</strong>，至于 CPU 收到这个中断号之后干嘛，我们暂且不管。</p>
-
-<p><img src="https://mmbiz.qpic.cn/mmbiz_png/GLeh42uInXRaebHKiaWevE73umedjHIDmq0gPkgWwLqjwEibZabXqibsCoCtG03GLQzxIvXh7UK3WYHYNHYWluPNQ/640?wx_fmt=png&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="图片" /></p>
-
-<p>我们先看看收到中断号之前，具体就是中断和异常到底是怎么做到给 CPU 一个中断号的。</p>
-
-<p>先说中断，别眨眼。</p>
-
-<p>有一个设备叫做<strong>可编程中断控制器</strong>，它有很多的 <strong>IRQ</strong> 引脚线，接入了一堆能发出中断请求的硬件设备，当这些硬件设备给 IRQ 引脚线发一个信号时，由于可编程中断控制器提前被设置好了 IRQ 与中断号的对应关系，所以就转化成了对应的中断号，把这个中断号存储在自己的一个端口上，然后给 CPU 的 <strong>INTR</strong> 引脚发送一个信号，CPU 收到 INTR 引脚信号后去刚刚的那个端口读取到这个中断号的值。</p>
-
-<p>估计你被绕晕了，但读我的文章有个好处，太复杂就上动图，来吧。
-![[image-20230320094930185.png]]</p>
-
-<p>你看，<strong>最终的目标，就是让 CPU 知道，有中断了，并且也知道中断号是多少</strong>。</p>
-
-<p>比如上图中按下了键盘，最终到 CPU 那里的反应就是，得到了一个中断号 <strong>0x21</strong>。</p>
-
-<p>那异常的机制就更简单了，是 CPU 自己执行指令时检测到的一些反常情况，然后自己给自己一个中断号即可，无需外界给。</p>
-
-<p>比如 CPU 执行到了一个无效的指令，则自己给自己一个中断号 <strong>0x06</strong>，这个中断号是 Intel 的 CPU 提前就规定好写死了的硬布线逻辑。</p>
-
-<p>好了，到目前为止，我们知道了无论是<strong>中断</strong>还是<strong>异常</strong>，最终都是通过各种方式，让 CPU 得到一个中断号。只不过中断是通过外部设备给 CPU 的 INTR 引脚发信号，异常是 CPU 自己执行指令的时候发现特殊情况触发的，自己给自己一个中断号。</p>
-
-<p>还有一种方式可以给到 CPU 一个中断号，但 Intel 手册写在了后面，<em>Chapter 6.4.4 INT n</em>，就是大名鼎鼎的 <strong>INT 指令</strong>。
-![[image-20230320095004648.png]]</p>
-
-<p>INT 指令后面跟一个数字，就相当于直接用指令的形式，告诉 CPU 一个中断号。</p>
-
-<p>比如 <strong>INT 0x80</strong>，就是告诉 CPU 中断号是 <strong>0x80</strong>。Linux 内核提供的<strong>系统调用</strong>，就是用了 INT 0x80 这种指令。</p>
-
-<p>那我们上面的图又丰富了起来。
-![[image-20230320095040034.png]]</p>
-
-<p>有的地方喜欢把他们做一些区分，把 INT n 这种方式叫做<strong>软件中断</strong>，因为他是由软件程序主动触发的。相应的把上面的中断和异常叫做<strong>硬件中断</strong>，因为他们都是硬件自动触发的。</p>
-
-<p>但我觉得大可不必，一共就这么几个分类，干嘛还要增加一层理解的成本呢，记三个方式不好么？</p>
-
-<p>好了，总结一下，给 CPU 一个中断号有三种方式，而这也是中断分类的依据。</p>
-
-<p><em><strong>1.</strong></em> <strong>通过中断控制器给 CPU 的 INTR 引脚发送信号</strong>，并且允许 CPU 从中断控制器的一个端口上读取中断号，比如按下键盘的一个按键，最终会给到 CPU 一个 0x21 中断号。</p>
-
-<p><em><strong>2.</strong></em> <strong>CPU 执行某条指令发现了异常</strong>，会自己触发并给自己一个中断号，比如执行到了无效指令，CPU 会给自己一个 0x06 的中断号。</p>
-
-<p><em><strong>3.</strong></em> <strong>执行 INT n 指令</strong>，会直接给 CPU 一个中断号 n，比如触发了 Linux 的系统调用，实际上就是执行了 INT 0x80 指令，那么 CPU 收到的就是一个 0x80 中断号。</p>
-
-<p>再往后，CPU 以各种不同的方式收到的这些 0x21 0x06 0x80，都会<strong>一视同仁</strong>，做同样的后续处理流程，所以从现在开始，前面的事情就不用再管了，这也体现了分层的好处。</p>
-
-<p><strong>收到中断号之后 CPU 干嘛？</strong></p>
-
-<p>那 CPU 收到中断号后，如何处理呢？</p>
-
-<p>先用一句不太准确的话总结，<strong>CPU 收到一个中断号 n 后，会去中断向量表中寻找第 n 个中断描述符，从中断描述符中找到中断处理程序的地址，然后跳过去执行</strong>。</p>
-
-<p>为什么说不准确呢？因为从中断描述符中找到的，并不直接是程序的地址，而是<strong>段选择子</strong>和<strong>段内偏移地址</strong>。然后段选择子又会去<strong>全局描述符表</strong>中寻找<strong>段描述符</strong>，从中取出<strong>段基址</strong>。之后段基址 + 段内偏移地址，才是最终处理程序的入口地址。</p>
-
-<p><img src="data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8'%3F%3E%3Csvg width='1px' height='1px' viewBox='0 0 1 1' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Ctitle%3E%3C/title%3E%3Cg stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' fill-opacity='0'%3E%3Cg transform='translate(-249.000000, -126.000000)' fill='%23FFFFFF'%3E%3Crect x='249' y='126' width='1' height='1'%3E%3C/rect%3E%3C/g%3E%3C/g%3E%3C/svg%3E" alt="图片" />当然这个入口地址，还不是最终的物理地址，如果开启了分页，又要经历分页机制的转换，就像下面这样。</p>
-
-<p><img src="data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8'%3F%3E%3Csvg width='1px' height='1px' viewBox='0 0 1 1' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Ctitle%3E%3C/title%3E%3Cg stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' fill-opacity='0'%3E%3Cg transform='translate(-249.000000, -126.000000)' fill='%23FFFFFF'%3E%3Crect x='249' y='126' width='1' height='1'%3E%3C/rect%3E%3C/g%3E%3C/g%3E%3C/svg%3E" alt="图片" />不过不要担心，这不是中断的主流程，<strong>因为分段机制和分页机制是所有地址转换过程的必经之路，并不是中断这个流程所特有的</strong>。</p>
-
-<p>所以我们简单的把中断描述符表中存储的地址，直接当做 CPU 可以跳过去执行的中断处理程序的入口地址，就好了，不影响理解他们。</p>
-
-<p><img src="data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8'%3F%3E%3Csvg width='1px' height='1px' viewBox='0 0 1 1' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Ctitle%3E%3C/title%3E%3Cg stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' fill-opacity='0'%3E%3Cg transform='translate(-249.000000, -126.000000)' fill='%23FFFFFF'%3E%3Crect x='249' y='126' width='1' height='1'%3E%3C/rect%3E%3C/g%3E%3C/g%3E%3C/svg%3E" alt="图片" /></p>
-
-<p>你看，这是不是简单很多。</p>
-
-<p>那接下来的问题就很简单了，这里出现了两个名词，那就分别对他们进行发问。</p>
-
-<p><em><strong>1.</strong></em> 中断描述符表是啥？</p>
-
-<p><em><strong>2.</strong></em> 中断描述符是啥？</p>
-
-<p><em><strong>3.</strong></em> 去哪里找他们？</p>
-
-<p>分别回答即可</p>
-
-<blockquote>
-  <blockquote>
-    <p><strong>中断描述符表是啥？</strong></p>
-
-  </blockquote>
-</blockquote>
-
-<p><strong>就是一个在内存中的数组而已</strong>，操作系统初始化过程中，有很多结构都称之为 XXX 表，其实就是个数组罢了。</p>
-
-<p>以 linux-2.6.0 源码为例，就很直观了。</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>struct desc_struct idt_table[256] = { {0, 0}, };
-</code></pre></div></div>
-
-<p>你看，是一个大小为 256 的数组。idt_table 这个名字就是 <strong>Interrupt Descriptor Table</strong>，逐字翻译过来确实就是<strong>中断描述符表</strong>。</p>
-
-<blockquote>
-  <blockquote>
-    <p><strong>中断描述符是啥？</strong></p>
-
-  </blockquote>
-</blockquote>
-
-<p><strong>就是中断描述符表这个数组里的存储的数据结构</strong>，通过刚刚的源码也可以看出来，是一个叫 <strong>desc_struct</strong> 的结构。</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>struct desc_struct {    unsigned long a,b;};
-</code></pre></div></div>
-
-<p>好家伙，Linux 源码里就这么简单粗暴表示，一个中断描述符的大小为 64 位，也就是 8 个字节，具体里面存的啥通过这个源码看不出来。</p>
-
-<p>翻一下 Intel 手册，在 <em>Volumn 3 Chapter 5.11 IDT Descriptors</em> 中找到了一张图。</p>
-
-<p><img src="data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8'%3F%3E%3Csvg width='1px' height='1px' viewBox='0 0 1 1' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Ctitle%3E%3C/title%3E%3Cg stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' fill-opacity='0'%3E%3Cg transform='translate(-249.000000, -126.000000)' fill='%23FFFFFF'%3E%3Crect x='249' y='126' width='1' height='1'%3E%3C/rect%3E%3C/g%3E%3C/g%3E%3C/svg%3E" alt="图片" /></p>
-
-<p>可以看到，中断描述符具体还分成好几个种类，有：</p>
-
-<p><strong>Task Gate</strong>：任务门描述符</p>
-
-<p><strong>Interrupt Gate</strong>：中断门描述符</p>
-
-<p><strong>Trap Gate</strong>：陷阱门描述符</p>
-
-<p>不要慌，其中任务门描述符 Linux 中几乎没有用到。</p>
-
-<p>中断门描述符和陷阱门描述符的区别仅仅是<strong>是否允许中断嵌套</strong>，实现方式非常简单粗暴，就是 CPU 如果收到的中断号对应的是一个中断门描述符，就修改 IF 标志位（就是一个寄存器中一位的值），修改了这个值后就屏蔽了中断，也就防止了中断的嵌套。而陷阱门没有改这个标志位，也就允许了中断的嵌套。</p>
-
-<p>所以简单理解的话，你把他们当做同样一个描述符就好了，先别管这些细节，他们的结构几乎完全一样，只是差了一个类型标识罢了。</p>
-
-<p>那这个中断描述符的结构长什么样呢？我们可以清晰地看到，里面有<strong>段选择子</strong>和<strong>段内偏移地址</strong>。</p>
-
-<p><img src="data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8'%3F%3E%3Csvg width='1px' height='1px' viewBox='0 0 1 1' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Ctitle%3E%3C/title%3E%3Cg stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' fill-opacity='0'%3E%3Cg transform='translate(-249.000000, -126.000000)' fill='%23FFFFFF'%3E%3Crect x='249' y='126' width='1' height='1'%3E%3C/rect%3E%3C/g%3E%3C/g%3E%3C/svg%3E" alt="图片" /></p>
-
-<p>回顾下刚刚说的中断处理流程。</p>
-
-<p><img src="data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8'%3F%3E%3Csvg width='1px' height='1px' viewBox='0 0 1 1' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Ctitle%3E%3C/title%3E%3Cg stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' fill-opacity='0'%3E%3Cg transform='translate(-249.000000, -126.000000)' fill='%23FFFFFF'%3E%3Crect x='249' y='126' width='1' height='1'%3E%3C/rect%3E%3C/g%3E%3C/g%3E%3C/svg%3E" alt="图片" />没骗你吧。</p>
-
-<p>但以上这些如果你都搞不明白，还是那句话，记这个最简单的流程就好了，不影响理解。</p>
-
-<p><img src="data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8'%3F%3E%3Csvg width='1px' height='1px' viewBox='0 0 1 1' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Ctitle%3E%3C/title%3E%3Cg stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' fill-opacity='0'%3E%3Cg transform='translate(-249.000000, -126.000000)' fill='%23FFFFFF'%3E%3Crect x='249' y='126' width='1' height='1'%3E%3C/rect%3E%3C/g%3E%3C/g%3E%3C/svg%3E" alt="图片" /></p>
-
-<p>好了，现在我们直观地看到了中断描述符表这个 256 大小的数组，以及它里面存的中断描述符长什么样子，<strong>最终的目的，还是帮助 CPU 找到一个程序的入口地址，然后跳转过去</strong>。</p>
-
-<p>OK，下一个问题，就是 CPU 怎么寻找到这个中断描述符表的位置呢？它是在内存中一个固定的位置么？</p>
-
-<blockquote>
-  <blockquote>
-    <p><strong>CPU 怎么找到中断描述符表</strong></p>
-
-  </blockquote>
-</blockquote>
-
-<p>答案是否定的，<strong>中断描述符表在哪里，全凭各个操作系统的喜好，想放在哪里就放在哪里</strong>，但需要通过某种方式告诉 CPU，即可。</p>
-
-<p>怎么告诉呢？CPU 提前预留了一个寄存器叫 <strong>IDTR 寄存器</strong>，这里面存放的就是中断描述符表的起始地址，以及中断描述符表的大小。</p>
-
-<p>在 <em>Volumn 3 Chapter 5.10 Interrupt Descriptor Table</em> 中告诉了我们 IDTR 寄存器的结构。</p>
-
-<p><img src="data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8'%3F%3E%3Csvg width='1px' height='1px' viewBox='0 0 1 1' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Ctitle%3E%3C/title%3E%3Cg stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' fill-opacity='0'%3E%3Cg transform='translate(-249.000000, -126.000000)' fill='%23FFFFFF'%3E%3Crect x='249' y='126' width='1' height='1'%3E%3C/rect%3E%3C/g%3E%3C/g%3E%3C/svg%3E" alt="图片" /></p>
-
-<p>操作系统的代码可以通过 <strong>LIDT 指令</strong>，将中断描述符表的地址放在这个寄存器里。</p>
-
-<p>还记得刚刚看的源码么？中断描述符表就是这个。</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>struct desc_struct idt_table[256] = { {0, 0}, };
-</code></pre></div></div>
-
-<p>然后操作系统把这个的地址用 <strong>LIDT</strong> 指令放在 <strong>IDTR 寄存器</strong>就行了。IDTR 寄存器里的值一共 48 位，前 16 位是中断描述符表大小（字节数），后 32 位是中断描述符表的起始内存地址，就是这个 idt_table 的位置。</p>
-
-<p>Linux-2.6.0 源码中是这样构造这个结构的，简单粗暴。</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>idt_descr:    .word 256 * 8 - 1    .long idt_table
-</code></pre></div></div>
-
-<p>紧接着，一个 LIDT 指令把这个结构放到 IDTR 寄存器中。</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>lidt idt_descr
-</code></pre></div></div>
-
-<p>整个过程一气呵成，呵得我连代码格式都懒得调了，是不是很清晰明了。</p>
-
-<p>这样，CPU 收到一个中断号后，<strong>中断描述符表的起始位置从 IDTR 寄存器中可以知道，而且里面的每个中断描述符都是 64 位大小，也就是 8 个字节，那自然就可以找到这个中断号对应的中断描述符</strong>。</p>
-
-<p>接下来的问题就是，这个中断描述符表是谁来提前写好的？又是怎么写的？</p>
-
-<blockquote>
-  <blockquote>
-    <p><strong>谁把中断描述符表这个结构写在内存的</strong></p>
-
-  </blockquote>
-</blockquote>
-
-<p>很简单，操作系统呗。</p>
-
-<p>在 Linux-2.6.0 内核源码的 traps.c 文件中，有这样一段代码。</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>void __init trap_init(void) {    set_trap_gate(0, &amp;divide_error);    ...    set_trap_gate(6, &amp;invalid_op);    ...    set_intr_gate(14, &amp;page_fault);    ...    set_system_gate(0x80, &amp;system_call);}
-</code></pre></div></div>
-
-<p>你看，我们刚刚提到的<strong>除法异常、非法指令异常、缺页异常</strong>，以及之后可能通过 INT 0x80 触发<strong>系统调用</strong>的中断处理函数 system_call，就是这样被写到了中断描述符表里。</p>
-
-<p>经过这样一番操作后，我们的中断描述符表里的值就丰富了起来。</p>
-
-<p>好了，现在只剩下最后一个问题了，CPU 在找到一个中断描述符后，如何跳过去执行？</p>
-
-<blockquote>
-  <blockquote>
-    <p><strong>找到中断描述符后，干嘛</strong></p>
-
-  </blockquote>
-</blockquote>
-
-<p>现在这个问题可以再问得大一些了，就是 <strong>CPU 在收到一个中断号并且找到了中断描述符之后，究竟做了哪些事</strong>？</p>
-
-<p>当然，最简单的办法就是，<strong>直接把中断描述符里的中断程序地址取出来，放在自己的 CS:IP 寄存器中</strong>，因为这里存的值就是下一跳指令的地址，只要放进去了，到下一个 CPU 指令周期时，就会去那里继续执行了。</p>
-
-<p>但 CPU 并没有这样简单粗暴，而是帮助我们程序员做了好多额外的事情，这增加了我们的学习和理解成本，但方便了写操作系统的程序员，拿到一些中断的信息，以及中断程序结束后的返回工作。</p>
-
-<p>但其实，就是做了一些<strong>压栈操作</strong>。</p>
-
-<p><em><strong>1.</strong></em> 如果发生了特权级转移，压入之前的堆栈段寄存器 SS 及栈顶指针 ESP 保存到栈中，并将堆栈切换为 TSS 中的堆栈。</p>
-
-<p><em><strong>2.</strong></em> 压入标志寄存器 EFLAGS。</p>
-
-<p><em><strong>3.</strong></em> 压入之前的代码段寄存器 CS 和指令寄存器 EIP，相当于压入返回地址。</p>
-
-<p><em><strong>4.</strong></em> 如果此中断有错误码的，压入错误码 ERROR_CODE</p>
-
-<p><em><strong>5.</strong></em> 结束（之后就跳转到中断程序了）</p>
-
-<p>压栈操作结束后，栈就变成了这个样子。</p>
-
-<p><img src="data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8'%3F%3E%3Csvg width='1px' height='1px' viewBox='0 0 1 1' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Ctitle%3E%3C/title%3E%3Cg stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' fill-opacity='0'%3E%3Cg transform='translate(-249.000000, -126.000000)' fill='%23FFFFFF'%3E%3Crect x='249' y='126' width='1' height='1'%3E%3C/rect%3E%3C/g%3E%3C/g%3E%3C/svg%3E" alt="图片" /></p>
-
-<p>特权级的转移需要切换栈，所以提前将之前的<strong>栈指针</strong>压入。<strong>错误码</strong>可以方便中断处理程序做一些工作，如果需要，从栈顶拿到就好了。</p>
-
-<p>抛开这两者不说，剩下的就只有<strong>标志寄存器</strong>和<strong>中断发生前的代码地址</strong>，被压入了栈，这很好理解，就是方便中断程序结束后，返回原来的代码嘛~</p>
-
-<p>具体的压栈工作，以及如何利用这些栈的信息达到结束中断并返回原程序的效果，Intel 手册中也写得很清楚。</p>
-
-<p><em>Volumn 3A System Programming Guide  Chapter 5.12.1Exception- or Interrupt-Handler Procedures</em></p>
-
-<p><img src="data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8'%3F%3E%3Csvg width='1px' height='1px' viewBox='0 0 1 1' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Ctitle%3E%3C/title%3E%3Cg stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' fill-opacity='0'%3E%3Cg transform='translate(-249.000000, -126.000000)' fill='%23FFFFFF'%3E%3Crect x='249' y='126' width='1' height='1'%3E%3C/rect%3E%3C/g%3E%3C/g%3E%3C/svg%3E" alt="图片" /></p>
-
-<p>看下面的话，通过配合 <strong>IRET</strong> 或 <strong>IRETD</strong> 指令返回。</p>
-
-<p>由于后续版本的 Linux 自己的玩法比较多，已经不用 Intel 提供的现成指令了，所以这回我们从 Linux-0.11 版源码中寻找答案。</p>
-
-<p>比如除法异常的中断处理函数，在 asm.s 中。</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>_divide_error: push dword ptr _do_divide_error ;no_error_code: ; xchg [esp],eax ; push ebx push ecx push edx push edi push esi push ebp push ds ; push es push fs push 0 ; lea edx,[esp+44] ; push edx mov edx,10h ; mov ds,dx mov es,dx mov fs,dx call eax ; add esp,8 ; pop fs pop es pop ds pop ebp pop esi pop edi pop edx pop ecx pop ebx pop eax ;// 弹出原来eax 中的内容。 iretd
-</code></pre></div></div>
-
-<p>只看最后一行，确实用了 iretd 指令。</p>
-
-<p>这个指令会依次弹出栈顶的三个元素，把它们分别赋值给 <strong>EIP，CS 和 EFLAGS</strong>，而栈顶的三个元素，又恰好是 <strong>EIP，CS 和 EFLAGS</strong> 这样的顺序，你说这巧不巧？</p>
-
-<p>当然不巧，人家 CPU 执行中断函数前做了压栈操作，然后又提供了 iret 指令做弹栈操作，当然是给你配套使用的！</p>
-
-<p>你看，<strong>中断是如何切到中断处理程序的？就是靠中断描述符表中记录的地址。那中断又如何回到原来的代码继续执行呢？是通过 CPU 帮我们把中断发生前的地址压入了栈中</strong>，然后我们程序自己利用他们去返回，当然也可以不返回。</p>
-
-<p>这就是 CPU 和操作系统配合的结果，把中断这个事给解决了。</p>
-
-<p><img src="data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8'%3F%3E%3Csvg width='1px' height='1px' viewBox='0 0 1 1' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Ctitle%3E%3C/title%3E%3Cg stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' fill-opacity='0'%3E%3Cg transform='translate(-249.000000, -126.000000)' fill='%23FFFFFF'%3E%3Crect x='249' y='126' width='1' height='1'%3E%3C/rect%3E%3C/g%3E%3C/g%3E%3C/svg%3E" alt="图片" /></p>
-
-<p><strong>总结</strong></p>
-
-<p>所以总结起来就是，理解中断，只要回答了这几个问题就好。</p>
-
-<p><strong>如何给 CPU 一个中断号？</strong></p>
-
-<p>外部设备通过 INTR 引脚，或者 CPU 执行指令的过程中自己触发，或者由软件通过 INT n 指令强行触发。</p>
-
-<p>同样中断也是这样进行分类的。</p>
-
-<p><strong>CPU 收到中断号后如何寻找到中断程序的入口地址？</strong></p>
-
-<p>通过 IDTR 寄存器找到中断描述符表，通过中断描述符表和中断号定位到中断描述符，取出中断描述符表中存储的程序入口地址。</p>
-
-<p><strong>中断描述符表是谁写的？</strong></p>
-
-<p>操作系统代码写上去的。</p>
-
-<p><strong>找到程序入口地址之后，CPU 做了什么？</strong></p>
-
-<p>简单说，实际上做的事情就是压栈，并跳转到入口地址处执行代码。而压栈的目的，就是保护现场（原来的程序地址、原来的程序堆栈、原来的标志位）和传递信息（错误码）</p>
-
-<p>好了，中断讲完了，如果再往后扩大一点点概念，以上说的中断，统统都是<strong>硬中断</strong>。注意，不叫硬件中断哦。</p>
-
-<p>为什么叫硬中断呢？因为这是 Intel CPU 这个硬件实现的中断机制，注意这里是实现机制，并不是触发机制，因为触发可以通过外部硬件，也可以通过软件的 INT 指令。</p>
-
-<p>那与硬中断对应的还有<strong>软中断</strong>，这个概念网上好多地方都讲错了，把软中断和 INT 指令这种软件中断混淆了，<strong>所以我觉得软件中断最好称其为，由软件触发的中断，而软中断称其为软件实现的中断</strong>。</p>
-
-<p><strong>软中断是纯粹由软件实现的一种类似中断的机制</strong>，实际上它就是模仿硬件，在内存中有一个地方存储着软中断的标志位，然后由内核的一个线程不断轮询这些标志位，如果有哪个标志位有效，则再去另一个地方寻找这个软中断对应的中断处理程序。</p>
-
-<p>软中断是 Linux 实现中断的<strong>下半部</strong>的一种非常常见的方式，之后我讲 Linux 内核如何接受网络包这个事情的时候也可以看到，软中断是研究整个过程的一个突破口。</p>
-
-<ul>
-  <li>EOF -</li>
-</ul>
-
-<p>推荐阅读  点击标题可跳转</p>
-
-<p>1、<a href="http://mp.weixin.qq.com/s?__biz=MzAxODI5ODMwOA==&amp;mid=2666558962&amp;idx=1&amp;sn=ede9eea879107df21557e1b9dcfeeb28&amp;chksm=80dcb159b7ab384f22e68fc32d5556afd3e98c29d08757a871582d526bf5985b0c7c3fd3ec6d&amp;scene=21#wechat_redirect">10 分钟看懂 Docker 和 K8S</a></p>
-
-<p>2、<a href="http://mp.weixin.qq.com/s?__biz=MzAxODI5ODMwOA==&amp;mid=2666558647&amp;idx=1&amp;sn=f9f02d09c89ec081c61a717b3724b7fd&amp;chksm=80dcb01cb7ab390a0d89664294542d564e7cc4d539cc6dc30ef997158d1b1ac496a21a991407&amp;scene=21#wechat_redirect">这才是中国被卡脖子最严重的软件！</a></p>
-
-<p>3、<a href="http://mp.weixin.qq.com/s?__biz=MzAxODI5ODMwOA==&amp;mid=2666558954&amp;idx=2&amp;sn=775617c1787bb8ab5251444c8762cd44&amp;chksm=80dcb141b7ab38576e44e8149b6f64aab5812d557f7f50a6b8543b375c7a67acac0fe75f00ac&amp;scene=21#wechat_redirect">如果让你来设计网络，你会把它弄成啥样？</a></p>
-
-<p>看完本文有收获？请分享给更多人</p>
-
-<p>推荐关注「Linux 爱好者」，提升Linux技能</p>
-
-<p><img src="http://mmbiz.qpic.cn/mmbiz_png/9aPYe0E1fb3sjicd8JxDra10FRIqT54Zke2sfhibTDdtdnVhv5Qh3wLHZmKPjiaD7piahMAzIH6Cnltd1Nco17Ihjw/0?wx_fmt=png" alt="" /></p>
-
-<p><strong>Linux爱好者</strong></p>
-
-<p>点击获取《每天一个Linux命令》系列和精选Linux技术资源。「Linux爱好者」日常分享 Linux/Unix 相关内容，包括：工具资源、使用技巧、课程书籍等。</p>
-
-<p>75篇原创内容</p>
-
-<p>公众号</p>
-
-<p>点赞和在看就是最大的支持❤️</p>
-
-<p>分享收藏</p>
-
-<p><img src="https://mp.weixin.qq.com/mp/qrcode?scene=10000004&amp;size=102&amp;__biz=MzAxODI5ODMwOA==&amp;mid=2666559053&amp;idx=2&amp;sn=cdd9e3e14102740664c93bfe99bb0044&amp;send_time=" alt="" /></p>
-
-<p>微信扫一扫<br />
-关注该公众号</p>]]></content><author><name>Tao He</name></author><category term="Jekyll" /><summary type="html"><![CDATA[【转帖】]]></summary></entry><entry><title type="html">Weston</title><link href="http://localhost:4000/blog/jekyll/2019-01-11-Weston.html" rel="alternate" type="text/html" title="Weston" /><published>2019-01-11T00:00:00+08:00</published><updated>2019-01-11T00:00:00+08:00</updated><id>http://localhost:4000/blog/jekyll/Weston</id><content type="html" xml:base="http://localhost:4000/blog/jekyll/2019-01-11-Weston.html"><![CDATA[<h1 id="1-启动weston">1. 启动Weston</h1>
+</ul>]]></content><author><name>kevin</name></author><category term="Jekyll" /><summary type="html"><![CDATA[Expat]]></summary></entry><entry><title type="html">Weston</title><link href="http://localhost:4000/blog/jekyll/2019-01-11-Weston.html" rel="alternate" type="text/html" title="Weston" /><published>2019-01-11T00:00:00+08:00</published><updated>2019-01-11T00:00:00+08:00</updated><id>http://localhost:4000/blog/jekyll/Weston</id><content type="html" xml:base="http://localhost:4000/blog/jekyll/2019-01-11-Weston.html"><![CDATA[<h1 id="1-启动weston">1. 启动Weston</h1>
 
 <h2 id="11-实现内容">1.1 实现内容</h2>
 
@@ -2543,4 +2310,959 @@ end
   <li>设备与驱动分离时, deriver_dettach时 就是driver_remove时。</li>
 </ul>
 
-<p><img src="/blog/assets/DeviceResourceManagement/7.png" alt="7.png" /></p>]]></content><author><name>kevin</name></author><category term="linux" /><summary type="html"><![CDATA[1.解决的问题]]></summary></entry></feed>
+<p><img src="/blog/assets/DeviceResourceManagement/7.png" alt="7.png" /></p>]]></content><author><name>kevin</name></author><category term="linux" /><summary type="html"><![CDATA[1.解决的问题]]></summary></entry><entry><title type="html">DRM ioctl</title><link href="http://localhost:4000/blog/drm/2018-06-21-DRM_IOCTL.html" rel="alternate" type="text/html" title="DRM ioctl" /><published>2018-06-21T00:00:00+08:00</published><updated>2018-06-21T00:00:00+08:00</updated><id>http://localhost:4000/blog/drm/DRM_IOCTL</id><content type="html" xml:base="http://localhost:4000/blog/drm/2018-06-21-DRM_IOCTL.html"><![CDATA[<h1 id="drm_ioctl_version">DRM_IOCTL_VERSION</h1>
+
+<p>它通过主要、次要和补丁程序级别的三元组来标识驱动程序版本。</p>
+<ul>
+  <li>这些信息在初始化时被打印到内核日志中</li>
+  <li>通过 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_VERSION</code> ioctl 传递到用户空间。</li>
+</ul>
+
+<p>驱动程序的描述是一个纯粹的信息字符串，通过 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_VERSION</code> ioctl 传递给用户空间，但在内核中没有其他用途。驱动程序的日期以 YYYYMMDD 格式表示，用于标识驱动程序的最新修改日期。<strong>由于大多数驱动程序未能更新它，其值基本上是无用的</strong>。</p>
+
+<h1 id="drm_ioctl_get_unique">DRM_IOCTL_GET_UNIQUE</h1>
+
+<p>它允许用户空间程序查询与 DRM 设备相关的唯一标识符。这个接口通常用于获取设备的 UUID 或其他唯一标识，以便在多个设备之间进行区分。</p>
+
+<h1 id="drm_ioctl_set_unique">DRM_IOCTL_SET_UNIQUE</h1>
+
+<p>它允许用户空间程序设置 DRM 设备的唯一名称。让我们深入了解一下这个接口的作用和实现。</p>
+
+<ol>
+  <li><strong>接口作用</strong>：
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_SET_UNIQUE</code> 允许用户空间程序使用指定的字符串设置 DRM 设备的唯一名称。</li>
+      <li>这个唯一名称通常用于标识不同的 DRM 设备，以便在多个设备之间进行区分。</li>
+    </ul>
+  </li>
+  <li><strong>实现细节</strong>：
+    <ul>
+      <li>在 Linux 内核中，<code class="language-plaintext highlighter-rouge">DRM_IOCTL_SET_UNIQUE</code> 的实现可能因不同的 DRM 驱动而异。</li>
+      <li>用户空间程序可以通过调用相应的 ioctl 函数来设置设备的唯一名称。</li>
+    </ul>
+  </li>
+</ol>
+
+<h1 id="drm_ioctl_irq_busid">DRM_IOCTL_IRQ_BUSID</h1>
+
+<p>它用于基于总线 ID（busid）为 PCI 设备获取中断请求（IRQ）。在过去，这个接口是通用的 DRM 模块函数，可以为多个不同的设备提供服务。然而，现在它可能需要更改，以仅返回与特定 <code class="language-plaintext highlighter-rouge">drm_device_t</code> 相关联的设备的中断号。</p>
+
+<h1 id="drm_ioctl_get_client">DRM_IOCTL_GET_CLIENT</h1>
+
+<p>它用于查询 DRM 设备的客户端信息。让我们来详细了解一下这个接口的作用和实现。</p>
+
+<ol>
+  <li><strong>接口作用</strong>：
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_GET_CLIENT</code> 允许用户空间程序查询与 DRM 设备相关的客户端信息。</li>
+      <li>这个接口通常用于获取客户端的唯一标识符或其他相关信息，以便在多个客户端之间进行区分。</li>
+    </ul>
+  </li>
+  <li><strong>实现细节</strong>：
+    <ul>
+      <li>在 Linux 内核中，<code class="language-plaintext highlighter-rouge">DRM_IOCTL_GET_CLIENT</code> 的实现可能因不同的 DRM 驱动而异。</li>
+      <li>通过调用 <code class="language-plaintext highlighter-rouge">drmGetBusid()</code> 函数，用户空间程序可以获取与总线 ID（busid）相关的客户端信息。</li>
+      <li>请注意，这个接口的具体实现可能因不同的驱动而有所不同，因此您可以查阅特定驱动的文档或源代码以获取更详细的信息。</li>
+    </ul>
+  </li>
+</ol>
+
+<h1 id="drm_ioctl_get_stats">DRM_IOCTL_GET_STATS</h1>
+
+<p>它允许用户空间程序查询与 DRM 设备相关的统计信息。让我们来详细了解一下这个接口的作用和实现。</p>
+
+<ol>
+  <li><strong>接口作用</strong>：
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_GET_STATS</code> 允许用户空间程序获取与 DRM 设备相关的统计数据。</li>
+      <li>这个接口通常用于查询设备的性能指标、资源使用情况、错误统计等信息。</li>
+    </ul>
+  </li>
+  <li><strong>实现细节</strong>：
+    <ul>
+      <li>在 Linux 内核中，<code class="language-plaintext highlighter-rouge">DRM_IOCTL_GET_STATS</code> 的实现可能因不同的 DRM 驱动而异。</li>
+      <li>用户空间程序可以通过调用相应的 ioctl 函数来获取统计数据。</li>
+      <li>请注意，这个接口的具体实现可能因不同的驱动而有所不同，因此您可以查阅特定驱动的文档或源代码以获取更详细的信息。</li>
+    </ul>
+  </li>
+</ol>
+
+<h1 id="drm_ioctl_get_cap">DRM_IOCTL_GET_CAP</h1>
+
+<p>它允许用户空间程序查询与 DRM 设备相关的能力信息。让我们来详细了解一下这个接口的作用和实现。</p>
+
+<ol>
+  <li><strong>接口作用</strong>：
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_GET_CAP</code> 允许用户空间程序获取与 DRM 设备相关的能力数据。</li>
+      <li>这个接口通常用于查询设备支持的功能、特性和限制。</li>
+    </ul>
+  </li>
+  <li><strong>实现细节</strong>：
+    <ul>
+      <li>在 Linux 内核中，<code class="language-plaintext highlighter-rouge">DRM_IOCTL_GET_CAP</code> 的实现可能因不同的 DRM 驱动而异。</li>
+      <li>用户空间程序可以通过调用相应的 ioctl 函数来获取能力数据。</li>
+      <li>请注意，这个接口的具体实现可能因不同的驱动而有所不同，因此您可以查阅特定驱动的文档或源代码以获取更详细的信息。</li>
+    </ul>
+  </li>
+</ol>
+
+<h1 id="drm_ioctl_set_client_cap">DRM_IOCTL_SET_CLIENT_CAP</h1>
+
+<p>它允许用户空间程序设置与 DRM 设备相关的能力信息。让我们来详细了解一下这个接口的作用和实现。</p>
+
+<ol>
+  <li><strong>接口作用</strong>：
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_SET_CLIENT_CAP</code> 允许用户空间程序设置与 DRM 设备相关的能力数据。</li>
+      <li>这个接口通常用于查询设备支持的功能、特性和限制。</li>
+    </ul>
+  </li>
+  <li><strong>实现细节</strong>：
+    <ul>
+      <li>在 Linux 内核中，<code class="language-plaintext highlighter-rouge">DRM_IOCTL_SET_CLIENT_CAP</code> 的实现可能因不同的 DRM 驱动而异。</li>
+      <li>用户空间程序可以通过调用相应的 ioctl 函数来设置能力数据。</li>
+      <li>请注意，这个接口的具体实现可能因不同的驱动而有所不同，因此您可以查阅特定驱动的文档或源代码以获取更详细的信息。</li>
+    </ul>
+  </li>
+  <li><strong>DRM_CLIENT_CAP_ASPECT_RATIO</strong>:
+    <ul>
+      <li>
+        <p>是一个客户端能力标志，用于指示用户空间应用程序是否支持图像的纵横比信息。如果应用程序支持此标志，内核将在模式中传递纵横比信息。这对于显示图像时保持正确的纵横比非常重要。</p>
+      </li>
+      <li>
+        <p>如果设置为 1，DRM 内核将向用户空间公开原子属性。这隐式启用了 DRM_CLIENT_CAP_UNIVERSAL_PLANES 和 DRM_CLIENT_CAP_ASPECT_RATIO。如果驱动程序不支持原子模式设置，启用此功能将失败并返回 -EOPNOTSUPP 错误。这个功能是在内核版本 4.0 中引入的1。</p>
+      </li>
+    </ul>
+  </li>
+</ol>
+
+<h1 id="drm_ioctl_wait_vblank">DRM_IOCTL_WAIT_VBLANK</h1>
+
+<p>它允许用户空间程序在指定的vblank事件发生时阻塞或请求信号。让我们来详细了解一下这个接口的作用和实现：</p>
+
+<ol>
+  <li><strong>接口作用</strong>：
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_WAIT_VBLANK</code> 允许用户空间程序在指定的vblank事件发生时阻塞或请求信号。</li>
+      <li>这个接口通常用于与显示相关的同步操作，例如在进行页面翻转时等待vblank。</li>
+    </ul>
+  </li>
+  <li><strong>实现细节</strong>：
+    <ul>
+      <li>DRM 核心处理大部分vblank管理逻辑，包括过滤掉虚假中断、保持无竞争的空白计数、处理计数器回绕和重置，以及保持使用计数。</li>
+      <li>用户空间程序可以通过执行相应的 ioctl 函数来使用这个接口。</li>
+      <li>这个机制确保只有经过身份验证的调用者才能访问特定的 DRM 功能。</li>
+    </ul>
+  </li>
+  <li><strong>垂直同步（VSYNC</strong>）：
+    <ul>
+      <li>在图形渲染中，垂直同步是一种技术，用于确保图像在显示器上的刷新与显示器的垂直空白期（vertical blanking interval）同步。</li>
+      <li>vblank(<strong>垂直空白期</strong>)是显示器在绘制一帧图像后，准备绘制下一帧之间的时间间隔。</li>
+    </ul>
+  </li>
+  <li><strong>drmWaitVBlank 函数</strong>：
+    <ul>
+      <li>这个函数用于等待垂直同步信号。</li>
+      <li>它接受一个 DRM 设备文件描述符（file descriptor）和一个表示显示输出的 CRTC（Cathode Ray Tube Controller）的 ID。
+当垂直同步信号到达时，函数会返回。</li>
+      <li>在游戏开发和图形渲染中，drmWaitVBlank 可以用于确保页面翻转（page flip）与垂直同步对齐，从而避免屏幕撕裂（tearing）。</li>
+    </ul>
+  </li>
+</ol>
+
+<h1 id="drm_ioctl_mode_getgamma">DRM_IOCTL_MODE_GETGAMMA</h1>
+
+<p>用于从 <strong>Linux 内核模式设置（KMS）</strong> 中获取特定 <strong>CRTC（Cathode Ray Tube Controller）</strong> 的 <strong>伽马校正（Gamma Correction）</strong> 信息.</p>
+
+<p>详情如下：</p>
+
+<ol>
+  <li><strong>伽马校正是什么？</strong>
+    <ul>
+      <li><strong>伽马校正</strong> 是一种图像处理技术，用于调整显示设备的亮度和对比度。</li>
+      <li>它通过改变像素的亮度值来实现，以便更准确地显示不同亮度级别的图像。</li>
+    </ul>
+  </li>
+  <li><strong>DRM_IOCTL_MODE_GETGAMMA 的作用</strong>
+    <ul>
+      <li>通过调用 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_GETGAMMA</code>，应用程序可以获取有关特定 CRTC 的伽马校正信息。</li>
+      <li>这些信息可能包括伽马校正曲线、亮度和对比度的调整等。</li>
+    </ul>
+  </li>
+  <li><strong>其他 DRM IOCTL 命令</strong>
+    <ul>
+      <li>除了 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_GETGAMMA</code>，还有其他与显示设置相关的 IOCTL 命令，例如：
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_GETCRTC</code>：获取有关特定 CRTC 的信息。</li>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_SETCRTC</code>：设置 CRTC 参数。</li>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_ADDFB</code>：添加新的帧缓冲区对象。</li>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_RMFB</code>：移除帧缓冲区对象。</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ol>
+
+<h1 id="drm_ioctl_mode_dirtyfb">DRM_IOCTL_MODE_DIRTYFB</h1>
+
+<p>用于定义一个帧缓冲区区域为“脏”（数据已更改，因此需要重新显示）。这个 ioctl 使用了 <code class="language-plaintext highlighter-rouge">drm_mode_fb_dirty_cmd</code> 结构，其中包含一个 <code class="language-plaintext highlighter-rouge">num_clips</code> 字段，指示更改的区域数量.</p>
+
+<ol>
+  <li><strong>帧缓冲区是什么？</strong>
+    <ul>
+      <li><strong>帧缓冲区</strong> 是一个抽象的内存对象，用于向 CRTC 扫描输出像素。</li>
+      <li>应用程序通过 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_ADDFB</code>（2）ioctl 显式请求创建帧缓冲区，并接收一个不透明的句柄，可以传递给 KMS CRTC 控制、平面配置和页面翻转功能。</li>
+      <li>帧缓冲区依赖于底层内存管理器进行低级内存操作。</li>
+    </ul>
+  </li>
+  <li><strong>DRM_IOCTL_MODE_DIRTYFB 的作用</strong>
+    <ul>
+      <li>通过调用 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_DIRTYFB</code>，应用程序可以将特定帧缓冲区区域标记为“脏”。</li>
+      <li>这通常用于通知显示系统需要重新扫描和显示更改的像素数据。</li>
+    </ul>
+  </li>
+  <li><strong>其他 DRM IOCTL 命令</strong>
+    <ul>
+      <li>除了 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_DIRTYFB</code>，还有其他与显示设置相关的 IOCTL 命令，例如：
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_GETCRTC</code>：获取有关特定 CRTC 的信息。</li>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_SETCRTC</code>：设置 CRTC 参数。</li>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_ADDFB</code>：添加新的帧缓冲区对象。</li>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_RMFB</code>：移除帧缓冲区对象。</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ol>
+
+<h1 id="drm_ioctl_mode_atomic">DRM_IOCTL_MODE_ATOMIC</h1>
+
+<p>用于在 <strong>Linux 内核模式设置（KMS）</strong> 中执行 <strong>原子操作（Atomic Operation）</strong>。详情如下：</p>
+
+<ol>
+  <li><strong>KMS 是什么？</strong>
+    <ul>
+      <li><strong>KMS（Kernel Mode Setting）</strong> 是一种内核级别的图形显示设置机制，用于管理显示设备的模式和状态。</li>
+      <li>它允许用户空间应用程序与内核交互，以配置显示输出。</li>
+    </ul>
+  </li>
+  <li><strong>原子操作的概念</strong>
+    <ul>
+      <li>在图形渲染中，<strong>原子操作</strong> 是指一组状态更改，要么全部成功应用，要么全部失败，不会出现部分应用的情况。</li>
+      <li>在 KMS 中，原子操作用于一次性更新多个显示对象的状态，例如 CRTC、平面、连接器等。</li>
+    </ul>
+  </li>
+  <li><strong>DRM_IOCTL_MODE_ATOMIC 的作用</strong>
+    <ul>
+      <li>通过调用 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_ATOMIC</code>，应用程序可以提交一组原子操作，以更新显示管道的状态。</li>
+      <li>这些操作可以包括更改 CRTC 模式、平面配置、连接器状态等。</li>
+    </ul>
+  </li>
+  <li><strong>其他 DRM IOCTL 命令</strong>
+    <ul>
+      <li>除了 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_ATOMIC</code>，还有其他与显示设置相关的 IOCTL 命令，例如：
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_GETCRTC</code>：获取有关特定 CRTC 的信息。</li>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_SETCRTC</code>：设置 CRTC 参数。</li>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_ADDFB</code>：添加新的帧缓冲区对象。</li>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_RMFB</code>：移除帧缓冲区对象。</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ol>
+
+<h1 id="drm_ioctl_crtc_get_sequence">DRM_IOCTL_CRTC_GET_SEQUENCE</h1>
+
+<p>用于从 <strong>Linux 内核模式设置（KMS）</strong> 中获取特定 <strong>CRTC（Cathode Ray Tube Controller）</strong> 的 <strong>帧序列（Frame Sequence）</strong> 信息.</p>
+
+<p>详情如下：</p>
+
+<ol>
+  <li><strong>CRTC 是什么？</strong>
+    <ul>
+      <li><strong>CRTC</strong> 是显示控制器，负责将图形数据发送到显示设备（例如显示器或电视）。</li>
+      <li>它管理像素时钟、扫描线和帧缓冲区的刷新。</li>
+    </ul>
+  </li>
+  <li><strong>帧序列是什么？</strong>
+    <ul>
+      <li>在图形渲染中，<strong>帧序列</strong> 是指显示设备刷新图像的顺序。</li>
+      <li>通过调用 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_CRTC_GET_SEQUENCE</code>，应用程序可以获取有关特定 CRTC 的帧序列信息，例如当前帧数、垂直同步信号等。</li>
+    </ul>
+  </li>
+  <li><strong>其他 DRM IOCTL 命令</strong>
+    <ul>
+      <li>除了 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_CRTC_GET_SEQUENCE</code>，还有其他与显示设置相关的 IOCTL 命令，例如：
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_GETCRTC</code>：获取有关特定 CRTC 的信息。</li>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_SETCRTC</code>：设置 CRTC 参数。</li>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_ADDFB</code>：添加新的帧缓冲区对象。</li>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_RMFB</code>：移除帧缓冲区对象。</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ol>
+
+<h1 id="drm_ioctl_crtc_queue_sequence">DRM_IOCTL_CRTC_QUEUE_SEQUENCE</h1>
+
+<p>用于在 <strong>Linux 内核模式设置（KMS）</strong> 中将特定 <strong>CRTC（Cathode Ray Tube Controller）</strong> 的帧序列信息添加到队列中.</p>
+
+<p>以下是关于 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_CRTC_QUEUE_SEQUENCE</code> 的一些要点：</p>
+
+<ol>
+  <li><strong>CRTC 是什么？</strong>
+    <ul>
+      <li><strong>CRTC</strong> 是显示控制器，负责将图形数据发送到显示设备（例如显示器或电视）。</li>
+      <li>它管理像素时钟、扫描线和帧缓冲区的刷新。</li>
+    </ul>
+  </li>
+  <li><strong>帧序列是什么？</strong>
+    <ul>
+      <li>在图形渲染中，<strong>帧序列</strong> 是指显示设备刷新图像的顺序。</li>
+      <li>通过调用 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_CRTC_QUEUE_SEQUENCE</code>，应用程序可以将特定 CRTC 的帧序列信息添加到队列中。</li>
+    </ul>
+  </li>
+  <li><strong>其他 DRM IOCTL 命令</strong>
+    <ul>
+      <li>除了 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_CRTC_QUEUE_SEQUENCE</code>，还有其他与显示设置相关的 IOCTL 命令，例如：
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_GETCRTC</code>：获取有关特定 CRTC 的信息。</li>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_SETCRTC</code>：设置 CRTC 参数。</li>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_ADDFB</code>：添加新的帧缓冲区对象。</li>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_RMFB</code>：移除帧缓冲区对象。</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ol>
+
+<h1 id="magic--master">Magic &amp; Master</h1>
+
+<h2 id="drm_ioctl_get_magic">DRM_IOCTL_GET_MAGIC</h2>
+
+<p>是一对 <strong>IOCTL（Input/Output Control）命令</strong>。详情如下：</p>
+
+<ol>
+  <li><strong>魔数/幻数字（Magic Number）的作用</strong>
+    <ul>
+      <li>在图形设备驱动中，<code class="language-plaintext highlighter-rouge">DRM_IOCTL_GET_MAGIC</code> 用于设置魔数/幻数字，以进行 <strong>GEM ioctl</strong> 权限检查。</li>
+      <li>魔数是一个32位的标识符，用于验证对图形资源的访问权限。</li>
+    </ul>
+  </li>
+  <li><strong>具体操作</strong>
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_GET_MAGIC</code> 函数会返回一个32位的魔数，然后将该魔数传递给 <strong>DRM-Master</strong>。</li>
+      <li><strong>DRM-Master</strong> 使用此魔数通过 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_AUTH_MAGIC</code> 给发起鉴权的非 <strong>DRM-Master</strong> 应用程序授权。</li>
+    </ul>
+  </li>
+</ol>
+
+<h2 id="drm_ioctl_auth_magic">DRM_IOCTL_AUTH_MAGIC</h2>
+
+<p>它用于对非 DRM 主用户空间程序进行身份验证。让我们详细了解一下这个接口的作用和实现：</p>
+
+<ol>
+  <li><strong>接口作用</strong>：
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_AUTH_MAGIC</code> 用于对非 DRM 主用户空间程序进行身份验证。</li>
+      <li>具体流程如下：
+        <ol>
+          <li>非 DRM 主用户空间程序通过执行 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_GET_MAGIC</code> ioctl 从 DRM 设备获取一个唯一的令牌（32 位魔数）。</li>
+          <li>然后，用户空间程序将此令牌传递给 DRM 主（例如通过 IPC 或 X 客户端中的 DRI2Authenticate 请求）。</li>
+          <li>DRM 主进程随后使用 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_AUTH_MAGIC</code> ioctl 将令牌发送回 DRM 设备。</li>
+          <li>设备根据接收到的令牌，授予发起身份验证的非 DRM 主应用特殊权限。</li>
+        </ol>
+      </li>
+    </ul>
+  </li>
+  <li><strong>实现细节</strong>：
+    <ul>
+      <li>身份验证令牌允许非 DRM 主进程执行特定的特权操作。</li>
+      <li>通过将令牌与相应的文件描述符（fd）关联，设备授权应用访问特定资源或执行受限操作。</li>
+      <li>这种机制确保只有经过身份验证的调用者才能访问特定的 DRM 功能。</li>
+    </ul>
+  </li>
+</ol>
+
+<p><img src="/blog/assets/DRM/drm_authentication.svg" alt="drm_authentication" /></p>
+
+<h2 id="drm_ioctl_set_master">DRM_IOCTL_SET_MASTER</h2>
+
+<p>它允许用户空间程序成为唯一的 DRM 主显示管理程序。执行此 ioctl 后，该程序获得了独占的权限，用于管理与显示相关的操作。相反，<code class="language-plaintext highlighter-rouge">DRM_IOCTL_DROP_MASTER</code> ioctl 可用于放弃 DRM 主身份。通常情况下，X 服务器（Xorg）充当 DRM 主。</p>
+
+<p>其他非 DRM 主用户空间程序可以通过 DRM-Auth 进行身份验证。具体过程如下：</p>
+
+<ol>
+  <li>执行 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_GET_MAGIC</code> ioctl，从 DRM 设备获取一个唯一的令牌（魔数）。</li>
+  <li>将此令牌传递给 DRM 主（例如通过 IPC 或 X 客户端中的 DRI2Authenticate 请求）。</li>
+  <li>DRM 主进程随后使用 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_AUTH_MAGIC</code> ioctl 将令牌发送回 DRM 设备。</li>
+  <li>基于接收到的令牌，设备授予发起身份验证的非 DRM 主应用特殊权限。</li>
+</ol>
+
+<p>这个身份验证令牌允许非 DRM 主进程执行特定的特权操作。通过将令牌与相应的文件描述符（fd）关联，设备授权应用访问特定资源或执行受限操作。这种机制确保只有经过身份验证的调用者才能访问特定的 DRM 功能。</p>
+
+<h2 id="drm_ioctl_drop_master">DRM_IOCTL_DROP_MASTER</h2>
+
+<p>它允许用户空间程序放弃 DRM 主身份。让我们详细了解一下这个接口的作用和实现：</p>
+
+<ol>
+  <li><strong>接口作用</strong>：
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_DROP_MASTER</code> 允许用户空间程序放弃 DRM 主身份。</li>
+      <li>当程序执行此 ioctl 时，它会失去独占管理显示相关操作的特权。</li>
+      <li>相反，<code class="language-plaintext highlighter-rouge">DRM_IOCTL_SET_MASTER</code> ioctl 可用于成为 DRM 主。</li>
+    </ul>
+  </li>
+  <li><strong>实现细节</strong>：
+    <ul>
+      <li>通过执行 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_DROP_MASTER</code>，用户空间程序可以放弃 DRM 主身份。</li>
+      <li>这在需要切换 DRM 主时很有用，例如在关闭/打开主设备节点时。</li>
+      <li>通常情况下，X 服务器（Xorg）充当 DRM 主。</li>
+    </ul>
+  </li>
+</ol>
+
+<h1 id="gem">GEM</h1>
+
+<h2 id="drm_ioctl_gem_close">DRM_IOCTL_GEM_CLOSE</h2>
+
+<p>它用于关闭 GEM 缓冲区（Graphics Execution Manager）。让我们详细了解一下这个接口的作用和实现：</p>
+
+<ol>
+  <li><strong>接口作用</strong>：
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_GEM_CLOSE</code> 用于关闭 GEM 缓冲区。</li>
+      <li>在执行此 ioctl 后，GEM 缓冲区的句柄将不再可用于当前进程，并且可能被 GEM API 重新用于新的 GEM 对象。</li>
+    </ul>
+  </li>
+  <li><strong>实现细节</strong>：
+    <ul>
+      <li>用户空间程序可以通过执行 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_GEM_CLOSE</code> 来关闭 GEM 缓冲区。</li>
+      <li>这在释放资源或管理内存时非常有用。</li>
+      <li>请注意，GEM 缓冲区的关闭不会立即释放内存，而是将其标记为不再使用，以便稍后进行回收。</li>
+    </ul>
+  </li>
+</ol>
+
+<h2 id="drm_ioctl_gem_flink">DRM_IOCTL_GEM_FLINK</h2>
+
+<p>它用于为 GEM 缓冲区（Graphics Execution Manager）创建一个名称。让我们详细了解一下这个接口的作用和实现：</p>
+
+<ol>
+  <li><strong>接口作用</strong>：
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_GEM_FLINK</code> 用于为 GEM 缓冲区创建一个名称。</li>
+      <li>在执行此 ioctl 后，您可以使用这个名称来引用该 GEM 缓冲区。</li>
+    </ul>
+  </li>
+  <li><strong>实现细节</strong>：
+    <ul>
+      <li>用户空间程序可以通过执行 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_GEM_FLINK</code> 来为 GEM 缓冲区创建一个名称。</li>
+      <li>这在需要在不同进程之间引用 GEM 对象时非常有用。</li>
+      <li>请注意，这个名称不能直接用于在 DRM API 中引用对象，应用程序必须使用 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_GEM_FLINK</code> 和 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_GEM_OPEN</code> ioctl 分别将句柄转换为名称和名称转换为句柄。</li>
+    </ul>
+  </li>
+</ol>
+
+<h2 id="drm_ioctl_gem_open">DRM_IOCTL_GEM_OPEN</h2>
+
+<p>它用于为 GEM 缓冲区（Graphics Execution Manager）创建一个名称。让我们详细了解一下这个接口的作用和实现：</p>
+
+<ol>
+  <li><strong>接口作用</strong>：
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_GEM_OPEN</code> 允许用户空间程序为 GEM 缓冲区创建一个名称。</li>
+      <li>在执行此 ioctl 后，您可以使用这个名称来引用该 GEM 缓冲区。</li>
+    </ul>
+  </li>
+  <li><strong>实现细节</strong>：
+    <ul>
+      <li>用户空间程序可以通过执行 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_GEM_OPEN</code> 来为 GEM 缓冲区创建一个名称。</li>
+      <li>这在需要在不同进程之间引用 GEM 对象时非常有用。</li>
+      <li>请注意，这个名称不能直接用于在 DRM API 中引用对象，应用程序必须使用 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_GEM_FLINK</code> 和 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_GEM_OPEN</code> ioctl 分别将句柄转换为名称和名称转换为句柄。</li>
+    </ul>
+  </li>
+</ol>
+
+<h2 id="drm_ioctl_prime_handle_to_fd">DRM_IOCTL_PRIME_HANDLE_TO_FD</h2>
+
+<p>它用于将 GEM 缓冲区（Graphics Execution Manager）的句柄转换为文件描述符（fd）。让我们详细了解一下这个接口的作用和实现：</p>
+
+<ol>
+  <li><strong>接口作用</strong>：
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_PRIME_HANDLE_TO_FD</code> 允许用户空间程序将 GEM 缓冲区的句柄转换为文件描述符。</li>
+      <li>这在需要在不同进程之间共享 GEM 缓冲区时非常有用，例如用于跨进程的纹理共享。</li>
+    </ul>
+  </li>
+  <li><strong>实现细节</strong>：
+    <ul>
+      <li>用户空间程序可以通过执行 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_PRIME_HANDLE_TO_FD</code> 来获取文件描述符。</li>
+      <li>这个接口通常与其他进程之间的 IPC（进程间通信）一起使用，以便共享 GEM 缓冲区。</li>
+      <li>请注意，这个接口的实现可能因不同的 DRM 驱动而有所不同，具体细节可以查阅特定驱动的文档或源代码。</li>
+    </ul>
+  </li>
+  <li>相关CMD <strong>DRM_IOCTL_PRIME_FD_TO_HANDLE</strong></li>
+</ol>
+
+<h1 id="resource">Resource</h1>
+
+<h2 id="drm_ioctl_mode_getresources">DRM_IOCTL_MODE_GETRESOURCES</h2>
+
+<p>它允许用户空间程序获取与 DRM 设备相关的资源信息。让我们详细了解一下这个接口的作用和实现：</p>
+
+<ol>
+  <li><strong>接口作用</strong>：
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_GETRESOURCES</code> 用于获取与 DRM 设备相关的资源信息。</li>
+      <li>这个接口通常用于查询设备的帧缓冲、连接器、CRTC（显示管道）和编码器的数量和标识符。</li>
+    </ul>
+  </li>
+  <li><strong>实现细节</strong>：
+    <ul>
+      <li>用户空间程序可以通过执行 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_GETRESOURCES</code> 来获取资源信息。</li>
+      <li>返回的结构体 <code class="language-plaintext highlighter-rouge">drm_mode_card_res</code> 包含了帧缓冲、连接器、CRTC 和编码器的数量以及相应的标识符。</li>
+      <li>这个接口对于初始化显示管道、资源管理和模式设置非常重要。</li>
+    </ul>
+  </li>
+</ol>
+
+<h2 id="drm_ioctl_mode_getplaneresources">DRM_IOCTL_MODE_GETPLANERESOURCES</h2>
+
+<p>它用于获取Direct Rendering Manager (DRM)的资源。DRM是Linux内核的一部分，负责处理图形硬件的底层细节。</p>
+
+<p>在使用<code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_GETPLANERESOURCES</code>时，你需要打开一个DRM设备（例如<code class="language-plaintext highlighter-rouge">/dev/dri/card0</code>），然后使用这个ioctl调用来获取资源。这些资源包括帧缓冲区（framebuffers）、CRTC（Cathode Ray Tube Controller）、连接器（connectors）和编码器（encoders）。</p>
+
+<p>这些资源的含义如下：</p>
+<ul>
+  <li><strong>帧缓冲区（Framebuffers）</strong>：它们包含要显示的像素数据。</li>
+  <li><strong>CRTC</strong>：CRTC代表整个显示管道，它从一个或多个平面获取像素数据进行混合。</li>
+  <li><strong>连接器（Connectors）</strong>：在DRM中，连接器是显示接收器的一般抽象，包括固定面板或任何其他可以以某种形式显示像素的设备。</li>
+  <li><strong>编码器（Encoders）</strong>：编码器从CRTC获取像素数据，并将其转换为任何连接的连接器可以接受的格式。</li>
+</ul>
+
+<p>请注意，这些资源的数量可能会根据你的硬件配置和当前的显示设置而变化。在使用这些资源之前，你可能需要检查它们的可用性和状态。。</p>
+
+<h2 id="drm_ioctl_mode_getcrtc">DRM_IOCTL_MODE_GETCRTC</h2>
+
+<p>是一种用于获取有关给定 CRTC（Cathode Ray Tube Controller）的信息的 IOCTL（Input/Output Control）命令。详情如下：</p>
+
+<ol>
+  <li><strong>CRTC 是什么？</strong>
+    <ul>
+      <li>CRTC 是显示控制器，负责将图形数据发送到显示设备（例如显示器或电视）。</li>
+      <li>它管理像素时钟、扫描线和帧缓冲区的刷新。</li>
+    </ul>
+  </li>
+  <li><strong>DRM_IOCTL_MODE_GETCRTC 的作用</strong>
+    <ul>
+      <li>通过调用 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_GETCRTC</code>，应用程序可以获取有关特定 CRTC 的信息。</li>
+      <li>这些信息可能包括 CRTC 的当前模式、分辨率、刷新率等。</li>
+    </ul>
+  </li>
+  <li><strong>其他 DRM IOCTL 命令</strong>
+    <ul>
+      <li>除了 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_GETCRTC</code>，还有其他与显示设置相关的 IOCTL 命令，例如：
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_GETOUTPUT</code>：获取有关特定输出的信息。</li>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_SETCRTC</code>：设置 CRTC 参数。</li>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_ADDFB</code>：添加新的帧缓冲区对象。</li>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_RMFB</code>：移除帧缓冲区对象。</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ol>
+
+<h2 id="drm_ioctl_mode_setcrtc">DRM_IOCTL_MODE_SETCRTC</h2>
+
+<p>用于在 <strong>Linux 内核模式设置（KMS）</strong> 中设置特定 <strong>CRTC（Cathode Ray Tube Controller）</strong> 的参数。详情如下：</p>
+
+<ol>
+  <li><strong>CRTC 是什么？</strong>
+    <ul>
+      <li><strong>CRTC</strong> 是显示控制器，负责将图形数据发送到显示设备（例如显示器或电视）。</li>
+      <li>它管理像素时钟、扫描线和帧缓冲区的刷新。</li>
+    </ul>
+  </li>
+  <li><strong>DRM_IOCTL_MODE_SETCRTC 的作用</strong>
+    <ul>
+      <li>通过调用 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_SETCRTC</code>，应用程序可以设置特定 CRTC 的参数，例如分辨率、刷新率等。</li>
+      <li>这对于配置显示输出非常重要。</li>
+    </ul>
+  </li>
+  <li><strong>其他 DRM IOCTL 命令</strong>
+    <ul>
+      <li>除了 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_SETCRTC</code>，还有其他与显示设置相关的 IOCTL 命令，例如：
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_GETCRTC</code>：获取有关特定 CRTC 的信息。</li>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_ADDFB</code>：添加新的帧缓冲区对象。</li>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_RMFB</code>：移除帧缓冲区对象。</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ol>
+
+<h2 id="drm_ioctl_mode_getplane">DRM_IOCTL_MODE_GETPLANE</h2>
+
+<p>用于从 <strong>Linux 内核模式设置（KMS）</strong> 中获取特定 <strong>平面（Plane）</strong> 的信息。详情如下：</p>
+
+<ol>
+  <li><strong>DRM_IOCTL_MODE_GETPLANE 的作用</strong>
+    <ul>
+      <li>通过调用 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_GETPLANE</code>，应用程序可以获取有关特定平面的信息。</li>
+      <li>这些信息可能包括平面的当前状态、位置、大小、像素格式等。</li>
+    </ul>
+  </li>
+  <li><strong>其他 DRM IOCTL 命令</strong>
+    <ul>
+      <li>除了 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_GETPLANE</code>，还有其他与显示设置相关的 IOCTL 命令，例如：
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_GETCRTC</code>：获取有关特定 CRTC 的信息。</li>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_SETCRTC</code>：设置 CRTC 参数。</li>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_ADDFB</code>：添加新的帧缓冲区对象。</li>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_RMFB</code>：移除帧缓冲区对象。</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ol>
+
+<h2 id="drm_ioctl_mode_setplane">DRM_IOCTL_MODE_SETPLANE</h2>
+
+<p>用于在 <strong>Linux 内核模式设置（KMS）</strong> 中设置特定 <strong>平面（Plane）</strong> 的参数。详情如下：</p>
+
+<ol>
+  <li><strong>DRM_IOCTL_MODE_SETPLANE 的作用</strong>
+    <ul>
+      <li>通过调用 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_SETPLANE</code>，应用程序可以设置特定平面的参数，例如分辨率、刷新率等。</li>
+      <li>这对于配置显示输出非常重要。</li>
+    </ul>
+  </li>
+  <li><strong>其他 DRM IOCTL 命令</strong>
+    <ul>
+      <li>除了 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_SETPLANE</code>，还有其他与显示设置相关的 IOCTL 命令，例如：
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_GETCRTC</code>：获取有关特定 CRTC 的信息。</li>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_SETCRTC</code>：设置 CRTC 参数。</li>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_ADDFB</code>：添加新的帧缓冲区对象。</li>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_RMFB</code>：移除帧缓冲区对象。</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ol>
+
+<h1 id="cursor">Cursor</h1>
+
+<h2 id="drm_ioctl_mode_cursor">DRM_IOCTL_MODE_CURSOR</h2>
+
+<p>用于操作特定 <strong>CRTC（Cathode Ray Tube Controller）</strong> 的 <strong>光标平面（Cursor Plane）</strong>。详情如下：</p>
+
+<ol>
+  <li><strong>CRTC 是什么？</strong>
+    <ul>
+      <li><strong>CRTC</strong> 是显示控制器，负责将图形数据发送到显示设备（例如显示器或电视）。</li>
+      <li>它管理像素时钟、扫描线和帧缓冲区的刷新。</li>
+    </ul>
+  </li>
+  <li><strong>光标平面（Cursor Plane）的作用</strong>
+    <ul>
+      <li><strong>光标平面</strong> 是一种特殊的显示平面，用于显示光标或其他小型图形元素。</li>
+      <li>通过调用 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_CURSOR</code>，应用程序可以操作光标平面，例如设置光标的位置、大小、图像等。</li>
+    </ul>
+  </li>
+  <li><strong>其他 DRM IOCTL 命令</strong>
+    <ul>
+      <li>除了 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_CURSOR</code>，还有其他与显示设置相关的 IOCTL 命令，例如：
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_GETCRTC</code>：获取有关特定 CRTC 的信息。</li>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_SETCRTC</code>：设置 CRTC 参数。</li>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_ADDFB</code>：添加新的帧缓冲区对象。</li>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_RMFB</code>：移除帧缓冲区对象。</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ol>
+
+<h2 id="drm_ioctl_mode_cursor2">DRM_IOCTL_MODE_CURSOR2</h2>
+
+<p>用于操作特定 <strong>CRTC（Cathode Ray Tube Controller）</strong> 的 <strong>光标平面（Cursor Plane）</strong>⁵。详情如下：</p>
+
+<ol>
+  <li><strong>CRTC 是什么？</strong>
+    <ul>
+      <li><strong>CRTC</strong> 是显示控制器，负责将图形数据发送到显示设备（例如显示器或电视）。</li>
+      <li>它管理像素时钟、扫描线和帧缓冲区的刷新。</li>
+    </ul>
+  </li>
+  <li><strong>光标平面（Cursor Plane）的作用</strong>
+    <ul>
+      <li><strong>光标平面</strong> 是一种特殊的显示平面，用于显示光标或其他小型图形元素。</li>
+      <li>通过调用 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_CURSOR2</code>，应用程序可以操作光标平面，例如设置光标的位置、大小、图像等。</li>
+    </ul>
+  </li>
+  <li><strong>其他 DRM IOCTL 命令</strong>
+    <ul>
+      <li>除了 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_CURSOR2</code>，还有其他与显示设置相关的 IOCTL 命令，例如：
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_GETCRTC</code>：获取有关特定 CRTC 的信息。</li>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_SETCRTC</code>：设置 CRTC 参数。</li>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_ADDFB</code>：添加新的帧缓冲区对象。</li>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_RMFB</code>：移除帧缓冲区对象。</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ol>
+
+<h2 id="区别">区别</h2>
+
+<p><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_CURSOR</code> 和 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_CURSOR2</code> 都是 <strong>IOCTL（Input/Output Control）命令</strong>，用于操作特定 <strong>CRTC（Cathode Ray Tube Controller）</strong> 的 <strong>光标平面（Cursor Plane）</strong>。它们之间的区别如下：</p>
+
+<ol>
+  <li><strong>DRM_IOCTL_MODE_CURSOR</strong>
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_CURSOR</code> 是旧版本的命令，用于设置光标平面的参数，例如光标的位置、大小、图像等。</li>
+      <li>它遵循旧的光标平面操作语义。</li>
+    </ul>
+  </li>
+  <li><strong>DRM_IOCTL_MODE_CURSOR2</strong>
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_CURSOR2</code> 是新版本的命令，用于相同的目的，但可能具有更丰富的功能。</li>
+      <li>它可能支持更多属性，例如更灵活的光标形状、透明度等。</li>
+    </ul>
+  </li>
+</ol>
+
+<p>总之，<code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_CURSOR2</code> 可能是对 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_CURSOR</code> 的改进或扩展，以提供更好的光标平面控制。</p>
+
+<h1 id="sync-obj">Sync Obj</h1>
+
+<h2 id="drm_ioctl_syncobj_create">DRM_IOCTL_SYNCOBJ_CREATE</h2>
+
+<p>用于在 <strong>Linux 内核模式设置（KMS）</strong> 中创建 <strong>同步对象（Sync Object）</strong>。详情如下：</p>
+
+<ol>
+  <li><strong>同步对象是什么？</strong>
+    <ul>
+      <li><strong>同步对象</strong> 是一种用于协调多个并发任务之间的同步机制。</li>
+      <li>在图形渲染中，同步对象通常用于确保不同图形操作的执行顺序或避免竞态条件。</li>
+    </ul>
+  </li>
+  <li><strong>DRM_IOCTL_SYNCOBJ_CREATE 的作用</strong>
+    <ul>
+      <li>通过调用 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_SYNCOBJ_CREATE</code>，应用程序可以创建一个同步对象。</li>
+      <li>同步对象可以用于跟踪图形操作的完成状态，例如等待渲染完成或等待其他事件。</li>
+    </ul>
+  </li>
+  <li><strong>其他 DRM IOCTL 命令</strong>
+    <ul>
+      <li>除了 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_SYNCOBJ_CREATE</code>，还有其他与显示设置相关的 IOCTL 命令，例如：
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_GETCRTC</code>：获取有关特定 CRTC 的信息。</li>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_SETCRTC</code>：设置 CRTC 参数。</li>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_ADDFB</code>：添加新的帧缓冲区对象。</li>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_RMFB</code>：移除帧缓冲区对象。</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ol>
+
+<h2 id="drm_ioctl_syncobj_handle_to_fd">DRM_IOCTL_SYNCOBJ_HANDLE_TO_FD</h2>
+
+<p>用于在 <strong>Linux 内核模式设置（KMS）</strong> 中将特定 <strong>同步对象（Sync Object）</strong> 的句柄转换为文件描述符（File Descriptor）。</p>
+
+<p>详情如下：</p>
+
+<ol>
+  <li><strong>同步对象是什么？</strong>
+    <ul>
+      <li><strong>同步对象</strong> 是一种用于协调多个并发任务之间的同步机制。</li>
+      <li>在图形渲染中，同步对象通常用于确保不同图形操作的执行顺序或避免竞态条件。</li>
+    </ul>
+  </li>
+  <li><strong>DRM_IOCTL_SYNCOBJ_HANDLE_TO_FD 的作用</strong>
+    <ul>
+      <li>通过调用 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_SYNCOBJ_HANDLE_TO_FD</code>，应用程序可以将同步对象的句柄转换为文件描述符。</li>
+      <li>文件描述符是一种用于在进程之间传递句柄的机制。这些文件描述符是不透明的，只能用于传递同步对象句柄。</li>
+    </ul>
+  </li>
+  <li><strong>其他 DRM IOCTL 命令</strong>
+    <ul>
+      <li>除了 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_SYNCOBJ_HANDLE_TO_FD</code>，还有其他与显示设置相关的 IOCTL 命令，例如：
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_GETCRTC</code>：获取有关特定 CRTC 的信息。</li>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_SETCRTC</code>：设置 CRTC 参数。</li>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_ADDFB</code>：添加新的帧缓冲区对象。</li>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_RMFB</code>：移除帧缓冲区对象。</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ol>
+
+<h2 id="drm_ioctl_syncobj_signal">DRM_IOCTL_SYNCOBJ_SIGNAL</h2>
+
+<p>用于在 <strong>Linux 内核模式设置（KMS）</strong> 中直接触发特定 <strong>同步对象（Sync Object）</strong>。这个命令提供了一种用户空间手动触发同步对象的机制。</p>
+
+<p>以下是关于 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_SYNCOBJ_SIGNAL</code> 的一些要点：</p>
+
+<ol>
+  <li><strong>同步对象是什么？</strong>
+    <ul>
+      <li><strong>同步对象</strong> 是一种用于协调多个并发任务之间的同步机制。</li>
+      <li>在图形渲染中，同步对象通常用于确保不同图形操作的执行顺序或避免竞态条件。</li>
+    </ul>
+  </li>
+  <li><strong>DRM_IOCTL_SYNCOBJ_SIGNAL 的作用</strong>
+    <ul>
+      <li>通过调用 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_SYNCOBJ_SIGNAL</code>，用户空间可以直接触发特定同步对象。</li>
+      <li>这对于手动触发同步对象非常有用。</li>
+    </ul>
+  </li>
+  <li><strong>其他 DRM IOCTL 命令</strong>
+    <ul>
+      <li>除了 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_SYNCOBJ_SIGNAL</code>，还有其他与显示设置相关的 IOCTL 命令，例如：
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_GETCRTC</code>：获取有关特定 CRTC 的信息。</li>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_SETCRTC</code>：设置 CRTC 参数。</li>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_ADDFB</code>：添加新的帧缓冲区对象。</li>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_RMFB</code>：移除帧缓冲区对象。</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ol>
+
+<h1 id="lease">Lease</h1>
+
+<h2 id="drm_ioctl_mode_create_lease">DRM_IOCTL_MODE_CREATE_LEASE</h2>
+
+<p>用于在 <strong>Linux 内核模式设置（KMS）</strong> 中创建 <strong>租约（Lease）</strong>。详情如下：</p>
+
+<ol>
+  <li><strong>租约是什么？</strong>
+    <ul>
+      <li><strong>租约</strong> 是一种机制，用于管理图形资源的共享和访问权限。</li>
+      <li>在多个图形客户端之间，租约允许控制对特定资源（例如帧缓冲区、平面、连接器等）的访问。</li>
+    </ul>
+  </li>
+  <li><strong>DRM_IOCTL_MODE_CREATE_LEASE 的作用</strong>
+    <ul>
+      <li>通过调用 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_CREATE_LEASE</code>，应用程序可以创建一个租约。</li>
+      <li>租约可以用于协调多个图形客户端之间的资源共享，以确保资源的正确使用和访问权限。</li>
+    </ul>
+  </li>
+  <li><strong>其他 DRM IOCTL 命令</strong>
+    <ul>
+      <li>除了 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_CREATE_LEASE</code>，还有其他与显示设置相关的 IOCTL 命令，例如：
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_GETCRTC</code>：获取有关特定 CRTC 的信息。</li>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_SETCRTC</code>：设置 CRTC 参数。</li>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_ADDFB</code>：添加新的帧缓冲区对象。</li>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_RMFB</code>：移除帧缓冲区对象。</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ol>
+
+<h2 id="drm_ioctl_mode_list_lessees">DRM_IOCTL_MODE_LIST_LESSEES</h2>
+
+<p>用于从 <strong>Linux 内核模式设置（KMS）</strong> 中获取特定 <strong>租约（Lease）</strong> 所有租户（lessees）的标识符（identifiers）。</p>
+
+<p>以下是关于 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_LIST_LESSEES</code> 的一些要点：</p>
+
+<ol>
+  <li><strong>租约是什么？</strong>
+    <ul>
+      <li><strong>租约</strong> 是一种机制，用于管理图形资源的共享和访问权限。</li>
+      <li>在多个图形客户端之间，租约允许控制对特定资源（例如帧缓冲区、平面、连接器等）的访问。</li>
+    </ul>
+  </li>
+  <li><strong>DRM_IOCTL_MODE_LIST_LESSEES 的作用</strong>
+    <ul>
+      <li>通过调用 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_LIST_LESSEES</code>，应用程序可以获取特定租约的所有租户的标识符。</li>
+      <li>这对于了解租约的使用情况以及资源共享非常有用。</li>
+    </ul>
+  </li>
+  <li><strong>其他 DRM IOCTL 命令</strong>
+    <ul>
+      <li>除了 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_LIST_LESSEES</code>，还有其他与显示设置相关的 IOCTL 命令，例如：
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_GETCRTC</code>：获取有关特定 CRTC 的信息。</li>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_SETCRTC</code>：设置 CRTC 参数。</li>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_ADDFB</code>：添加新的帧缓冲区对象。</li>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_RMFB</code>：移除帧缓冲区对象。</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ol>
+
+<h2 id="drm_ioctl_mode_get_lease">DRM_IOCTL_MODE_GET_LEASE</h2>
+
+<p>用于从 <strong>Linux 内核模式设置（KMS）</strong> 中获取特定 <strong>租约（Lease）</strong> 的信息。详情如下：</p>
+
+<ol>
+  <li><strong>租约是什么？</strong>
+    <ul>
+      <li><strong>租约</strong> 是一种机制，用于管理图形资源的共享和访问权限。</li>
+      <li>在多个图形客户端之间，租约允许控制对特定资源（例如帧缓冲区、平面、连接器等）的访问。</li>
+    </ul>
+  </li>
+  <li><strong>DRM_IOCTL_MODE_GET_LEASE 的作用</strong>
+    <ul>
+      <li>通过调用 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_GET_LEASE</code>，应用程序可以获取有关特定租约的信息。</li>
+      <li>这些信息可能包括租约的状态、租约的资源列表、租约的持有者等。</li>
+    </ul>
+  </li>
+  <li><strong>其他 DRM IOCTL 命令</strong>
+    <ul>
+      <li>除了 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_GET_LEASE</code>，还有其他与显示设置相关的 IOCTL 命令，例如：
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_CREATE_LEASE</code>：创建租约。</li>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_LIST_LESSEES</code>：列出租约的所有租户。</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ol>
+
+<h2 id="drm_ioctl_mode_revoke_lease">DRM_IOCTL_MODE_REVOKE_LEASE</h2>
+
+<p>用于在 <strong>Linux 内核模式设置（KMS）</strong> 中撤销特定 <strong>租约（Lease）</strong> 的权限。</p>
+
+<p>以下是关于 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_REVOKE_LEASE</code> 的一些要点：</p>
+
+<ol>
+  <li><strong>租约是什么？</strong>
+    <ul>
+      <li><strong>租约</strong> 是一种机制，用于管理图形资源的共享和访问权限。</li>
+      <li>在多个图形客户端之间，租约允许控制对特定资源（例如帧缓冲区、平面、连接器等）的访问。</li>
+    </ul>
+  </li>
+  <li><strong>DRM_IOCTL_MODE_REVOKE_LEASE 的作用</strong>
+    <ul>
+      <li>通过调用 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_REVOKE_LEASE</code>，应用程序可以撤销特定租约的权限。</li>
+      <li>这对于限制资源的访问或更改租约的状态非常有用。</li>
+    </ul>
+  </li>
+  <li><strong>其他 DRM IOCTL 命令</strong>
+    <ul>
+      <li>除了 <code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_REVOKE_LEASE</code>，还有其他与显示设置相关的 IOCTL 命令，例如：
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_CREATE_LEASE</code>：创建租约。</li>
+          <li><code class="language-plaintext highlighter-rouge">DRM_IOCTL_MODE_LIST_LESSEES</code>：列出租约的所有租户。</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ol>]]></content><author><name>kevin</name></author><category term="DRM" /><summary type="html"><![CDATA[DRM_IOCTL_VERSION]]></summary></entry></feed>
