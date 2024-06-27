@@ -1,8 +1,8 @@
 {"/blog/jekyll/2024-04-27-git.html": {
-    "title": "git",
+    "title": "Git",
     "keywords": "Jekyll",
     "url": "/blog/jekyll/2024-04-27-git.html",
-    "body": "在Git中，你可以使用git diff命令来比较不同分支中某个文件的差异。以下是具体的命令： git diff &lt;branch1&gt;..&lt;branch2&gt; -- &lt;file&gt; 其中，&lt;branch1&gt;和&lt;branch2&gt;是你想要比较的两个分支的名称，&lt;file&gt;是你想要比较的文件的路径。这个命令会显示出&lt;branch1&gt;和&lt;branch2&gt;之间&lt;file&gt;的差异。 例如，如果你想要比较master分支和dev分支中README.md文件的差异，你可以使用以下命令： git diff master..dev -- README.md 这个命令会显示出master分支和dev分支中README.md文件的差异。希望这个信息对你有所帮助！"
+    "body": "比较不同分支的某个文件 在Git中，你可以使用git diff命令来比较不同分支中某个文件的差异。以下是具体的命令： git diff &lt;branch1&gt;..&lt;branch2&gt; -- &lt;file&gt; 其中，&lt;branch1&gt;和&lt;branch2&gt;是你想要比较的两个分支的名称，&lt;file&gt;是你想要比较的文件的路径。这个命令会显示出&lt;branch1&gt;和&lt;branch2&gt;之间&lt;file&gt;的差异。 例如，如果你想要比较master分支和dev分支中README.md文件的差异，你可以使用以下命令： git diff master..dev -- README.md 这个命令会显示出master分支和dev分支中README.md文件的差异。希望这个信息对你有所帮助！ 修改已经提交的commit注释 当你需要修改已经提交的 Git commit 注释时，有几种方法可以做到。以下是两种常见的情况以及对应的操作步骤： 修改最后一次提交的注释： 首先，如果你只想修改最后一次提交的注释，可以执行以下步骤： 进入你的 Git 项目目录。 运行命令：git commit --amend 进入编辑模式，修改注释。 保存并退出编辑模式。 运行命令：git log 来查看提交记录。 修改之前提交的注释： 如果你需要修改之前的提交注释，可以按照以下步骤操作： 运行命令：git rebase -i HEAD~n，其中 n 是你想要修改的提交之前的次数。 在编辑模式中，将你需要修改的注释前的 pick 改为 edit。 保存并退出编辑模式。 运行命令：git commit --amend，修改你真正需要的注释。 运行命令：git rebase --continue，完成变基。 已经将代码 push 到远程仓库： 如果你已经将代码 push 到远程仓库，可以先从远程仓库拉取最新版本，然后按照上述步骤修改注释。最后，使用强制 push 将修改后的提交推送到远程仓库： git push --force origin master 请注意，在强制 push 之前，确保没有其他人提交了新的代码到远程仓库，以免覆盖其他人的更改。"
   },"/blog/jekyll/2022-05-02-App_misc.html": {
     "title": "linux dev misc",
     "keywords": "Jekyll",

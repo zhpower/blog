@@ -1,5 +1,7 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.2">Jekyll</generator><link href="http://localhost:4000/blog/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/blog/" rel="alternate" type="text/html" /><updated>2024-06-25T19:48:38+08:00</updated><id>http://localhost:4000/blog/feed.xml</id><title type="html">学习笔记</title><subtitle>Build Jekyll site with the GitBook style.
-</subtitle><author><name>kevin_zh</name></author><entry><title type="html">git</title><link href="http://localhost:4000/blog/jekyll/2024-04-27-git.html" rel="alternate" type="text/html" title="git" /><published>2024-04-27T00:00:00+08:00</published><updated>2024-04-27T00:00:00+08:00</updated><id>http://localhost:4000/blog/jekyll/git</id><content type="html" xml:base="http://localhost:4000/blog/jekyll/2024-04-27-git.html"><![CDATA[<p>在Git中，你可以使用<code class="language-plaintext highlighter-rouge">git diff</code>命令来比较不同分支中某个文件的差异。以下是具体的命令：</p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.2">Jekyll</generator><link href="http://localhost:4000/blog/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/blog/" rel="alternate" type="text/html" /><updated>2024-06-27T09:26:29+08:00</updated><id>http://localhost:4000/blog/feed.xml</id><title type="html">学习笔记</title><subtitle>Build Jekyll site with the GitBook style.
+</subtitle><author><name>kevin_zh</name></author><entry><title type="html">Git</title><link href="http://localhost:4000/blog/jekyll/2024-04-27-git.html" rel="alternate" type="text/html" title="Git" /><published>2024-04-27T00:00:00+08:00</published><updated>2024-04-27T00:00:00+08:00</updated><id>http://localhost:4000/blog/jekyll/git</id><content type="html" xml:base="http://localhost:4000/blog/jekyll/2024-04-27-git.html"><![CDATA[<h1 id="比较不同分支的某个文件">比较不同分支的某个文件</h1>
+
+<p>在Git中，你可以使用<code class="language-plaintext highlighter-rouge">git diff</code>命令来比较不同分支中某个文件的差异。以下是具体的命令：</p>
 
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git diff &lt;branch1&gt;..&lt;branch2&gt; <span class="nt">--</span> &lt;file&gt;
 </code></pre></div></div>
@@ -11,7 +13,49 @@
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git diff master..dev <span class="nt">--</span> README.md
 </code></pre></div></div>
 
-<p>这个命令会显示出<code class="language-plaintext highlighter-rouge">master</code>分支和<code class="language-plaintext highlighter-rouge">dev</code>分支中<code class="language-plaintext highlighter-rouge">README.md</code>文件的差异。希望这个信息对你有所帮助！</p>]]></content><author><name>kevin</name></author><category term="Jekyll" /><summary type="html"><![CDATA[在Git中，你可以使用git diff命令来比较不同分支中某个文件的差异。以下是具体的命令：]]></summary></entry><entry><title type="html">linux dev misc</title><link href="http://localhost:4000/blog/jekyll/2022-05-02-App_misc.html" rel="alternate" type="text/html" title="linux dev misc" /><published>2022-05-02T00:00:00+08:00</published><updated>2022-05-02T00:00:00+08:00</updated><id>http://localhost:4000/blog/jekyll/App_misc</id><content type="html" xml:base="http://localhost:4000/blog/jekyll/2022-05-02-App_misc.html"><![CDATA[<h1 id="pthread_mutex_tpthread_cond_t">pthread_mutex_t&amp;pthread_cond_t</h1>
+<p>这个命令会显示出<code class="language-plaintext highlighter-rouge">master</code>分支和<code class="language-plaintext highlighter-rouge">dev</code>分支中<code class="language-plaintext highlighter-rouge">README.md</code>文件的差异。希望这个信息对你有所帮助！</p>
+
+<h1 id="修改已经提交的commit注释">修改已经提交的commit注释</h1>
+
+<p>当你需要修改已经提交的 Git commit 注释时，有几种方法可以做到。以下是两种常见的情况以及对应的操作步骤：</p>
+
+<ol>
+  <li><strong>修改最后一次提交的注释</strong>：
+    <ul>
+      <li>首先，如果你只想修改最后一次提交的注释，可以执行以下步骤：
+        <ol>
+          <li>进入你的 Git 项目目录。</li>
+          <li>运行命令：<code class="language-plaintext highlighter-rouge">git commit --amend</code></li>
+          <li>进入编辑模式，修改注释。</li>
+          <li>保存并退出编辑模式。</li>
+          <li>运行命令：<code class="language-plaintext highlighter-rouge">git log</code> 来查看提交记录。</li>
+        </ol>
+      </li>
+    </ul>
+  </li>
+  <li><strong>修改之前提交的注释</strong>：
+    <ul>
+      <li>如果你需要修改之前的提交注释，可以按照以下步骤操作：
+        <ol>
+          <li>运行命令：<code class="language-plaintext highlighter-rouge">git rebase -i HEAD~n</code>，其中 <code class="language-plaintext highlighter-rouge">n</code> 是你想要修改的提交之前的次数。</li>
+          <li>在编辑模式中，将你需要修改的注释前的 <code class="language-plaintext highlighter-rouge">pick</code> 改为 <code class="language-plaintext highlighter-rouge">edit</code>。</li>
+          <li>保存并退出编辑模式。</li>
+          <li>运行命令：<code class="language-plaintext highlighter-rouge">git commit --amend</code>，修改你真正需要的注释。</li>
+          <li>运行命令：<code class="language-plaintext highlighter-rouge">git rebase --continue</code>，完成变基。</li>
+        </ol>
+      </li>
+    </ul>
+  </li>
+  <li><strong>已经将代码 push 到远程仓库</strong>：
+    <ul>
+      <li>如果你已经将代码 push 到远程仓库，可以先从远程仓库拉取最新版本，然后按照上述步骤修改注释。最后，使用强制 push 将修改后的提交推送到远程仓库：
+        <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  git push --force origin master
+</code></pre></div>        </div>
+      </li>
+      <li>请注意，在强制 push 之前，确保没有其他人提交了新的代码到远程仓库，以免覆盖其他人的更改。</li>
+    </ul>
+  </li>
+</ol>]]></content><author><name>kevin</name></author><category term="Jekyll" /><summary type="html"><![CDATA[比较不同分支的某个文件]]></summary></entry><entry><title type="html">linux dev misc</title><link href="http://localhost:4000/blog/jekyll/2022-05-02-App_misc.html" rel="alternate" type="text/html" title="linux dev misc" /><published>2022-05-02T00:00:00+08:00</published><updated>2022-05-02T00:00:00+08:00</updated><id>http://localhost:4000/blog/jekyll/App_misc</id><content type="html" xml:base="http://localhost:4000/blog/jekyll/2022-05-02-App_misc.html"><![CDATA[<h1 id="pthread_mutex_tpthread_cond_t">pthread_mutex_t&amp;pthread_cond_t</h1>
 
 <p>函数定义：</p>
 
