@@ -88,7 +88,7 @@
                         <li class="chapter" data-level="1.1" data-path="/blog/jekyll/2000-04-27-linux_grpahic_architecture.html">
                         
                             <a href="/blog/jekyll/2000-04-27-linux_grpahic_architecture.html" onclick="pageScrollToTop(this)">
-                                Linux graphic arch
+                                Linux graphic架构
                             </a>
                             
                                 
@@ -551,7 +551,7 @@ window.MathJax = {
                     </a>
 
                     
-                        <a href="/blog/jekyll/2000-04-27-linux_grpahic_architecture.html" class="navigation navigation-next navigation-unique" aria-label="Next page: Linux graphic arch">
+                        <a href="/blog/jekyll/2000-04-27-linux_grpahic_architecture.html" class="navigation navigation-next navigation-unique" aria-label="Next page: Linux graphic架构">
                             <i class="fa fa-angle-right"></i>
                         </a>
                     
@@ -570,7 +570,7 @@ window.MathJax = {
 
         
         "next": {
-            "title": "Linux graphic arch",
+            "title": "Linux graphic架构",
             "level": "1.2",
             "depth": 1,
             "path": "_posts/2024-05-01-linux_grpahic_architecture.md",
