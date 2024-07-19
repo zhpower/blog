@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.2">Jekyll</generator><link href="http://localhost:4000/blog/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/blog/" rel="alternate" type="text/html" /><updated>2024-07-18T16:54:37+08:00</updated><id>http://localhost:4000/blog/feed.xml</id><title type="html">学习笔记</title><subtitle>Build Jekyll site with the GitBook style.
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.2">Jekyll</generator><link href="http://localhost:4000/blog/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/blog/" rel="alternate" type="text/html" /><updated>2024-07-19T11:14:37+08:00</updated><id>http://localhost:4000/blog/feed.xml</id><title type="html">学习笔记</title><subtitle>Build Jekyll site with the GitBook style.
 </subtitle><author><name>kevin_zh</name></author><entry><title type="html">Git</title><link href="http://localhost:4000/blog/jekyll/2024-04-27-git.html" rel="alternate" type="text/html" title="Git" /><published>2024-04-27T00:00:00+08:00</published><updated>2024-04-27T00:00:00+08:00</updated><id>http://localhost:4000/blog/jekyll/git</id><content type="html" xml:base="http://localhost:4000/blog/jekyll/2024-04-27-git.html"><![CDATA[<h1 id="比较不同分支的某个文件">比较不同分支的某个文件</h1>
 
 <p>在Git中，你可以使用<code class="language-plaintext highlighter-rouge">git diff</code>命令来比较不同分支中某个文件的差异。以下是具体的命令：</p>
@@ -1964,7 +1964,8 @@ cpu_addr是由dma_alloc_noncoherent返回的虚拟地址。
 
 <h2 id="22-占用字节数">2.2 占用字节数</h2>
 
-<p>由上可以推算出不同采样方式下每个像素需要的平均字节数。</p>
+<p>如果Y,U,V分别用一个字节存储，由上可以推算出不同采样方式下每个像素需要的平均字节数。
+(现在也有Y,U,V分别用10bit储存的格式, 见#7)</p>
 
 <ul>
   <li>
@@ -2358,6 +2359,45 @@ ffplay <span class="nt">-video_size</span> 512x512 <span class="nt">-pixel_forma
     <span class="s">"   rgb.a = 1.0;                                          </span><span class="se">\n</span><span class="s">"</span>
     <span class="s">"}                                                        </span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
 
+</code></pre></div></div>
+
+<h1 id="7-10bit-存储">7 10bit 存储</h1>
+
+<p>10bit YUV就是每个 Y、U、V 分量分别占用10个bit ，由于实际处理中我们是以字节为单位进行存储和处理的，所以最终处理的数据是以2个字节来存储 10bit 的有效数据。这样 在10bit YUV中 ，每个像素(以Y 分量为例)将占用 16bit 两个字节，但是其中 6 个 bit 是 padding ，补 0 。
+<img src="/blog/assets/YUV/10bit.webp" alt="" /></p>
+
+<p>最近发现越来越多的视频解码出来是 10bit YUV 的图像，毫无疑问 10bit YUV 会有更大的取值范围，能表现出更丰富的颜色信息。</p>
+
+<p><strong>10bit纹理数据的加载</strong></p>
+
+<p>可以利用2个通道 8bit 格式如 GL_LUMINANCE_ALPHA 或者 GL_RG8 完成加载 16bit 图像数据到纹理，然后采样的时候再将 2 个 8bit 数据转换成 16bit.</p>
+
+<p>在 shader 采样之后，每一个通道的值都会被归一化，8bit 归一化之前的范围是 0~255，16bit 归一化之前的范围是 0~65535, 2 个 8bit 值进行移位求和转成 16bit 值，最后再进行归一化。</p>
+
+<p>shader脚本</p>
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="err">#</span><span class="nx">version</span> <span class="mi">300</span> <span class="nx">es</span>
+<span class="nx">precision</span> <span class="nx">highp</span> <span class="nx">float</span><span class="p">;</span>
+<span class="k">in</span> <span class="nx">vec2</span> <span class="nx">v_texCoord</span><span class="p">;</span>
+<span class="nx">uniform</span> <span class="nx">sampler2D</span> <span class="nx">u_texture</span><span class="p">;</span>
+<span class="nx">out</span> <span class="nx">vec4</span> <span class="nx">outColor</span><span class="p">;</span>
+<span class="k">void</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">vec4</span> <span class="nx">col</span> <span class="o">=</span> <span class="nf">texture</span><span class="p">(</span><span class="nx">u_texture</span><span class="p">,</span> <span class="nx">v_texCoord</span><span class="p">);</span>
+    <span class="nx">float</span> <span class="nx">val</span> <span class="o">=</span> <span class="mf">255.0</span> <span class="o">*</span> <span class="nx">col</span><span class="p">.</span><span class="nx">r</span> <span class="o">+</span> <span class="nx">col</span><span class="p">.</span><span class="nx">a</span> <span class="o">*</span> <span class="mf">255.0</span> <span class="o">*</span> <span class="nf">pow</span><span class="p">(</span><span class="mf">2.0</span><span class="p">,</span> <span class="mf">8.0</span><span class="p">);</span>
+    <span class="nx">outColor</span> <span class="o">=</span> <span class="nf">vec4</span><span class="p">(</span><span class="nf">vec3</span><span class="p">(</span><span class="nx">val</span> <span class="o">/</span> <span class="mf">65535.0</span><span class="p">),</span> <span class="mf">1.0</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>纹理加载</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="nf">glBindTexture</span><span class="p">(</span><span class="nx">GL_TEXTURE_2D</span><span class="p">,</span> <span class="nx">m_uTextureId</span><span class="p">);</span>
+
+    <span class="nf">glTexImage2D </span><span class="p">(</span> <span class="nx">GL_TEXTURE_2D</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">GL_LUMINANCE_ALPHA</span><span class="p">,</span> <span class="nx">m_RenderImage</span><span class="p">.</span><span class="nx">width</span><span class="p">,</span> <span class="nx">m_RenderImage</span><span class="p">.</span><span class="nx">height</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">GL_LUMINANCE_ALPHA</span><span class="p">,</span> <span class="nx">GL_UNSIGNED_BYTE</span><span class="p">,</span> <span class="nx">m_RenderImage</span><span class="p">.</span><span class="nx">ppPlane</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+
+    <span class="nf">glTexParameterf</span><span class="p">(</span><span class="nx">GL_TEXTURE_2D</span><span class="p">,</span> <span class="nx">GL_TEXTURE_WRAP_S</span><span class="p">,</span> <span class="nx">GL_CLAMP_TO_EDGE</span><span class="p">);</span>
+    <span class="nf">glTexParameterf</span><span class="p">(</span><span class="nx">GL_TEXTURE_2D</span><span class="p">,</span> <span class="nx">GL_TEXTURE_WRAP_T</span><span class="p">,</span> <span class="nx">GL_CLAMP_TO_EDGE</span><span class="p">);</span>
+    <span class="nf">glTexParameteri</span><span class="p">(</span><span class="nx">GL_TEXTURE_2D</span><span class="p">,</span> <span class="nx">GL_TEXTURE_MIN_FILTER</span><span class="p">,</span> <span class="nx">GL_LINEAR</span><span class="p">);</span>
+    <span class="nf">glTexParameteri</span><span class="p">(</span><span class="nx">GL_TEXTURE_2D</span><span class="p">,</span> <span class="nx">GL_TEXTURE_MAG_FILTER</span><span class="p">,</span> <span class="nx">GL_LINEAR</span><span class="p">);</span>
+    <span class="nf">glBindTexture</span><span class="p">(</span><span class="nx">GL_TEXTURE_2D</span><span class="p">,</span> <span class="nx">GL_NONE</span><span class="p">);</span>
 </code></pre></div></div>]]></content><author><name>Kevin</name></author><category term="graphic" /><summary type="html"><![CDATA[1.简介]]></summary></entry><entry><title type="html">Cobalt</title><link href="http://localhost:4000/blog/jekyll/2013-03-02-cobalt.html" rel="alternate" type="text/html" title="Cobalt" /><published>2013-03-02T00:00:00+08:00</published><updated>2013-03-02T00:00:00+08:00</updated><id>http://localhost:4000/blog/jekyll/cobalt</id><content type="html" xml:base="http://localhost:4000/blog/jekyll/2013-03-02-cobalt.html"><![CDATA[<h1 id="starboard">Starboard</h1>
 
 <p>在 Cobalt 的上下文中，Starboard 是一个重要的概念。让我为你解释一下：</p>
