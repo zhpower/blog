@@ -1,0 +1,18 @@
+title Camera
+
+participant "Lens\n镜头" as Lens
+participant "Image sensor\n图像传感器" as Image sensor
+participant "ISP(Image signal processor)\n图像信号处理器" as ISP
+
+participant [
+participant "外设\nUSB,HDMI,WIFI" as 外设
+
+rbox over Lens:收集光线\n并将其聚焦到图像传感器上
+[->Lens: 光线
+Lens -> Image sensor: 光信号
+rbox over Image sensor:将光信号转换为电信号
+Image sensor -> ISP: 电信号
+
+rbox over ISP:处理图像传感器输出的原始数据，\n进行颜色校正、白平衡、降噪等处理
+
+ISP -> 外设:图像数据

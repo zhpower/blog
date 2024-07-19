@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html lang="en" >
     <head><meta charset="UTF-8">
-<meta content="text/html; charset=utf-8" http-equiv="Content-Type"><title>Jekyll Gitbook Theme · 学习笔记</title><meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type"><title>Camera · 学习笔记</title><meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta name="description" content="Build Jekyll site with the GitBook style.
 "><meta name="generator" content="Jekyll (using style of GitBook 3.2.3)"><meta name="author" content="kevin_zh"><link rel="stylesheet" href="/blog/assets/gitbook/style.css">
 <link rel="stylesheet" href="/blog/assets/gitbook/gitbook-plugin-back-to-top-button/plugin.css">
@@ -25,9 +25,11 @@
 
 
 
+            <link rel="prev" href="/blog/jekyll/2022-05-02-App_misc.html" />
+        
 
         
-            <link rel="next" href="/blog/jekyll/2000-04-27-linux_grpahic_architecture.html" />
+            <link rel="next" href="/blog/jekyll/2024-04-27-git.html" />
         
     </head>
     <body>
@@ -60,7 +62,7 @@
         </div>
         <ul class="summary">
             
-            <li class="chapter active" data-level="1.1" data-path="/blog">
+            <li class="chapter" data-level="1.1" data-path="/blog">
             
                 <a href="/blog/" onclick="pageScrollToTop(this)">
                     学习笔记
@@ -250,12 +252,15 @@
                         </li>
                     
                         
-                        <li class="chapter" data-level="1.1" data-path="/blog/jekyll/2024-03-22-Camera.html">
+                        <li class="chapter active" data-level="1.2" data-path="/blog/jekyll/2024-03-22-Camera.html">
                         
                             <a href="/blog/jekyll/2024-03-22-Camera.html" onclick="pageScrollToTop(this)">
                                 Camera
                             </a>
                             
+                                
+                                    <ul><li><a href="#功能模块" onclick="mobilePageScrollToAnchor(this)" >功能模块</a></li><li><a href="#处理流程" onclick="mobilePageScrollToAnchor(this)" >处理流程</a></li><li><a href="#参考资料" onclick="mobilePageScrollToAnchor(this)" >参考资料</a></li></ul>
+
                                 
                             
                         </li>
@@ -286,7 +291,7 @@
                     <h1>
                         <i class="fa fa-circle-o-notch fa-spin"></i>
                         
-                            <a href="." >Jekyll Gitbook Theme</a>
+                            <a href="." >Camera</a>
                         
                     </h1>
                 </div>
@@ -299,209 +304,118 @@
             <div class="search-noresults">
                 <section class="normal markdown-section">
                     
-                        <h1 id="">Jekyll Gitbook Theme</h1>
+                        <h1 id="/jekyll/Camera">Camera</h1>
                     
 
-                    Make Jelly site have a GitBook look!
+                    <p>相机（Camera）的功能模块和处理流程是一个复杂且精细的系统，涉及硬件和软件多个方面。以下是对相机功能模块和处理流程的详细介绍：</p>
 
-## Demo
+<h3 id="功能模块">功能模块</h3>
 
-Live demo on Github Pages: [https://sighingnow.github.io/jekyll-gitbook](https://sighingnow.github.io/jekyll-gitbook)
+<ol>
+  <li><strong>镜头（Lens）</strong>
+    <ul>
+      <li><strong>作用</strong>：收集光线并将其聚焦到图像传感器上。</li>
+      <li><strong>组成</strong>：通常包括多个玻璃或塑料镜片，可能具有光学防抖（OIS）和自动对焦（AF）功能。</li>
+    </ul>
+  </li>
+  <li><strong>图像传感器（Image Sensor）</strong>
+    <ul>
+      <li><strong>作用</strong>：将光信号转换为电信号。</li>
+      <li><strong>类型</strong>：常见的有CCD（Charge-Coupled Device）和CMOS（Complementary Metal-Oxide-Semiconductor）传感器。</li>
+      <li><strong>参数</strong>：包括分辨率、感光度（ISO）、动态范围等。</li>
+    </ul>
+  </li>
+  <li><strong>图像信号处理器（ISP - Image Signal Processor）</strong>
+    <ul>
+      <li><strong>作用</strong>：处理图像传感器输出的原始数据，进行颜色校正、白平衡、降噪等处理。</li>
+      <li><strong>功能</strong>：包括自动曝光（AE）、自动白平衡（AWB）、自动对焦（AF）、降噪（Denoising）、去马赛克（Demosaicing）等。</li>
+    </ul>
+  </li>
+  <li><strong>控制器（Controller）</strong>
+    <ul>
+      <li><strong>作用</strong>：控制相机的各种操作，如快门速度、光圈大小、ISO设置等。</li>
+      <li><strong>组成</strong>：通常包含微处理器或嵌入式控制单元。</li>
+    </ul>
+  </li>
+  <li><strong>存储器（Memory）</strong>
+    <ul>
+      <li><strong>作用</strong>：存储图像数据、固件和临时处理数据。</li>
+      <li><strong>类型</strong>：包括内置存储和可扩展的存储卡（如SD卡）。</li>
+    </ul>
+  </li>
+  <li><strong>电源管理模块（Power Management）</strong>
+    <ul>
+      <li><strong>作用</strong>：为相机各个组件提供电力，管理电池的充放电。</li>
+    </ul>
+  </li>
+  <li><strong>接口模块（Interface）</strong>
+    <ul>
+      <li><strong>作用</strong>：提供相机与外部设备的连接接口，如USB、HDMI、Wi-Fi、蓝牙等。</li>
+    </ul>
+  </li>
+</ol>
 
-[![Jekyll Themes](https://img.shields.io/badge/featured%20on-JekyllThemes-red.svg)](https://jekyll-themes.com/jekyll-gitbook/)
+<p><img src="/blog/assets/camera/camera.svg" alt="" /></p>
 
-## Why Jekyll with GitBook
+<h3 id="处理流程">处理流程</h3>
 
-GitBook is an amazing frontend style to present and organize contents (such as book chapters
-and blogs) on Web. The typical to deploy GitBook at [Github Pages][1]
-is building HTML files locally and then push to Github repository, usually to the `gh-pages`
-branch. It's quite annoying to repeat such workload and make it hard for people do version
-control via git for when there are generated HTML files to be staged in and out.
+<ol>
+  <li><strong>图像捕获（Image Capture）</strong>
+    <ul>
+      <li><strong>过程</strong>：光线通过镜头到达图像传感器，传感器将光信号转换为电信号。</li>
+      <li><strong>注意事项</strong>：对焦、曝光和白平衡的调整。</li>
+    </ul>
+  </li>
+  <li><strong>信号读取（Signal Readout）</strong>
+    <ul>
+      <li><strong>过程</strong>：图像传感器将电信号传递给图像信号处理器（ISP）。</li>
+      <li><strong>注意事项</strong>：确保数据的完整性和准确性。</li>
+    </ul>
+  </li>
+  <li><strong>图像处理（Image Processing）</strong>
+    <ul>
+      <li><strong>去马赛克（Demosaicing）</strong>：将传感器输出的拜耳图像转换为全彩图像。</li>
+      <li><strong>降噪（Denoising）</strong>：减少图像中的噪点。</li>
+      <li><strong>白平衡（White Balance）</strong>：校正图像的色温。</li>
+      <li><strong>颜色校正（Color Correction）</strong>：调整图像的色彩表现。</li>
+      <li><strong>伽马校正（Gamma Correction）</strong>：调整图像的亮度和对比度。</li>
+    </ul>
+  </li>
+  <li><strong>图像压缩（Image Compression）</strong>
+    <ul>
+      <li><strong>过程</strong>：将处理过的图像数据压缩成JPEG、PNG等格式以节省存储空间。</li>
+      <li><strong>技术</strong>：使用各种压缩算法，如JPEG压缩、HEIF压缩等。</li>
+    </ul>
+  </li>
+  <li><strong>图像存储（Image Storage）</strong>
+    <ul>
+      <li><strong>过程</strong>：将压缩后的图像数据存储在内置存储或存储卡上。</li>
+      <li><strong>注意事项</strong>：数据的存储位置、存储格式和文件管理。</li>
+    </ul>
+  </li>
+  <li><strong>显示和预览（Display and Preview）</strong>
+    <ul>
+      <li><strong>过程</strong>：将处理后的图像实时显示在取景器或显示屏上，供用户预览和构图。</li>
+      <li><strong>功能</strong>：包括实时预览、直方图显示、对焦峰值显示等。</li>
+    </ul>
+  </li>
+  <li><strong>图像传输（Image Transfer）</strong>
+    <ul>
+      <li><strong>过程</strong>：通过USB、Wi-Fi、蓝牙等接口将图像传输到外部设备，如计算机、手机或云存储。</li>
+      <li><strong>注意事项</strong>：传输速度和数据完整性。</li>
+    </ul>
+  </li>
+</ol>
 
-This theme takes style definition out of generated GitBook site and provided the template
-for Jekyll to rendering markdown documents to HTML, thus the whole site can be deployed
-to [Github Pages][1] without generating and uploading HTML bundle every time when there are
-changes to the original repo.
+<h3 id="参考资料">参考资料</h3>
 
-## How to Get Started
+<ul>
+  <li><a href="https://developer.android.com/reference/android/hardware/Camera">Camera Hardware and Software Architecture</a></li>
+  <li><a href="https://www.cambridgeincolour.com/tutorials/camera-sensor-size.htm">Digital Camera Workflow and Processing</a></li>
+  <li><a href="https://www.digikey.com/en/articles/image-signal-processing-in-digital-cameras">Image Signal Processing in Digital Cameras</a></li>
+</ul>
 
-This theme can be used just as other [Jekyll themes][1] and support [remote theme][12],
-see [the official guide][13] as well.
-
-You can introduce this jekyll theme into your own site by either
-
-- [Fork][3] this repository and add your markdown posts to the `_posts` folder.
-- Use as a remote theme in your [`_config.yml`][14](just like what we do for this
-  site itself),
-
-```yaml
-remote_theme: sighingnow/jekyll-gitbook
-```
-
-### Deploy Locally with Jekyll Serve
-
-This theme can be ran locally using Ruby and Gemfiles.
-
-[Testing your GitHub Pages site locally with Jekyll](https://docs.github.com/en/pages/setting-up-a-github-pages-site-with-jekyll/testing-your-github-pages-site-locally-with-jekyll) - GitHub
-
-## Full-text search
-
-The search functionality in jekyll-gitbook theme is powered by the [gitbook-plugin-search-pro][5] plugin and is enabled by default.
-
-[https://sighingnow.github.io/jekyll-gitbook/?q=generated](https://sighingnow.github.io/jekyll-gitbook/?q=generated)
-
-## Code highlight
-
-The code highlight style is configurable the following entry in `_config.yaml`:
-
-```yaml
-syntax_highlighter_style: colorful
-```
-
-The default code highlight style is `colorful`, the full supported styles can be found from [the rouge repository][6]. Customized
-style can be added to [./assets/gitbook/rouge/](./assets/gitbook/rouge/).
-
-## How to generate TOC
-
-The jekyll-gitbook theme leverages [jekyll-toc][4] to generate the *Contents* for the page.
-The TOC feature is not enabled by default. To use the TOC feature, modify the TOC
-configuration in `_config.yml`:
-
-```yaml
-toc:
-    enabled: true
-    h_min: 1
-    h_max: 3
-```
-
-## Google Analytics, etc.
-
-The jekyll-gitboook theme supports embedding the [Google Analytics][7], [CNZZ][8] and [Application Insights][9] website analytical tools with the following
-minimal configuration in `_config.yaml`:
-
-```yaml
-tracker:
-  google_analytics: "<YOUR GOOGLE ANALYTICS KEY, e.g, UA-xxxxxx-x>"
-```
-
-Similarly, CNZZ can be added with the following configuration in `_config.yaml`
-
-```yaml
-tracker:
-  cnzz: "<YOUR CNZZ ANALYTICS KEY, e.g., xxxxxxxx>"
-```
-
-Application Insights can be added with the following configuration in `_config.yaml`
-
-```yaml
-tracker:
-  application_insights: "<YOUR APPLICATION INSIGHTS CONNECTION STRING>"
-```
-
-## Disqus comments
-
-[Disqus](https://disqus.com/) comments can be enabled by adding the following configuration in `_config.yaml`:
-
-```yaml
-disqushandler: "<YOUR DISQUS SHORTNAME>"
-```
-
-## Extra StyleSheet or Javascript elements
-
-You can add extra CSS or JavaScript references using configuration collections:
-
-- extra_css: for additional style sheets. If the url does not start by http, the path must be relative to the root of the site, without a starting `/`.
-- extra_header_js: for additional scripts to be included in the `<head>` tag, after the `extra_css` has been added. If the url does not start by http, the path must be relative to the root of the site, without a starting `/`.
-- extra_footer_js: for additional scripts to be included at the end of the HTML document, just before the site tracking script. If the url does not start by http, the path must be relative to the root of the site, without a starting `/`.
-
-## Customizing font settings
-
-The fonts can be customized by modifying the `.book.font-family-0` and `.book.font-family-1` entry in [`./assets/gitbook/custom.css`][10],
-
-```css
-.book.font-family-0 {
-    font-family: Georgia, serif;
-}
-.book.font-family-1 {
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-}
-```
-
-## Tips, Warnings and Dangers blocks
-
-The jekyll-gitbook theme supports customized kramdown attributes (`{: .block-tip }`, `{: .block-warning }`,
-`{: .block-danger }`) like that displayed in [the discord.js website][11]. The marker can be used like
-
-```markdown
-> ##### TIP
->
-> This guide is last tested with @napi-rs/canvas^0.1.20, so make sure you have
-> this or a similar version after installation.
-{: .block-tip }
-```
-
-Rendered page can be previewed from
-
-[https://sighingnow.github.io/jekyll-gitbook/jekyll/2022-06-30-tips_warnings_dangers.html](https://sighingnow.github.io/jekyll-gitbook/jekyll/2022-06-30-tips_warnings_dangers.html)
-
-## Cover image inside pages
-
-The jekyll-gitbook theme supports adding a cover image to a specific page by adding
-a `cover` field to the page metadata:
-
-```diff
-  ---
-  title: Page with cover image
-  author: Tao He
-  date: 2022-05-24
-  category: Jekyll
-  layout: post
-+ cover: /assets/jekyll-gitbook/dinosaur.gif
-  ---
-```
-
-The effect can be previewed from
-
-[https://sighingnow.github.io/jekyll-gitbook/jekyll/2022-05-24-page_cover.html](https://sighingnow.github.io/jekyll-gitbook/jekyll/2022-05-24-page_cover.html)
-
-## Diagrams with mermaid.js
-
-This jekyll-theme supports [mermaid.js](https://mermaid.js.org/) to render diagrams
-in markdown.
-
-To enable the mermaid support, you need to set `mermaid: true` in the front matter
-of your post.
-
-```markdown
----
-mermaid: true
----
-```
-
-The example can be previewed from
-
-[https://sighingnow.github.io/jekyll-gitbook/jekyll/2023-08-31-mermaid.html](https://sighingnow.github.io/jekyll-gitbook/jekyll/2023-08-31-mermaid.html)
-
-## License
-
-This work is open sourced under the Apache License, Version 2.0.
-
-Copyright 2019 Tao He.
-
-[1]: https://pages.github.com
-[2]: https://pages.github.com/themes
-[3]: https://github.com/sighingnow/jekyll-gitbook/fork
-[4]: https://github.com/allejo/jekyll-toc
-[5]: https://github.com/gitbook-plugins/gitbook-plugin-search-pro
-[6]: https://github.com/rouge-ruby/rouge/tree/master/lib/rouge/themes
-[7]: https://analytics.google.com/analytics/web/
-[8]: https://www.cnzz.com/
-[9]: https://docs.microsoft.com/en-us/azure/azure-monitor/app/app-insights-overview
-[10]: https://github.com/sighingnow/jekyll-gitbook/blob/master/gitbook/custom.css
-[11]: https://discordjs.guide/popular-topics/canvas.html#setting-up-napi-rs-canvas
-[12]: https://rubygems.org/gems/jekyll-remote-theme
-[13]: https://docs.github.com/en/pages/setting-up-a-github-pages-site-with-jekyll/adding-a-theme-to-your-github-pages-site-using-jekyll
-[14]: https://github.com/sighingnow/jekyll-gitbook/blob/master/_config.yml
+<p>通过这些模块和流程的协同工作，相机能够高效、准确地捕捉和处理图像，提供高质量的照片和视频。</p>
 </section>
             </div><div class="search-results">
     <div class="has-results">
@@ -534,6 +448,38 @@ window.MathJax = {
 
 <!-- introduce per-page mermaid support -->
 
+    <script>
+    function render_mermaid() {
+        mermaid.initialize({
+            startOnLoad: false,
+            theme: "default",
+        });
+        window.mermaid.init(undefined, document.querySelectorAll('.language-mermaid'));
+    }
+
+    function initialize_mermaid() {
+        if (document.readyState === "loading") {
+            // Loading hasn't finished yet
+            document.addEventListener("DOMContentLoaded", render_mermaid);
+        } else {
+            // `DOMContentLoaded` has already fired
+            render_mermaid();
+        }
+    }
+
+    if (window.mermaid_script && window.mermaid) {
+        initialize_mermaid();
+    } else {
+        window.mermaid_script = document.createElement("script");
+        mermaid_script.onload = initialize_mermaid;
+        document.head.appendChild(mermaid_script);
+        mermaid_script.defer = true;
+        mermaid_script.id = 'mermaid-script';
+        mermaid_script.src = '/blog/assets/gitbook/mermaid.min.js';
+    }
+</script>
+
+
 
 <!-- introduce mathjax support -->
 <script>
@@ -557,12 +503,14 @@ window.MathJax = {
     }
 </script>
 
-<a href="/blog/" class="navigation navigation-pre navigation-unique">
-                        <i class="fa"></i>
-                    </a>
+
+                        <a href="/blog/jekyll/2022-05-02-App_misc.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page: linux dev misc">
+                            <i class="fa fa-angle-left"></i>
+                        </a>
+                    
 
                     
-                        <a href="/blog/jekyll/2000-04-27-linux_grpahic_architecture.html" class="navigation navigation-next navigation-unique" aria-label="Next page: Linux graphic架构">
+                        <a href="/blog/jekyll/2024-04-27-git.html" class="navigation navigation-next navigation-unique" aria-label="Next page: Git">
                             <i class="fa fa-angle-right"></i>
                         </a>
                     
@@ -578,14 +526,12 @@ window.MathJax = {
         "level": "1.1",
         "depth": 1,
         
-
-        
         "next": {
-            "title": "Linux graphic架构",
+            "title": "Git",
             "level": "1.2",
             "depth": 1,
-            "path": "_posts/2024-05-01-linux_grpahic_architecture.md",
-            "ref": "_posts/2024-05-01-linux_grpahic_architecture.md",
+            "path": "_posts/2024-04-01-git.md",
+            "ref": "_posts/2024-04-01-git.md",
             "articles": []
         },
         
@@ -677,8 +623,8 @@ window.MathJax = {
         "gitbook": "*"
     },
     "file": {
-        "path": "README.md.org",
-        "mtime": "",
+        "path": "_posts/2000-03-22-Camera.md",
+        "mtime": "2024-03-22 00:00:00 +0800",
         "type": "markdown"
     },
     "gitbook": {
