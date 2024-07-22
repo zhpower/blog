@@ -359,15 +359,24 @@
 <h2 id="变量">变量</h2>
 
 <p><strong>uniform变量</strong></p>
-
+<pre><code class="language-mermaid">graph LR;
+    App--&gt;Vertext_Shader;
+    Vertext_Shader--&gt;Frag_Shader;
+</code></pre>
 <p>uniform变量是外部application程序传递给（vertex和fragment）shader的变量。因此它是application通过函数glUniform**（）函数赋值的。在（vertex和fragment）shader程序内部，uniform变量就像是C语言里面的常量（const ），它不能被shader程序修改。</p>
 
 <p><strong>attribute变量</strong></p>
 
+<pre><code class="language-mermaid">graph LR;
+    App--&gt;Vertext_Shader;
+</code></pre>
 <p>attribute变量是只能在vertex shader中使用的变量。它不能在fragment shader中声明attribute变量，也不能被fragment shader中使用。一般用attribute变量来表示一些顶点的数据，如：顶点坐标，法线，纹理坐标，顶点颜色等。在application中，一般用函数glBindAttribLocation（）来绑定每个attribute变量的位置，然后用函数glVertexAttribPointer（）为每个attribute变量赋值。</p>
 
 <p><strong>varying变量</strong></p>
 
+<pre><code class="language-mermaid">graph LR;    
+    Vertext_Shader--&gt;Frag_Shader;
+</code></pre>
 <p>varying变量是vertex和fragment shader之间做数据传递用的。一般vertex shader修改varying变量的值，然后fragment shader使用该varying变量的值。因此varying变量在vertex和fragment shader二者之间的声明必须是一致的。application不能使用此变量。</p>
 
 <h1 id="资源释放">资源释放</h1>
@@ -386,77 +395,77 @@
   </li>
 </ul>
 
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="k">const</span> <span class="o">*</span><span class="n">argv</span><span class="p">[]){</span>
-    <span class="n">init_dev</span><span class="p">();</span>
-    <span class="n">egl_Init</span><span class="p">();</span>
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">int</span> <span class="nf">main</span><span class="p">(</span><span class="nx">int</span> <span class="nx">argc</span><span class="p">,</span> <span class="nx">char</span> <span class="kd">const</span> <span class="o">*</span><span class="nx">argv</span><span class="p">[]){</span>
+    <span class="nf">init_dev</span><span class="p">();</span>
+    <span class="nf">egl_Init</span><span class="p">();</span>
 
-    <span class="n">dmabuf_fd</span> <span class="o">=</span> <span class="n">allocate_dmabuf</span><span class="p">(</span><span class="mi">1920</span><span class="o">*</span><span class="mi">1080</span><span class="o">*</span><span class="mi">4</span><span class="p">);</span>
-    <span class="n">textureid</span> <span class="o">=</span> <span class="n">create_texture_for_dmabuf</span><span class="p">(</span><span class="n">dmabuf_fd</span><span class="p">,</span> <span class="mi">1920</span><span class="p">,</span> <span class="mi">1080</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">eglImg</span><span class="p">);</span>
+    <span class="nx">dmabuf_fd</span> <span class="o">=</span> <span class="nf">allocate_dmabuf</span><span class="p">(</span><span class="mi">1920</span><span class="o">*</span><span class="mi">1080</span><span class="o">*</span><span class="mi">4</span><span class="p">);</span>
+    <span class="nx">textureid</span> <span class="o">=</span> <span class="nf">create_texture_for_dmabuf</span><span class="p">(</span><span class="nx">dmabuf_fd</span><span class="p">,</span> <span class="mi">1920</span><span class="p">,</span> <span class="mi">1080</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">eglImg</span><span class="p">);</span>
 
-    <span class="n">glGenFramebuffers</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">FBO2</span><span class="p">);</span>
-    <span class="n">glBindFramebuffer</span><span class="p">(</span><span class="n">GL_FRAMEBUFFER</span><span class="p">,</span> <span class="n">FBO2</span><span class="p">);</span>
-    <span class="n">glBindTexture</span><span class="p">(</span><span class="n">GL_TEXTURE_EXTERNAL_OES</span><span class="p">,</span> <span class="n">textureid</span><span class="p">);</span>
-    <span class="n">glFramebufferTexture2D</span><span class="p">(</span><span class="n">GL_FRAMEBUFFER</span><span class="p">,</span> <span class="n">GL_COLOR_ATTACHMENT0</span><span class="p">,</span> <span class="n">GL_TEXTURE_EXTERNAL_OES</span><span class="p">,</span> <span class="n">textureid</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">glCheckFramebufferStatus</span><span class="p">(</span><span class="n">GL_FRAMEBUFFER</span><span class="p">)</span> <span class="o">!=</span> <span class="n">GL_FRAMEBUFFER_COMPLETE</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">assert</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="nf">glGenFramebuffers</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">FBO2</span><span class="p">);</span>
+    <span class="nf">glBindFramebuffer</span><span class="p">(</span><span class="nx">GL_FRAMEBUFFER</span><span class="p">,</span> <span class="nx">FBO2</span><span class="p">);</span>
+    <span class="nf">glBindTexture</span><span class="p">(</span><span class="nx">GL_TEXTURE_EXTERNAL_OES</span><span class="p">,</span> <span class="nx">textureid</span><span class="p">);</span>
+    <span class="nf">glFramebufferTexture2D</span><span class="p">(</span><span class="nx">GL_FRAMEBUFFER</span><span class="p">,</span> <span class="nx">GL_COLOR_ATTACHMENT0</span><span class="p">,</span> <span class="nx">GL_TEXTURE_EXTERNAL_OES</span><span class="p">,</span> <span class="nx">textureid</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+    <span class="k">if </span><span class="p">(</span><span class="nf">glCheckFramebufferStatus</span><span class="p">(</span><span class="nx">GL_FRAMEBUFFER</span><span class="p">)</span> <span class="o">!=</span> <span class="nx">GL_FRAMEBUFFER_COMPLETE</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nf">assert</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
     <span class="p">}</span>
     
     <span class="c1">// 得到当前附加纹理ID为 1</span>
-    <span class="n">glGetFramebufferAttachmentParameteriv</span><span class="p">(</span><span class="n">GL_FRAMEBUFFER</span><span class="p">,</span> <span class="n">GL_COLOR_ATTACHMENT0</span><span class="p">,</span> <span class="n">GL_FRAMEBUFFER_ATTACHMENT_OBJECT_NAME</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">text</span><span class="p">);</span>
+    <span class="nf">glGetFramebufferAttachmentParameteriv</span><span class="p">(</span><span class="nx">GL_FRAMEBUFFER</span><span class="p">,</span> <span class="nx">GL_COLOR_ATTACHMENT0</span><span class="p">,</span> <span class="nx">GL_FRAMEBUFFER_ATTACHMENT_OBJECT_NAME</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">text</span><span class="p">);</span>
 
-    <span class="n">free_dmabuf</span><span class="p">(</span><span class="n">dmabuf_fd</span><span class="p">);</span>
-    <span class="n">glDeleteTextures</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">textureid</span><span class="p">);</span>
-    <span class="n">eglDestroyImageKHR</span><span class="p">(</span><span class="n">g_EGLDisplay</span><span class="p">,</span> <span class="n">eglImg</span><span class="p">);</span>
+    <span class="nf">free_dmabuf</span><span class="p">(</span><span class="nx">dmabuf_fd</span><span class="p">);</span>
+    <span class="nf">glDeleteTextures</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">textureid</span><span class="p">);</span>
+    <span class="nf">eglDestroyImageKHR</span><span class="p">(</span><span class="nx">g_EGLDisplay</span><span class="p">,</span> <span class="nx">eglImg</span><span class="p">);</span>
     <span class="c1">// 完成后 /sys/kernel/debug/dmabuf/bufferinfo 中dmabuf已经释放</span>
 
     <span class="c1">// 得到当前附加纹理ID为 0</span>
-    <span class="n">glGetFramebufferAttachmentParameteriv</span><span class="p">(</span><span class="n">GL_FRAMEBUFFER</span><span class="p">,</span> <span class="n">GL_COLOR_ATTACHMENT0</span><span class="p">,</span> <span class="n">GL_FRAMEBUFFER_ATTACHMENT_OBJECT_NAME</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">text</span><span class="p">);</span>
-    <span class="n">glDeleteFramebuffers</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">FBO2</span><span class="p">);</span>
-    <span class="n">eglDestroyContext</span><span class="p">(</span><span class="n">g_EGLDisplay</span><span class="p">,</span> <span class="n">g_EGLContext</span><span class="p">);</span>
+    <span class="nf">glGetFramebufferAttachmentParameteriv</span><span class="p">(</span><span class="nx">GL_FRAMEBUFFER</span><span class="p">,</span> <span class="nx">GL_COLOR_ATTACHMENT0</span><span class="p">,</span> <span class="nx">GL_FRAMEBUFFER_ATTACHMENT_OBJECT_NAME</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">text</span><span class="p">);</span>
+    <span class="nf">glDeleteFramebuffers</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">FBO2</span><span class="p">);</span>
+    <span class="nf">eglDestroyContext</span><span class="p">(</span><span class="nx">g_EGLDisplay</span><span class="p">,</span> <span class="nx">g_EGLContext</span><span class="p">);</span>
 
     <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
 </code></pre></div></div>
 
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="k">const</span> <span class="o">*</span><span class="n">argv</span><span class="p">[]){</span>
-    <span class="n">init_dev</span><span class="p">();</span>
-    <span class="n">egl_Init</span><span class="p">();</span>
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">int</span> <span class="nf">main</span><span class="p">(</span><span class="nx">int</span> <span class="nx">argc</span><span class="p">,</span> <span class="nx">char</span> <span class="kd">const</span> <span class="o">*</span><span class="nx">argv</span><span class="p">[]){</span>
+    <span class="nf">init_dev</span><span class="p">();</span>
+    <span class="nf">egl_Init</span><span class="p">();</span>
 
-    <span class="n">dmabuf_fd1</span> <span class="o">=</span> <span class="n">allocate_dmabuf</span><span class="p">(</span><span class="mi">1920</span><span class="o">*</span><span class="mi">1080</span><span class="o">*</span><span class="mi">4</span><span class="p">);</span>
-    <span class="n">textureid1</span> <span class="o">=</span> <span class="n">create_texture_for_dmabuf</span><span class="p">(</span><span class="n">dmabuf_fd1</span><span class="p">,</span> <span class="mi">1920</span><span class="p">,</span> <span class="mi">1080</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">eglImg1</span><span class="p">);</span>
+    <span class="nx">dmabuf_fd1</span> <span class="o">=</span> <span class="nf">allocate_dmabuf</span><span class="p">(</span><span class="mi">1920</span><span class="o">*</span><span class="mi">1080</span><span class="o">*</span><span class="mi">4</span><span class="p">);</span>
+    <span class="nx">textureid1</span> <span class="o">=</span> <span class="nf">create_texture_for_dmabuf</span><span class="p">(</span><span class="nx">dmabuf_fd1</span><span class="p">,</span> <span class="mi">1920</span><span class="p">,</span> <span class="mi">1080</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">eglImg1</span><span class="p">);</span>
 
-    <span class="n">dmabuf_fd2</span> <span class="o">=</span> <span class="n">allocate_dmabuf</span><span class="p">(</span><span class="mi">1920</span><span class="o">*</span><span class="mi">1080</span><span class="o">*</span><span class="mi">4</span><span class="p">);</span>
-    <span class="n">textureid2</span> <span class="o">=</span> <span class="n">create_texture_for_dmabuf</span><span class="p">(</span><span class="n">dmabuf_fd2</span><span class="p">,</span> <span class="mi">1920</span><span class="p">,</span> <span class="mi">1080</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">eglImg2</span><span class="p">);</span>
+    <span class="nx">dmabuf_fd2</span> <span class="o">=</span> <span class="nf">allocate_dmabuf</span><span class="p">(</span><span class="mi">1920</span><span class="o">*</span><span class="mi">1080</span><span class="o">*</span><span class="mi">4</span><span class="p">);</span>
+    <span class="nx">textureid2</span> <span class="o">=</span> <span class="nf">create_texture_for_dmabuf</span><span class="p">(</span><span class="nx">dmabuf_fd2</span><span class="p">,</span> <span class="mi">1920</span><span class="p">,</span> <span class="mi">1080</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">eglImg2</span><span class="p">);</span>
 
-    <span class="n">glGenFramebuffers</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">FBO1</span><span class="p">);</span>
-    <span class="n">glBindFramebuffer</span><span class="p">(</span><span class="n">GL_FRAMEBUFFER</span><span class="p">,</span> <span class="n">FBO1</span><span class="p">);</span>
-    <span class="n">glBindTexture</span><span class="p">(</span><span class="n">GL_TEXTURE_EXTERNAL_OES</span><span class="p">,</span> <span class="n">textureid1</span><span class="p">);</span>
-    <span class="n">glFramebufferTexture2D</span><span class="p">(</span><span class="n">GL_FRAMEBUFFER</span><span class="p">,</span> <span class="n">GL_COLOR_ATTACHMENT0</span><span class="p">,</span> <span class="n">GL_TEXTURE_EXTERNAL_OES</span><span class="p">,</span> <span class="n">textureid1</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">glCheckFramebufferStatus</span><span class="p">(</span><span class="n">GL_FRAMEBUFFER</span><span class="p">)</span> <span class="o">!=</span> <span class="n">GL_FRAMEBUFFER_COMPLETE</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">assert</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="nf">glGenFramebuffers</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">FBO1</span><span class="p">);</span>
+    <span class="nf">glBindFramebuffer</span><span class="p">(</span><span class="nx">GL_FRAMEBUFFER</span><span class="p">,</span> <span class="nx">FBO1</span><span class="p">);</span>
+    <span class="nf">glBindTexture</span><span class="p">(</span><span class="nx">GL_TEXTURE_EXTERNAL_OES</span><span class="p">,</span> <span class="nx">textureid1</span><span class="p">);</span>
+    <span class="nf">glFramebufferTexture2D</span><span class="p">(</span><span class="nx">GL_FRAMEBUFFER</span><span class="p">,</span> <span class="nx">GL_COLOR_ATTACHMENT0</span><span class="p">,</span> <span class="nx">GL_TEXTURE_EXTERNAL_OES</span><span class="p">,</span> <span class="nx">textureid1</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+    <span class="k">if </span><span class="p">(</span><span class="nf">glCheckFramebufferStatus</span><span class="p">(</span><span class="nx">GL_FRAMEBUFFER</span><span class="p">)</span> <span class="o">!=</span> <span class="nx">GL_FRAMEBUFFER_COMPLETE</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nf">assert</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
     <span class="p">}</span>
     <span class="c1">// 注意要设置FBO 的纹理为0， 否则后面不能真正释放</span>
-    <span class="n">glFramebufferTexture2D</span><span class="p">(</span><span class="n">GL_FRAMEBUFFER</span><span class="p">,</span> <span class="n">GL_COLOR_ATTACHMENT0</span><span class="p">,</span> <span class="n">GL_TEXTURE_EXTERNAL_OES</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+    <span class="nf">glFramebufferTexture2D</span><span class="p">(</span><span class="nx">GL_FRAMEBUFFER</span><span class="p">,</span> <span class="nx">GL_COLOR_ATTACHMENT0</span><span class="p">,</span> <span class="nx">GL_TEXTURE_EXTERNAL_OES</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
 
-    <span class="n">glGenFramebuffers</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">FBO2</span><span class="p">);</span>
-    <span class="n">glBindFramebuffer</span><span class="p">(</span><span class="n">GL_FRAMEBUFFER</span><span class="p">,</span> <span class="n">FBO2</span><span class="p">);</span>
-    <span class="n">glBindTexture</span><span class="p">(</span><span class="n">GL_TEXTURE_EXTERNAL_OES</span><span class="p">,</span> <span class="n">textureid2</span><span class="p">);</span>
-    <span class="n">glFramebufferTexture2D</span><span class="p">(</span><span class="n">GL_FRAMEBUFFER</span><span class="p">,</span> <span class="n">GL_COLOR_ATTACHMENT0</span><span class="p">,</span> <span class="n">GL_TEXTURE_EXTERNAL_OES</span><span class="p">,</span> <span class="n">textureid2</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">glCheckFramebufferStatus</span><span class="p">(</span><span class="n">GL_FRAMEBUFFER</span><span class="p">)</span> <span class="o">!=</span> <span class="n">GL_FRAMEBUFFER_COMPLETE</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">assert</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="nf">glGenFramebuffers</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">FBO2</span><span class="p">);</span>
+    <span class="nf">glBindFramebuffer</span><span class="p">(</span><span class="nx">GL_FRAMEBUFFER</span><span class="p">,</span> <span class="nx">FBO2</span><span class="p">);</span>
+    <span class="nf">glBindTexture</span><span class="p">(</span><span class="nx">GL_TEXTURE_EXTERNAL_OES</span><span class="p">,</span> <span class="nx">textureid2</span><span class="p">);</span>
+    <span class="nf">glFramebufferTexture2D</span><span class="p">(</span><span class="nx">GL_FRAMEBUFFER</span><span class="p">,</span> <span class="nx">GL_COLOR_ATTACHMENT0</span><span class="p">,</span> <span class="nx">GL_TEXTURE_EXTERNAL_OES</span><span class="p">,</span> <span class="nx">textureid2</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+    <span class="k">if </span><span class="p">(</span><span class="nf">glCheckFramebufferStatus</span><span class="p">(</span><span class="nx">GL_FRAMEBUFFER</span><span class="p">)</span> <span class="o">!=</span> <span class="nx">GL_FRAMEBUFFER_COMPLETE</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nf">assert</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
     <span class="p">}</span>
 
-    <span class="n">free_dmabuf</span><span class="p">(</span><span class="n">dmabuf_fd1</span><span class="p">);</span>
-    <span class="n">glDeleteTextures</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">textureid1</span><span class="p">);</span>
-    <span class="n">eglDestroyImageKHR</span><span class="p">(</span><span class="n">g_EGLDisplay</span><span class="p">,</span> <span class="n">eglImg1</span><span class="p">);</span>
-    <span class="n">free_dmabuf</span><span class="p">(</span><span class="n">dmabuf_fd2</span><span class="p">);</span>
-    <span class="n">glDeleteTextures</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">textureid2</span><span class="p">);</span>
-    <span class="n">eglDestroyImageKHR</span><span class="p">(</span><span class="n">g_EGLDisplay</span><span class="p">,</span> <span class="n">eglImg2</span><span class="p">);</span>    
+    <span class="nf">free_dmabuf</span><span class="p">(</span><span class="nx">dmabuf_fd1</span><span class="p">);</span>
+    <span class="nf">glDeleteTextures</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">textureid1</span><span class="p">);</span>
+    <span class="nf">eglDestroyImageKHR</span><span class="p">(</span><span class="nx">g_EGLDisplay</span><span class="p">,</span> <span class="nx">eglImg1</span><span class="p">);</span>
+    <span class="nf">free_dmabuf</span><span class="p">(</span><span class="nx">dmabuf_fd2</span><span class="p">);</span>
+    <span class="nf">glDeleteTextures</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">textureid2</span><span class="p">);</span>
+    <span class="nf">eglDestroyImageKHR</span><span class="p">(</span><span class="nx">g_EGLDisplay</span><span class="p">,</span> <span class="nx">eglImg2</span><span class="p">);</span>    
     <span class="c1">// 完成后 /sys/kernel/debug/dmabuf/bufferinfo 中dmabuf已经释放</span>
 
-    <span class="n">glDeleteFramebuffers</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">FBO1</span><span class="p">);</span>
-    <span class="n">glDeleteFramebuffers</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">FBO2</span><span class="p">);</span>
+    <span class="nf">glDeleteFramebuffers</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">FBO1</span><span class="p">);</span>
+    <span class="nf">glDeleteFramebuffers</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">FBO2</span><span class="p">);</span>
 
-    <span class="n">eglDestroyContext</span><span class="p">(</span><span class="n">g_EGLDisplay</span><span class="p">,</span> <span class="n">g_EGLContext</span><span class="p">);</span>
+    <span class="nf">eglDestroyContext</span><span class="p">(</span><span class="nx">g_EGLDisplay</span><span class="p">,</span> <span class="nx">g_EGLContext</span><span class="p">);</span>
 
     <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
 </code></pre></div></div>
@@ -467,7 +476,9 @@
 
 <p><img src="/blog/assets/OpenGL/cpu_gpu.webp" alt="" /></p>
 
-<p>glWaitSync是在GPU上等待fence, glClientWaitSync是在CPU上等待fence</p>
+<p>glWaitSync是在GPU上等待fence,</p>
+
+<p>glClientWaitSync是在CPU上等待fence</p>
 
 <h1 id="纹理过滤">纹理过滤</h1>
 
@@ -509,7 +520,7 @@
 
 <p><strong>Mipmap</strong></p>
 
-<p>如何解决上面摩尔波纹的问题，GPU 引入了Mipmap(多级渐远纹理)概念。它简单来说就是一系列的纹理图像，后一个纹理图像是前一个的二分之一。</p>
+<p>如何解决上面摩尔波纹的问题，GPU 引入了Mipmap(<span style="color:#ff00ff">多级渐远纹理</span>)概念。它简单来说就是一系列的纹理图像，后一个纹理图像是前一个的二分之一。</p>
 
 <p>使用Mipmap的渲染过程：</p>
 
