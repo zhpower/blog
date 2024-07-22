@@ -804,7 +804,7 @@
 <p><strong>原理</strong>：
 无论三角形遮盖了多少个子采样点，（每个图元中）每个像素只运行一次片段着色器。片段着色器所使用的顶点数据会插值到每个像素的中心，所得到的结果颜色会被储存在每个被遮盖住的子采样点中。当颜色缓冲的子样本被图元的所有颜色填满时，所有的这些颜色将会在每个像素内部平均化。因为上图的4个采样点中只有2个被遮盖住了，<span style="color:red">这个像素的颜色将会是三角形颜色与其他两个采样点的颜色（在这里是无色）的平均值，最终形成一种淡蓝色</span>。</p>
 
-<p><a href="/blog/assets/OpenGL/anti_aliasing_rasterization_samples_filled.png">!MSAA_anti_aliasing</a></p>
+<p><img src="/blog/assets/OpenGL/anti_aliasing_rasterization_samples_filled.png" alt="MSAA_anti_aliasing" /></p>
 
 <p><strong>通过EGL设置多重采样</strong></p>
 
@@ -836,14 +836,14 @@
 
 <ol>
   <li>构建多重采样纹理：
-    <pre><code class="language-C"> glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, tex);
- glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, samples, GL_RGB, width, height, GL_TRUE);
- glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, 0);
-</code></pre>
+    <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="n">glBindTexture</span><span class="o">(</span><span class="no">GL_TEXTURE_2D_MULTISAMPLE</span><span class="o">,</span> <span class="n">tex</span><span class="o">);</span>
+ <span class="n">glTexImage2DMultisample</span><span class="o">(</span><span class="no">GL_TEXTURE_2D_MULTISAMPLE</span><span class="o">,</span> <span class="n">samples</span><span class="o">,</span> <span class="no">GL_RGB</span><span class="o">,</span> <span class="n">width</span><span class="o">,</span> <span class="n">height</span><span class="o">,</span> <span class="no">GL_TRUE</span><span class="o">);</span>
+ <span class="n">glBindTexture</span><span class="o">(</span><span class="no">GL_TEXTURE_2D_MULTISAMPLE</span><span class="o">,</span> <span class="mi">0</span><span class="o">);</span>
+</code></pre></div>    </div>
   </li>
   <li>附加到帧缓冲
-    <pre><code class="language-C"> glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D_MULTISAMPLE, tex, 0);
-</code></pre>
+    <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="n">glFramebufferTexture2D</span><span class="o">(</span><span class="no">GL_FRAMEBUFFER</span><span class="o">,</span> <span class="no">GL_COLOR_ATTACHMENT0</span><span class="o">,</span> <span class="no">GL_TEXTURE_2D_MULTISAMPLE</span><span class="o">,</span> <span class="n">tex</span><span class="o">,</span> <span class="mi">0</span><span class="o">);</span>
+</code></pre></div>    </div>
   </li>
   <li>渲染到多重采样帧缓冲</li>
 </ol>
@@ -856,34 +856,34 @@
 
 <p>glBlitFramebuffer会将一个用4个屏幕空间坐标所定义的源区域复制到一个同样用4个屏幕空间坐标所定义的目标区域中。你可能记得在帧缓冲教程中，当我们绑定到GL_FRAMEBUFFER时，我们是同时绑定了读取和绘制的帧缓冲目标。我们也可以将帧缓冲分开绑定至GL_READ_FRAMEBUFFER与GL_DRAW_FRAMEBUFFER。glBlitFramebuffer函数会根据这两个目标，决定哪个是源帧缓冲，哪个是目标帧缓冲。接下来，我们可以将图像位块传送(Blit)到默认的帧缓冲中，将多重采样的帧缓冲传送到屏幕上。</p>
 
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="n">glBindFramebuffer</span><span class="p">(</span><span class="n">GL_READ_FRAMEBUFFER</span><span class="p">,</span> <span class="n">multisampledFBO</span><span class="p">);</span>
-    <span class="n">glBindFramebuffer</span><span class="p">(</span><span class="n">GL_DRAW_FRAMEBUFFER</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
-    <span class="n">glBlitFramebuffer</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">GL_COLOR_BUFFER_BIT</span><span class="p">,</span> <span class="n">GL_NEAREST</span><span class="p">);</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="n">glBindFramebuffer</span><span class="o">(</span><span class="no">GL_READ_FRAMEBUFFER</span><span class="o">,</span> <span class="n">multisampledFBO</span><span class="o">);</span>
+    <span class="n">glBindFramebuffer</span><span class="o">(</span><span class="no">GL_DRAW_FRAMEBUFFER</span><span class="o">,</span> <span class="mi">0</span><span class="o">);</span>
+    <span class="n">glBlitFramebuffer</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="n">width</span><span class="o">,</span> <span class="n">height</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="n">width</span><span class="o">,</span> <span class="n">height</span><span class="o">,</span> <span class="no">GL_COLOR_BUFFER_BIT</span><span class="o">,</span> <span class="no">GL_NEAREST</span><span class="o">);</span>
 </code></pre></div></div>
 <p>or</p>
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
-    <span class="n">glBindFramebuffer</span><span class="p">(</span><span class="n">GL_FRAMEBUFFER</span><span class="p">,</span> <span class="n">m_FboId</span><span class="p">);</span>
-    <span class="n">glViewport</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">screenW</span><span class="p">,</span> <span class="n">screenH</span><span class="p">);</span>
-    <span class="n">glClearColor</span><span class="p">(</span><span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">);</span>
-    <span class="n">glClear</span><span class="p">(</span><span class="n">GL_COLOR_BUFFER_BIT</span><span class="p">);</span>
-    <span class="n">UpdateMVPMatrix</span><span class="p">(</span><span class="n">m_MVPMatrix</span><span class="p">,</span> <span class="n">m_AngleX</span><span class="p">,</span> <span class="n">m_AngleY</span><span class="p">,</span> <span class="p">(</span><span class="kt">float</span><span class="p">)</span><span class="n">screenW</span> <span class="o">/</span> <span class="n">screenH</span><span class="p">);</span>
-    <span class="n">glUseProgram</span> <span class="p">(</span><span class="n">m_ProgramObj</span><span class="p">);</span>
-    <span class="n">glBindVertexArray</span><span class="p">(</span><span class="n">m_VaoId</span><span class="p">);</span>
-    <span class="n">GLUtils</span><span class="o">::</span><span class="n">setMat4</span><span class="p">(</span><span class="n">m_ProgramObj</span><span class="p">,</span> <span class="s">"u_MVPMatrix"</span><span class="p">,</span> <span class="n">m_MVPMatrix</span><span class="p">);</span>
-    <span class="n">glActiveTexture</span><span class="p">(</span><span class="n">GL_TEXTURE1</span><span class="p">);</span>
-    <span class="n">glBindTexture</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="n">m_TextureId</span><span class="p">);</span>
-    <span class="n">GLUtils</span><span class="o">::</span><span class="n">setInt</span><span class="p">(</span><span class="n">m_ProgramObj</span><span class="p">,</span> <span class="s">"s_Texture"</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
-    <span class="n">glDrawElements</span><span class="p">(</span><span class="n">GL_TRIANGLES</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="n">GL_UNSIGNED_SHORT</span><span class="p">,</span> <span class="p">(</span><span class="k">const</span> <span class="kt">void</span> <span class="o">*</span><span class="p">)</span><span class="mi">0</span><span class="p">);</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+    <span class="n">glBindFramebuffer</span><span class="o">(</span><span class="no">GL_FRAMEBUFFER</span><span class="o">,</span> <span class="n">m_FboId</span><span class="o">);</span>
+    <span class="n">glViewport</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="n">screenW</span><span class="o">,</span> <span class="n">screenH</span><span class="o">);</span>
+    <span class="n">glClearColor</span><span class="o">(</span><span class="mf">1.0</span><span class="o">,</span> <span class="mf">1.0</span><span class="o">,</span> <span class="mf">1.0</span><span class="o">,</span> <span class="mf">1.0</span><span class="o">);</span>
+    <span class="n">glClear</span><span class="o">(</span><span class="no">GL_COLOR_BUFFER_BIT</span><span class="o">);</span>
+    <span class="nc">UpdateMVPMatrix</span><span class="o">(</span><span class="n">m_MVPMatrix</span><span class="o">,</span> <span class="n">m_AngleX</span><span class="o">,</span> <span class="n">m_AngleY</span><span class="o">,</span> <span class="o">(</span><span class="kt">float</span><span class="o">)</span><span class="n">screenW</span> <span class="o">/</span> <span class="n">screenH</span><span class="o">);</span>
+    <span class="n">glUseProgram</span> <span class="o">(</span><span class="n">m_ProgramObj</span><span class="o">);</span>
+    <span class="n">glBindVertexArray</span><span class="o">(</span><span class="n">m_VaoId</span><span class="o">);</span>
+    <span class="nl">GLUtils:</span><span class="o">:</span><span class="n">setMat4</span><span class="o">(</span><span class="n">m_ProgramObj</span><span class="o">,</span> <span class="s">"u_MVPMatrix"</span><span class="o">,</span> <span class="n">m_MVPMatrix</span><span class="o">);</span>
+    <span class="n">glActiveTexture</span><span class="o">(</span><span class="no">GL_TEXTURE1</span><span class="o">);</span>
+    <span class="n">glBindTexture</span><span class="o">(</span><span class="no">GL_TEXTURE_2D</span><span class="o">,</span> <span class="n">m_TextureId</span><span class="o">);</span>
+    <span class="nl">GLUtils:</span><span class="o">:</span><span class="n">setInt</span><span class="o">(</span><span class="n">m_ProgramObj</span><span class="o">,</span> <span class="s">"s_Texture"</span><span class="o">,</span> <span class="mi">1</span><span class="o">);</span>
+    <span class="n">glDrawElements</span><span class="o">(</span><span class="no">GL_TRIANGLES</span><span class="o">,</span> <span class="mi">6</span><span class="o">,</span> <span class="no">GL_UNSIGNED_SHORT</span><span class="o">,</span> <span class="o">(</span><span class="kd">const</span> <span class="kt">void</span> <span class="o">*)</span><span class="mi">0</span><span class="o">);</span>
 
     <span class="c1">//多重采样缓冲区无法直接上屏（渲染），先搞到另外一个缓冲区，然后再上屏</span>
-    <span class="n">glBindFramebuffer</span><span class="p">(</span><span class="n">GL_FRAMEBUFFER</span><span class="p">,</span> <span class="n">m_FboId2</span><span class="p">);</span>
-    <span class="n">glClearColor</span><span class="p">(</span><span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">);</span>
-    <span class="n">glClear</span><span class="p">(</span><span class="n">GL_COLOR_BUFFER_BIT</span><span class="p">);</span>
-    <span class="n">glBindFramebuffer</span><span class="p">(</span><span class="n">GL_READ_FRAMEBUFFER</span><span class="p">,</span> <span class="n">m_FboId</span><span class="p">);</span> <span class="c1">// 设置GL_READ_FRAMEBUFFER 为m_FboId</span>
-    <span class="n">glReadBuffer</span><span class="p">(</span><span class="n">GL_COLOR_ATTACHMENT0</span><span class="p">);</span>
-    <span class="n">glBlitFramebuffer</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">screenW</span><span class="p">,</span> <span class="n">screenH</span><span class="p">,</span>
-                      <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">screenW</span><span class="p">,</span> <span class="n">screenH</span><span class="p">,</span>
-                      <span class="n">GL_COLOR_BUFFER_BIT</span><span class="p">,</span> <span class="n">GL_LINEAR</span><span class="p">);</span>
+    <span class="n">glBindFramebuffer</span><span class="o">(</span><span class="no">GL_FRAMEBUFFER</span><span class="o">,</span> <span class="n">m_FboId2</span><span class="o">);</span>
+    <span class="n">glClearColor</span><span class="o">(</span><span class="mf">1.0</span><span class="o">,</span> <span class="mf">1.0</span><span class="o">,</span> <span class="mf">1.0</span><span class="o">,</span> <span class="mf">1.0</span><span class="o">);</span>
+    <span class="n">glClear</span><span class="o">(</span><span class="no">GL_COLOR_BUFFER_BIT</span><span class="o">);</span>
+    <span class="n">glBindFramebuffer</span><span class="o">(</span><span class="no">GL_READ_FRAMEBUFFER</span><span class="o">,</span> <span class="n">m_FboId</span><span class="o">);</span> <span class="c1">// 设置GL_READ_FRAMEBUFFER 为m_FboId</span>
+    <span class="n">glReadBuffer</span><span class="o">(</span><span class="no">GL_COLOR_ATTACHMENT0</span><span class="o">);</span>
+    <span class="n">glBlitFramebuffer</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="n">screenW</span><span class="o">,</span> <span class="n">screenH</span><span class="o">,</span>
+                      <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="n">screenW</span><span class="o">,</span> <span class="n">screenH</span><span class="o">,</span>
+                      <span class="no">GL_COLOR_BUFFER_BIT</span><span class="o">,</span> <span class="no">GL_LINEAR</span><span class="o">);</span>
 </code></pre></div></div>
 
 <h2 id="文字渲染中的抗锯齿">文字渲染中的抗锯齿</h2>
@@ -936,6 +936,8 @@
   <li><strong>减少对比度</strong>：图像更平坦，亮部和暗部的差异减少。</li>
 </ul>
 
+<p><span style="color:#FF00FF">通过把颜色调整到[-0.5,0.5]之间，然后乘以一个系数，再调回(0, 1.0)来实现对比度的调节</span></p>
+
 <div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">static</span> <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">blit_frag_src</span> <span class="o">=</span><span class="s">""</span>    
     <span class="s">"varying highp  vec2  varTexCoord;                       </span><span class="se">\n</span><span class="s">"</span>
     <span class="s">"uniform sampler2D    dfbSampler;                        </span><span class="se">\n</span><span class="s">"</span>
@@ -973,8 +975,9 @@
 
 <h1 id="gamma校正">gamma校正</h1>
 
-<p>Gamma校正是一种调整图像亮度的非线性操作，用于矫正显示设备的非线性响应，从而使图像显示更加自然。
-Gamma校正使用一个指数函数来调整图像的亮度。</p>
+<p>Gamma校正是一种调整图像亮度的非线性操作，用于矫正显示设备的非线性响应，从而使图像显示更加自然。</p>
+
+<p>Gamma校正<span style="color:#ff00ff">使用一个指数函数</span>来调整图像的亮度。</p>
 
 <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">static</span> <span class="kd">const</span> <span class="nx">char</span><span class="o">*</span> <span class="nx">blit_frag_src</span> <span class="o">=</span><span class="dl">""</span>    
     <span class="dl">"</span><span class="s2">varying highp  vec2  varTexCoord;                       </span><span class="se">\n</span><span class="dl">"</span>
@@ -997,7 +1000,7 @@ Gamma校正使用一个指数函数来调整图像的亮度。</p>
 
 <p>阈值分割：就是根据像素值进行简单的二值化操作</p>
 
-<p>这段片段着色器代码实现了一个简单的图像分割算法，即阈值分割。通过比较每个像素的亮度值与给定的阈值，可以将图像分割为前景（亮度大于阈值的部分）和背景（亮度小于或等于阈值的部分）。这在一些简单的图像处理任务中非常有用，例如二值化处理。</p>
+<p>这段片段着色器代码实现了一个简单的图像分割算法，即阈值分割。通过<span style="color:#ff00ff">比较每个像素的亮度值与给定的阈值</span>，可以将图像分割为前景（亮度大于阈值的部分）和背景（亮度小于或等于阈值的部分）。这在一些简单的图像处理任务中非常有用，例如二值化处理。</p>
 
 <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">static</span> <span class="kd">const</span> <span class="nx">char</span><span class="o">*</span> <span class="nx">blit_frag_src</span> <span class="o">=</span><span class="dl">""</span>    
     <span class="dl">"</span><span class="s2">varying highp  vec2  varTexCoord;                                       </span><span class="dl">"</span>
@@ -1013,10 +1016,11 @@ Gamma校正使用一个指数函数来调整图像的亮度。</p>
     <span class="dl">"</span><span class="s2">}                                                                       </span><span class="dl">"</span><span class="p">;</span>
 </code></pre></div></div>
 
+<p><span style="color:#ff00ff">颜色的亮度公式</span></p>
 <div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">highp</span> <span class="kt">float</span> <span class="n">brightness</span> <span class="o">=</span> <span class="n">dot</span><span class="p">(</span><span class="n">color</span><span class="p">.</span><span class="n">rgb</span><span class="p">,</span> <span class="n">vec3</span><span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">299</span><span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mi">587</span><span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mi">114</span><span class="p">));</span>
 </code></pre></div></div>
 
-<p>计算采样颜色的亮度。使用 dot 函数计算颜色的亮度值。亮度计算公式为 <code class="language-plaintext highlighter-rouge">brightness = 0.299 * R + 0.587 * G + 0.114 * B</code>。这是因为人眼对不同颜色的敏感度不同，所以使用这种加权平均方法来计算亮度更符合人眼感知.</p>
+<p>计算采样颜色的亮度。使用 dot 函数计算颜色的亮度值。亮度计算公式为 <code class="language-plaintext highlighter-rouge">brightness = 0.299 * R + 0.587 * G + 0.114 * B</code>。这是因为人眼对不同颜色的<span style="color:#ff00ff">敏感度</span>不同，所以使用这种<span style="color:#ff00ff">加权平均方法</span>来计算亮度更符合人眼感知.</p>
 
 </section>
             </div><div class="search-results">
