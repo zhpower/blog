@@ -149,7 +149,7 @@
                             </a>
                             
                                 
-                                    <ul><li><a href="#glinvalidateframebuffer-vs-glclear" onclick="mobilePageScrollToAnchor(this)" >glInvalidateFramebuffer vs glClear</a></li><li><a href="#gldiscardframebufferext" onclick="mobilePageScrollToAnchor(this)" >glDiscardFramebufferEXT</a></li><li><a href="#texture-obj与rbo的区别" onclick="mobilePageScrollToAnchor(this)" >Texture obj与RBO的区别</a></li><li><a href="#shader" onclick="mobilePageScrollToAnchor(this)" >shader</a><ul><li><a href="#初始化" onclick="mobilePageScrollToAnchor(this)" >初始化</a></li><li><a href="#变量" onclick="mobilePageScrollToAnchor(this)" >变量</a></li></ul></li><li><a href="#资源释放" onclick="mobilePageScrollToAnchor(this)" >资源释放</a></li><li><a href="#glwaitsync-vs-glclientwaitsync" onclick="mobilePageScrollToAnchor(this)" >glWaitSync VS glClientWaitSync</a></li><li><a href="#纹理过滤" onclick="mobilePageScrollToAnchor(this)" >纹理过滤</a></li><li><a href="#纹理环绕" onclick="mobilePageScrollToAnchor(this)" >纹理环绕</a></li><li><a href="#glmapbufferrange" onclick="mobilePageScrollToAnchor(this)" >glMapBufferRange</a></li><li><a href="#freetype" onclick="mobilePageScrollToAnchor(this)" >freetype</a></li><li><a href="#抗锯齿" onclick="mobilePageScrollToAnchor(this)" >抗锯齿</a><ul><li><a href="#line" onclick="mobilePageScrollToAnchor(this)" >line</a></li><li><a href="#msaa" onclick="mobilePageScrollToAnchor(this)" >MSAA</a></li><li><a href="#文字渲染中的抗锯齿" onclick="mobilePageScrollToAnchor(this)" >文字渲染中的抗锯齿</a></li></ul></li><li><a href="#图像处理" onclick="mobilePageScrollToAnchor(this)" >图像处理</a><ul><li><a href="#对比度调节" onclick="mobilePageScrollToAnchor(this)" >对比度调节</a></li><li><a href="#gamma校正" onclick="mobilePageScrollToAnchor(this)" >gamma校正</a></li><li><a href="#阈值分隔" onclick="mobilePageScrollToAnchor(this)" >阈值分隔</a></li><li><a href="#白平衡" onclick="mobilePageScrollToAnchor(this)" >白平衡</a></li><li><a href="#降噪" onclick="mobilePageScrollToAnchor(this)" >降噪</a></li></ul></li></ul>
+                                    <ul><li><a href="#glinvalidateframebuffer-vs-glclear" onclick="mobilePageScrollToAnchor(this)" >glInvalidateFramebuffer vs glClear</a></li><li><a href="#gldiscardframebufferext" onclick="mobilePageScrollToAnchor(this)" >glDiscardFramebufferEXT</a></li><li><a href="#texture-obj与rbo的区别" onclick="mobilePageScrollToAnchor(this)" >Texture obj与RBO的区别</a></li><li><a href="#vaovboveo" onclick="mobilePageScrollToAnchor(this)" >VAO,VBO,VEO</a></li><li><a href="#shader" onclick="mobilePageScrollToAnchor(this)" >shader</a><ul><li><a href="#初始化" onclick="mobilePageScrollToAnchor(this)" >初始化</a></li><li><a href="#变量" onclick="mobilePageScrollToAnchor(this)" >变量</a></li></ul></li><li><a href="#资源释放" onclick="mobilePageScrollToAnchor(this)" >资源释放</a></li><li><a href="#glwaitsync-vs-glclientwaitsync" onclick="mobilePageScrollToAnchor(this)" >glWaitSync VS glClientWaitSync</a></li><li><a href="#纹理过滤" onclick="mobilePageScrollToAnchor(this)" >纹理过滤</a></li><li><a href="#纹理环绕" onclick="mobilePageScrollToAnchor(this)" >纹理环绕</a></li><li><a href="#glmapbufferrange" onclick="mobilePageScrollToAnchor(this)" >glMapBufferRange</a></li><li><a href="#freetype" onclick="mobilePageScrollToAnchor(this)" >freetype</a></li><li><a href="#抗锯齿" onclick="mobilePageScrollToAnchor(this)" >抗锯齿</a><ul><li><a href="#line" onclick="mobilePageScrollToAnchor(this)" >line</a></li><li><a href="#msaa" onclick="mobilePageScrollToAnchor(this)" >MSAA</a></li><li><a href="#文字渲染中的抗锯齿" onclick="mobilePageScrollToAnchor(this)" >文字渲染中的抗锯齿</a></li></ul></li><li><a href="#图像处理" onclick="mobilePageScrollToAnchor(this)" >图像处理</a><ul><li><a href="#对比度调节" onclick="mobilePageScrollToAnchor(this)" >对比度调节</a></li><li><a href="#gamma校正" onclick="mobilePageScrollToAnchor(this)" >gamma校正</a></li><li><a href="#阈值分隔" onclick="mobilePageScrollToAnchor(this)" >阈值分隔</a></li><li><a href="#白平衡" onclick="mobilePageScrollToAnchor(this)" >白平衡</a></li><li><a href="#降噪" onclick="mobilePageScrollToAnchor(this)" >降噪</a></li></ul></li></ul>
 
                                 
                             
@@ -350,6 +350,135 @@
 <p>FBO(Frame Buffer Object)即帧缓冲区对象，是一个可添加缓冲区的容器，可以为其添加纹理或渲染缓冲区对象（RBO),它们的区别如下图</p>
 
 <p><img src="/blog/assets/OpenGL/renderbuffer.png" alt="renderbuffer" /></p>
+
+<h1 id="vaovboveo">VAO,VBO,VEO</h1>
+
+<p>在OpenGL中，VAO（Vertex Array Object）、VBO（Vertex Buffer Object）和EBO（Element Buffer Object）是用于管理和组织顶点数据的重要工具。它们在现代OpenGL编程中扮演着关键角色。以下是它们的区别和联系：</p>
+
+<p><strong>Vertex Array Object (VAO)</strong></p>
+
+<p>VAO是顶点数组对象，用于存储关于顶点属性配置的状态。一个VAO可以绑定多个VBO和EBO，并记录这些缓冲区的绑定状态和顶点属性配置。使用VAO可以简化顶点属性的管理和绑定，便于切换不同的顶点数据配置。</p>
+
+<p><span style="color:#FF00FF">一个VAO可以关联多组记录顶点不同属性的VBO，在实际使用时只绑定该VAO就完成所有VBO的关联</span>。见下文smaple code</p>
+
+<p>主要功能</p>
+<ul>
+  <li>记录顶点属性指针的配置。</li>
+  <li>记录与之关联的VBO和EBO的绑定状态。</li>
+  <li>简化绘制调用时的状态切换</li>
+</ul>
+
+<p><strong>Vertex Buffer Object (VBO)</strong></p>
+
+<p>VBO是顶点缓冲对象，用于在GPU内存中存储顶点数据（如顶点位置、法线、纹理坐标等）。VBO的主要优点是能够显著提高顶点数据的传输效率，因为数据存储在GPU内存中而非CPU内存中。</p>
+
+<p>主要功能</p>
+<ul>
+  <li>存储顶点数据。</li>
+  <li>提供高效的数据传输和存取方式。</li>
+</ul>
+
+<p><strong>Element Buffer Object (EBO)</strong></p>
+
+<p>EBO是元素缓冲对象（也称为索引缓冲对象，IBO），用于在GPU内存中存储顶点索引。EBO允许我们通过索引数组来绘制图形，从而避免顶点数据的重复，提高存储效率和渲染性能。</p>
+
+<p>主要功能</p>
+<ul>
+  <li>存储顶点索引。</li>
+  <li>通过索引数组绘制顶点，从而减少重复顶点数据。</li>
+</ul>
+
+<p><strong>smaple code</strong></p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;GL/glew.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;GLFW/glfw3.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
+</span><span class="c1">// 顶点位置数据</span>
+<span class="n">GLfloat</span> <span class="n">positions</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="o">-</span><span class="mi">0</span><span class="p">.</span><span class="mi">5</span><span class="n">f</span><span class="p">,</span> <span class="o">-</span><span class="mi">0</span><span class="p">.</span><span class="mi">5</span><span class="n">f</span><span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="n">f</span><span class="p">,</span>
+     <span class="mi">0</span><span class="p">.</span><span class="mi">5</span><span class="n">f</span><span class="p">,</span> <span class="o">-</span><span class="mi">0</span><span class="p">.</span><span class="mi">5</span><span class="n">f</span><span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="n">f</span><span class="p">,</span>
+     <span class="mi">0</span><span class="p">.</span><span class="mi">5</span><span class="n">f</span><span class="p">,</span>  <span class="mi">0</span><span class="p">.</span><span class="mi">5</span><span class="n">f</span><span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="n">f</span><span class="p">,</span>
+    <span class="o">-</span><span class="mi">0</span><span class="p">.</span><span class="mi">5</span><span class="n">f</span><span class="p">,</span>  <span class="mi">0</span><span class="p">.</span><span class="mi">5</span><span class="n">f</span><span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="n">f</span>
+<span class="p">};</span>
+<span class="c1">// 顶点颜色数据</span>
+<span class="n">GLfloat</span> <span class="n">colors</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="n">f</span><span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="n">f</span><span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="n">f</span><span class="p">,</span>
+    <span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="n">f</span><span class="p">,</span> <span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="n">f</span><span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="n">f</span><span class="p">,</span>
+    <span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="n">f</span><span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="n">f</span><span class="p">,</span> <span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="n">f</span><span class="p">,</span>
+    <span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="n">f</span><span class="p">,</span> <span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="n">f</span><span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="n">f</span>
+<span class="p">};</span>
+<span class="c1">// 索引数据</span>
+<span class="n">GLuint</span> <span class="n">indices</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span>
+    <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">0</span>
+<span class="p">};</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="c1">// 初始化GLFW</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">glfwInit</span><span class="p">())</span> <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">cerr</span> <span class="o">&lt;&lt;</span> <span class="s">"Failed to initialize GLFW"</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="c1">// 创建窗口</span>
+    <span class="n">GLFWwindow</span><span class="o">*</span> <span class="n">window</span> <span class="o">=</span> <span class="n">glfwCreateWindow</span><span class="p">(</span><span class="mi">800</span><span class="p">,</span> <span class="mi">600</span><span class="p">,</span> <span class="s">"VAO with Multiple VBOs"</span><span class="p">,</span> <span class="n">nullptr</span><span class="p">,</span> <span class="n">nullptr</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">window</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">cerr</span> <span class="o">&lt;&lt;</span> <span class="s">"Failed to create GLFW window"</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+        <span class="n">glfwTerminate</span><span class="p">();</span>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">glfwMakeContextCurrent</span><span class="p">(</span><span class="n">window</span><span class="p">);</span>
+    <span class="c1">// 初始化GLEW</span>
+    <span class="n">glewExperimental</span> <span class="o">=</span> <span class="n">GL_TRUE</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">glewInit</span><span class="p">()</span> <span class="o">!=</span> <span class="n">GLEW_OK</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">cerr</span> <span class="o">&lt;&lt;</span> <span class="s">"Failed to initialize GLEW"</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="c1">// 生成并绑定VAO</span>
+    <span class="n">GLuint</span> <span class="n">vao</span><span class="p">;</span>
+    <span class="n">glGenVertexArrays</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">vao</span><span class="p">);</span>
+    <span class="n">glBindVertexArray</span><span class="p">(</span><span class="n">vao</span><span class="p">);</span>
+    <span class="c1">// 生成并绑定位置VBO</span>
+    <span class="n">GLuint</span> <span class="n">vboPositions</span><span class="p">;</span>
+    <span class="n">glGenBuffers</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">vboPositions</span><span class="p">);</span>
+    <span class="n">glBindBuffer</span><span class="p">(</span><span class="n">GL_ARRAY_BUFFER</span><span class="p">,</span> <span class="n">vboPositions</span><span class="p">);</span>
+    <span class="n">glBufferData</span><span class="p">(</span><span class="n">GL_ARRAY_BUFFER</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">positions</span><span class="p">),</span> <span class="n">positions</span><span class="p">,</span> <span class="n">GL_STATIC_DRAW</span><span class="p">);</span>
+    <span class="n">glVertexAttribPointer</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">GL_FLOAT</span><span class="p">,</span> <span class="n">GL_FALSE</span><span class="p">,</span> <span class="mi">3</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">float</span><span class="p">),</span> <span class="p">(</span><span class="kt">void</span><span class="o">*</span><span class="p">)</span><span class="mi">0</span><span class="p">);</span>
+    <span class="n">glEnableVertexAttribArray</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="c1">// 生成并绑定颜色VBO</span>
+    <span class="n">GLuint</span> <span class="n">vboColors</span><span class="p">;</span>
+    <span class="n">glGenBuffers</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">vboColors</span><span class="p">);</span>
+    <span class="n">glBindBuffer</span><span class="p">(</span><span class="n">GL_ARRAY_BUFFER</span><span class="p">,</span> <span class="n">vboColors</span><span class="p">);</span>
+    <span class="n">glBufferData</span><span class="p">(</span><span class="n">GL_ARRAY_BUFFER</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">colors</span><span class="p">),</span> <span class="n">colors</span><span class="p">,</span> <span class="n">GL_STATIC_DRAW</span><span class="p">);</span>
+    <span class="n">glVertexAttribPointer</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">GL_FLOAT</span><span class="p">,</span> <span class="n">GL_FALSE</span><span class="p">,</span> <span class="mi">3</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">float</span><span class="p">),</span> <span class="p">(</span><span class="kt">void</span><span class="o">*</span><span class="p">)</span><span class="mi">0</span><span class="p">);</span>
+    <span class="n">glEnableVertexAttribArray</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+    <span class="c1">// 生成并绑定EBO</span>
+    <span class="n">GLuint</span> <span class="n">ebo</span><span class="p">;</span>
+    <span class="n">glGenBuffers</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">ebo</span><span class="p">);</span>
+    <span class="n">glBindBuffer</span><span class="p">(</span><span class="n">GL_ELEMENT_ARRAY_BUFFER</span><span class="p">,</span> <span class="n">ebo</span><span class="p">);</span>
+    <span class="n">glBufferData</span><span class="p">(</span><span class="n">GL_ELEMENT_ARRAY_BUFFER</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">indices</span><span class="p">),</span> <span class="n">indices</span><span class="p">,</span> <span class="n">GL_STATIC_DRAW</span><span class="p">);</span>
+    <span class="c1">// 解绑VAO</span>
+    <span class="n">glBindVertexArray</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="c1">// 渲染循环</span>
+    <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">glfwWindowShouldClose</span><span class="p">(</span><span class="n">window</span><span class="p">))</span> <span class="p">{</span>
+        <span class="c1">// 清屏</span>
+        <span class="n">glClear</span><span class="p">(</span><span class="n">GL_COLOR_BUFFER_BIT</span><span class="p">);</span>
+        <span class="c1">// 绘制, 在使用时只要绑定vao即可</span>
+        <span class="n">glBindVertexArray</span><span class="p">(</span><span class="n">vao</span><span class="p">);</span>
+        <span class="n">glDrawElements</span><span class="p">(</span><span class="n">GL_TRIANGLES</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="n">GL_UNSIGNED_INT</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+        <span class="n">glBindVertexArray</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+        <span class="c1">// 交换缓冲</span>
+        <span class="n">glfwSwapBuffers</span><span class="p">(</span><span class="n">window</span><span class="p">);</span>
+        <span class="n">glfwPollEvents</span><span class="p">();</span>
+    <span class="p">}</span>
+    <span class="c1">// 释放资源</span>
+    <span class="n">glDeleteVertexArrays</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">vao</span><span class="p">);</span>
+    <span class="n">glDeleteBuffers</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">vboPositions</span><span class="p">);</span>
+    <span class="n">glDeleteBuffers</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">vboColors</span><span class="p">);</span>
+    <span class="n">glDeleteBuffers</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">ebo</span><span class="p">);</span>
+    <span class="c1">// 终止GLFW</span>
+    <span class="n">glfwTerminate</span><span class="p">();</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
 
 <h1 id="shader">shader</h1>
 

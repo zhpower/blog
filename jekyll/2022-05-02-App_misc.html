@@ -248,7 +248,7 @@
                             </a>
                             
                                 
-                                    <ul><li><a href="#pthread_mutex_tpthread_cond_t" onclick="mobilePageScrollToAnchor(this)" >pthread_mutex_t&amp;pthread_cond_t</a></li><li><a href="#char-a-vs-char-a" onclick="mobilePageScrollToAnchor(this)" >char *a vs char a[]</a></li><li><a href="#mmap" onclick="mobilePageScrollToAnchor(this)" >mmap()</a></li><li><a href="#fork-的进程空间" onclick="mobilePageScrollToAnchor(this)" >fork() 的进程空间</a></li></ul>
+                                    <ul><li><a href="#pthread_mutex_tpthread_cond_t" onclick="mobilePageScrollToAnchor(this)" >pthread_mutex_t&amp;pthread_cond_t</a></li><li><a href="#char-a-vs-char-a" onclick="mobilePageScrollToAnchor(this)" >char *a vs char a[]</a></li><li><a href="#mmap" onclick="mobilePageScrollToAnchor(this)" >mmap()</a></li><li><a href="#fork-的进程空间" onclick="mobilePageScrollToAnchor(this)" >fork() 的进程空间</a></li><li><a href="#mingw" onclick="mobilePageScrollToAnchor(this)" >MinGW</a></li></ul>
 
                                 
                             
@@ -580,6 +580,52 @@ Segmentation fault (core dumped)
 <p>总之，父进程使用 <code class="language-plaintext highlighter-rouge">malloc</code> 分配的内存可以被它 <code class="language-plaintext highlighter-rouge">fork</code> 的子进程访问，但在修改时会进行复制，以保持数据的独立性¹²。</p>
 
 <p>如果您还有其他问题，欢迎继续提问！ 😊</p>
+
+<h1 id="mingw">MinGW</h1>
+
+<p>MinGW（Minimalist GNU for Windows）是一个用于在Windows平台上编译和链接程序的开发环境，它包含了一个GNU编译器集合（GCC）和一些GNU工具（如Make、GDB等）。MinGW为开发者提供了一套工具，使他们能够在Windows上开发和编译C、C++、Fortran等语言的程序。</p>
+
+<p><strong>MinGW的主要特点</strong></p>
+<ul>
+  <li>跨平台编译器：使用GCC编译器，可以生成Windows可执行文件，支持C、C++、Fortran等多种编程语言。</li>
+  <li>轻量级：相比其他开发环境，如Cygwin，MinGW更为轻量级，不依赖于任何POSIX兼容库。</li>
+  <li>开放源码：MinGW是开源的，任何人都可以自由使用和修改。</li>
+  <li>易于使用：提供了一系列工具和库，使得在Windows上进行开发和调试变得简单。</li>
+</ul>
+
+<p><strong>安装MinGW</strong></p>
+
+<p>以下是在Windows 10上安装MinGW的步骤：</p>
+
+<ul>
+  <li>下载MinGW安装程序：</li>
+</ul>
+
+<p>访问MinGW官方网站并下载最新的安装程序（通常是mingw-get-setup.exe）。</p>
+
+<ul>
+  <li>运行安装程序：</li>
+</ul>
+
+<p>运行下载的安装程序。按照提示进行安装，选择你需要的组件。建议至少安装以下组件：</p>
+
+<ol>
+  <li>mingw32-base：基本的MinGW工具，包括GCC编译器。</li>
+  <li>mingw32-gcc-g++：G++编译器，用于编译C++代码。</li>
+  <li>msys-base：MSYS基本系统，为MinGW提供一个类似UNIX的命令行环境。</li>
+</ol>
+
+<ul>
+  <li>配置环境变量：</li>
+</ul>
+
+<p>安装完成后，需要将MinGW的bin目录添加到系统的PATH环境变量中，以便在命令行中可以直接使用MinGW的工具。假设MinGW安装在C:\MinGW，将C:\MinGW\bin添加到PATH中。</p>
+
+<ul>
+  <li>使用MinGW编译代码</li>
+</ul>
+
+<p>安装和配置完成后，你可以使用MinGW编译和运行你的C/C++程序。</p>
 </section>
             </div><div class="search-results">
     <div class="has-results">

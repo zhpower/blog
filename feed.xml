@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.2">Jekyll</generator><link href="http://localhost:4000/blog/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/blog/" rel="alternate" type="text/html" /><updated>2024-07-23T14:19:18+08:00</updated><id>http://localhost:4000/blog/feed.xml</id><title type="html">学习笔记</title><subtitle>Build Jekyll site with the GitBook style.
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.2">Jekyll</generator><link href="http://localhost:4000/blog/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/blog/" rel="alternate" type="text/html" /><updated>2024-07-26T15:41:36+08:00</updated><id>http://localhost:4000/blog/feed.xml</id><title type="html">学习笔记</title><subtitle>Build Jekyll site with the GitBook style.
 </subtitle><author><name>kevin_zh</name></author><entry><title type="html">Git</title><link href="http://localhost:4000/blog/jekyll/2024-04-27-git.html" rel="alternate" type="text/html" title="Git" /><published>2024-04-27T00:00:00+08:00</published><updated>2024-04-27T00:00:00+08:00</updated><id>http://localhost:4000/blog/jekyll/git</id><content type="html" xml:base="http://localhost:4000/blog/jekyll/2024-04-27-git.html"><![CDATA[<h1 id="比较不同分支的某个文件">比较不同分支的某个文件</h1>
 
 <p>在Git中，你可以使用<code class="language-plaintext highlighter-rouge">git diff</code>命令来比较不同分支中某个文件的差异。以下是具体的命令：</p>
@@ -435,7 +435,53 @@ Segmentation fault (core dumped)
 
 <p>总之，父进程使用 <code class="language-plaintext highlighter-rouge">malloc</code> 分配的内存可以被它 <code class="language-plaintext highlighter-rouge">fork</code> 的子进程访问，但在修改时会进行复制，以保持数据的独立性¹²。</p>
 
-<p>如果您还有其他问题，欢迎继续提问！ 😊</p>]]></content><author><name>Kevin</name></author><category term="Jekyll" /><summary type="html"><![CDATA[pthread_mutex_t&amp;pthread_cond_t]]></summary></entry><entry><title type="html">位运算</title><link href="http://localhost:4000/blog/jekyll/2022-04-27-bit.html" rel="alternate" type="text/html" title="位运算" /><published>2022-04-27T00:00:00+08:00</published><updated>2022-04-27T00:00:00+08:00</updated><id>http://localhost:4000/blog/jekyll/bit</id><content type="html" xml:base="http://localhost:4000/blog/jekyll/2022-04-27-bit.html"><![CDATA[<h1 id="1位运算概述">1.位运算概述</h1>
+<p>如果您还有其他问题，欢迎继续提问！ 😊</p>
+
+<h1 id="mingw">MinGW</h1>
+
+<p>MinGW（Minimalist GNU for Windows）是一个用于在Windows平台上编译和链接程序的开发环境，它包含了一个GNU编译器集合（GCC）和一些GNU工具（如Make、GDB等）。MinGW为开发者提供了一套工具，使他们能够在Windows上开发和编译C、C++、Fortran等语言的程序。</p>
+
+<p><strong>MinGW的主要特点</strong></p>
+<ul>
+  <li>跨平台编译器：使用GCC编译器，可以生成Windows可执行文件，支持C、C++、Fortran等多种编程语言。</li>
+  <li>轻量级：相比其他开发环境，如Cygwin，MinGW更为轻量级，不依赖于任何POSIX兼容库。</li>
+  <li>开放源码：MinGW是开源的，任何人都可以自由使用和修改。</li>
+  <li>易于使用：提供了一系列工具和库，使得在Windows上进行开发和调试变得简单。</li>
+</ul>
+
+<p><strong>安装MinGW</strong></p>
+
+<p>以下是在Windows 10上安装MinGW的步骤：</p>
+
+<ul>
+  <li>下载MinGW安装程序：</li>
+</ul>
+
+<p>访问MinGW官方网站并下载最新的安装程序（通常是mingw-get-setup.exe）。</p>
+
+<ul>
+  <li>运行安装程序：</li>
+</ul>
+
+<p>运行下载的安装程序。按照提示进行安装，选择你需要的组件。建议至少安装以下组件：</p>
+
+<ol>
+  <li>mingw32-base：基本的MinGW工具，包括GCC编译器。</li>
+  <li>mingw32-gcc-g++：G++编译器，用于编译C++代码。</li>
+  <li>msys-base：MSYS基本系统，为MinGW提供一个类似UNIX的命令行环境。</li>
+</ol>
+
+<ul>
+  <li>配置环境变量：</li>
+</ul>
+
+<p>安装完成后，需要将MinGW的bin目录添加到系统的PATH环境变量中，以便在命令行中可以直接使用MinGW的工具。假设MinGW安装在C:\MinGW，将C:\MinGW\bin添加到PATH中。</p>
+
+<ul>
+  <li>使用MinGW编译代码</li>
+</ul>
+
+<p>安装和配置完成后，你可以使用MinGW编译和运行你的C/C++程序。</p>]]></content><author><name>Kevin</name></author><category term="Jekyll" /><summary type="html"><![CDATA[pthread_mutex_t&amp;pthread_cond_t]]></summary></entry><entry><title type="html">位运算</title><link href="http://localhost:4000/blog/jekyll/2022-04-27-bit.html" rel="alternate" type="text/html" title="位运算" /><published>2022-04-27T00:00:00+08:00</published><updated>2022-04-27T00:00:00+08:00</updated><id>http://localhost:4000/blog/jekyll/bit</id><content type="html" xml:base="http://localhost:4000/blog/jekyll/2022-04-27-bit.html"><![CDATA[<h1 id="1位运算概述">1.位运算概述</h1>
 
 <p>从现代计算机中所有的数据二进制的形式存储在设备中。即 0、1 两种状态，计算机对二进制数据进行的运算(+、-、*、\/)都是叫位运算，即将符号位共同参与运算的运算。</p>
 
